@@ -13,11 +13,7 @@ License: GPL v2
 
 
 class kcEssentials {
-
-	function init() {
-		//add_action( 'admin_footer', array(__CLASS__, 'dev' ) );
-	}
-
+	static $paths;
 
 	function paths() {
 		$paths = array();
@@ -40,9 +36,18 @@ class kcEssentials {
 	}
 
 
+	function init() {
+		$paths = self::paths();
+
+		require_once "{$paths['inc']}/admin.php";
+
+		//add_action( 'admin_footer', array(__CLASS__, 'dev' ) );
+	}
+
+
 	function dev() {
 		echo '<pre>';
-		print_r( self::paths() );
+		print_r( self::$paths );
 		echo '</pre>';
 	}
 }
