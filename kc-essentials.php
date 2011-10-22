@@ -14,7 +14,7 @@ License: GPL v2
 
 class kcEssentials {
 	public static $paths;
-	private static $settings;
+	public static $settings;
 
 
 	static function get_paths() {
@@ -43,6 +43,12 @@ class kcEssentials {
 
 		require_once self::$paths['inc'] . '/admin.php';
 		self::$settings = kc_get_option( 'kc_essentials' );
+
+		# Unique taxonomies
+		if ( isset(self::$settings['taxonomies']) && !empty(self::$settings['taxonomies']) ) {
+			require_once self::$paths['inc'] . '/taxonomies.php';
+			add_action( 'admin_menu', 'kcsst_unique_taxonomies' );
+		}
 
 		//add_action( 'admin_footer', array(__CLASS__, 'dev' ) );
 	}
