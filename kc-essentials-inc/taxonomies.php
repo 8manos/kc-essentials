@@ -53,7 +53,7 @@ function kcsst_unique_taxonomies() {
       }
 
       # Add our own
-      add_meta_box( "unique-{$tax_name}-div", $taxonomy->labels->singular_name, 'kcsst_unique_taxonomies_metabox', $pt, 'side', 'low', array('taxonomy' => $tax_name) );
+      add_meta_box( "unique-{$tax_name}-div", $taxonomy->label, 'kcsst_unique_taxonomies_metabox', $pt, 'side', 'low', array('taxonomy' => $tax_name) );
     }
   }
 }
@@ -96,9 +96,11 @@ function kcsst_unique_taxonomies_metabox( $post, $box ) {
       $name = ( $taxonomy == 'category' ) ? 'post_category' : 'tax_input[' . $taxonomy . ']';
       echo "<input type='hidden' name='{$name}' value='0' />"; // Allows for an empty term set to be sent. 0 is an invalid Term ID and will be ignored by empty() checks.
     ?>
+    <div class="tabs-panel">
     <ul id="<?php echo $taxonomy; ?>checklist" class="list:<?php echo $taxonomy?> categorychecklist form-no-clear">
       <?php kcsst_terms_radiolist( $post->ID, $taxonomy ) ?>
     </ul>
+    </div>
   <?php if ( !current_user_can($tax->cap->assign_terms) ) { ?>
     <p><em><?php _e('You cannot modify this taxonomy.'); ?></em></p>
   <?php } ?>
