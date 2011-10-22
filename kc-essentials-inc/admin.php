@@ -1,22 +1,30 @@
 <?php
 add_filter( 'kc_plugin_settings', 'kc_essentials_options' );
 function kc_essentials_options( $settings ) {
-	$options = array(
-		'general' => array(
-			'id'			=> 'general',
-			'title'		=> __('General', 'kc-essentials'),
+	$options = array();
+
+	$taxonomies = get_taxonomies( array('show_ui' => true), 'objects' );
+	if ( !empty($taxonomies) ) {
+		$tax_list = array();
+		foreach ( $taxonomies as $k => $v ) {
+			$tax_list[$k] = $v->label;
+		}
+		asort( $tax_list );
+
+		$options['taxonomies'] = array(
+			'id'			=> 'taxonomies',
+			'title'		=> __('Taxonomies', 'kc-essentials'),
 			'fields'	=> array(
-				'components' => array(
-					'id'			=> 'components',
-					'title'		=> __('Components', 'kc-essentials'),
+				'unique' => array(
+					'id'			=> 'unique',
+					'title'		=> __('Unique taxonomies', 'kc-essentials'),
 					'type'		=> 'checkbox',
-					'options'	=> array(
-						'unique_taxonomies'	=> __('Unique taxonomies', 'kc-essentials')
-					)
+					'options'	=> $tax_list
 				)
 			)
-		)
-	);
+		);
+
+	}
 
 	$my_settings = array(
 		'prefix'				=> 'kc_essentials',

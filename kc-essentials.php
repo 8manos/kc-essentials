@@ -13,9 +13,11 @@ License: GPL v2
 
 
 class kcEssentials {
-	static $paths;
+	public static $paths;
+	private static $settings;
 
-	function paths() {
+
+	static function get_paths() {
 		$paths = array();
 		$inc_prefix = "/kc-essentials-inc";
 		$fname = basename( __FILE__ );
@@ -36,23 +38,28 @@ class kcEssentials {
 	}
 
 
-	function init() {
-		$paths = self::paths();
+	static function init() {
+		self::$paths = self::get_paths();
 
-		require_once "{$paths['inc']}/admin.php";
+		require_once self::$paths['inc'] . '/admin.php';
+		self::$settings = kc_get_option( 'kc_essentials' );
 
 		//add_action( 'admin_footer', array(__CLASS__, 'dev' ) );
 	}
 
 
-	function dev() {
+	static function dev() {
 		echo '<pre>';
-		print_r( self::$paths );
+
+		print_r( self::$settings );
+
 		echo '</pre>';
 	}
 }
 
 
-kcEssentials::init();
-
+function kc_essentials_init() {
+	kcEssentials::init();
+}
+add_action( 'init', 'kc_essentials_init' );
 ?>
