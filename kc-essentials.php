@@ -8,16 +8,14 @@ Version: 0.1
 Author: Dzikri Aziz
 Author URI: http://kucrut.org/
 License: GPL v2
-
 */
 
 
 class kcEssentials {
-	public static $paths;
-	public static $settings;
+	public static $data;
 
 
-	static function get_paths() {
+	private static function _paths() {
 		$paths = array();
 		$inc_prefix = "/kc-essentials-inc";
 		$fname = basename( __FILE__ );
@@ -38,16 +36,29 @@ class kcEssentials {
 	}
 
 
+	private static function _options() {
+		$options = array(
+			'general'	=> array(
+				'components'	=> array( 'uniquetax' ),
+				'uniquetax'		=> array()
+			)
+		);
+
+		return apply_filters( 'kc_essentials_setting', $options );
+	}
+
+
 	static function init() {
-		self::$paths = self::get_paths();
+		$settings = ( class_exists('kcSettings') ) ? kc_get_option( 'kc_essentials' ) : self::_options();
+		if ( empty($settings) || !isset($settings['general']['components']) || empty($settings['general']['components']) )
+			return false;
 
-		require_once self::$paths['inc'] . '/admin.php';
-		self::$settings = kc_get_option( 'kc_essentials' );
+		self::$data['settings'] = $settings;
+		self::$data['paths'] = self::_paths();
 
-		# Unique taxonomies
-		if ( isset(self::$settings['taxonomies']) && !empty(self::$settings['taxonomies']) ) {
-			require_once self::$paths['inc'] . '/taxonomies.php';
-			add_action( 'admin_menu', 'kcsst_unique_taxonomies' );
+		foreach ( $settings['general']['components'] as $c ) {
+			require_once self::$data['paths']['inc'] . "/{$c}.php";
+			add_action( 'init', array("kcEssentials_{$c}", 'init'), 99 );
 		}
 
 		//add_action( 'admin_footer', array(__CLASS__, 'dev' ) );
@@ -63,9 +74,6 @@ class kcEssentials {
 	}
 }
 
-
-function kc_essentials_init() {
-	kcEssentials::init();
-}
-add_action( 'init', 'kc_essentials_init' );
+require_once dirname(__FILE__) . '/kc-essentials-inc/options.php';
+add_action( 'init', array('kcEssentials', 'init'), 12 );
 ?>
