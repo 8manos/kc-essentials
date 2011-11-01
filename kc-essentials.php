@@ -39,7 +39,7 @@ class kcEssentials {
 	private static function _options() {
 		$options = array(
 			'general'	=> array(
-				'components'	=> array( 'uniquetax' ),
+				'components'	=> array( 'uniquetax', 'custom_widget_id_class' ),
 				'uniquetax'		=> array()
 			)
 		);
@@ -55,6 +55,7 @@ class kcEssentials {
 
 		self::$data['settings'] = $settings;
 		self::$data['paths'] = self::_paths();
+		require_once self::$data['paths']['inc'] . '/_helpers.php';
 
 		foreach ( $settings['general']['components'] as $c ) {
 			require_once self::$data['paths']['inc'] . "/{$c}.php";

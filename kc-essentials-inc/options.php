@@ -11,13 +11,16 @@ function kc_essentials_options( $settings ) {
 					'title'		=> __('Components', 'kc-essentials'),
 					'type'		=> 'checkbox',
 					'options'	=> array(
-						'uniquetax'	=> __('Unique taxonomies', 'kc-essentials')
+						'uniquetax'								=> __('Unique taxonomies', 'kc-essentials'),
+						'custom_widget_id_class'	=> __('Custom widget ID &amp; classes', 'kc-essentials')
 					)
 				)
 			)
 		)
 	);
 
+
+	# Unique taxonomies
 	$taxonomies = get_taxonomies( array('show_ui' => true), 'objects' );
 	if ( !empty($taxonomies) ) {
 		$tax_list = array();
@@ -35,6 +38,25 @@ function kc_essentials_options( $settings ) {
 
 	}
 
+
+	# Custom widget ID & classes
+	$options['general']['fields'][] = array(
+		'id'			=> 'custom_widget_id',
+		'title'		=> __('Custom widget IDs', 'kc-essentials'),
+		'type'		=> 'text',
+		'attr'		=> array('style' => 'width:98%' ),
+		'desc'		=> __('Predefined widget IDs (optional, separate with spaces)', 'kc-essentials'),
+	);
+	$options['general']['fields'][] = array(
+		'id'			=> 'custom_widget_class',
+		'title'		=> __('Custom widget classes', 'kc-essentials'),
+		'type'		=> 'text',
+		'attr'		=> array('style' => 'width:98%' ),
+		'desc'		=> __('Predefined widget classes (optional, separate with spaces)', 'kc-essentials')
+	);
+
+
+	# The entry for KC Settings
 	$my_settings = array(
 		'prefix'			=> 'kc_essentials',
 		'menu_title'	=> __('KC Essentials', 'kc-essentials'),
@@ -46,5 +68,10 @@ function kc_essentials_options( $settings ) {
 	$settings[] = $my_settings;
 	return $settings;
 }
+
+
+add_filter( 'kcv_setting_kc_essentials_general_custom_widget_id', 'kc_essentials_sanitize_html_classes' );
+add_filter( 'kcv_setting_kc_essentials_general_custom_widget_class', 'kc_essentials_sanitize_html_classes' );
+
 
 ?>
