@@ -97,7 +97,7 @@ if ( !class_exists('kcForm') ) {
 
 			$output  = '';
 			foreach ( $args['options'] as $o ) {
-				$output .= "{$args['check_sep'][0]}<label class='kcs-check {$args['type']}'><input type='{$args['type']}' value='{$o['value']}'{$attr}";
+				$output .= "{$args['check_sep'][0]}<label class='kcs-check kcs-{$args['type']}'><input type='{$args['type']}' value='{$o['value']}'{$attr}";
 				if ( in_array($o['value'], $args['current']) || ( isset($args['current'][$o['value']]) && $args['current'][$o['value']]) )
 					$output .= " checked='true'";
 				$output .= " /> {$o['label']}</label>{$args['check_sep'][1]}\n";

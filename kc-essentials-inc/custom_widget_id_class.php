@@ -92,12 +92,17 @@ class kcEssentials_custom_widget_id_class {
 		print_r( $new_instance );
 		foreach ( array('id', 'class') as $c ) {
 			# 0. Add/Update
-			if ( !empty($new_instance["custom_{$c}"]) )
-				$instance["custom_{$c}"] = kc_essentials_sanitize_html_classes($new_instance["custom_{$c}"]);
+			if ( !empty($new_instance["custom_{$c}"]) ) {
+				if ( $c == 'id' )
+					$instance["custom_{$c}"] = trim( sanitize_html_class($new_instance["custom_{$c}"]) );
+				else
+					$instance["custom_{$c}"] = trim( kc_essentials_sanitize_html_classes($new_instance["custom_{$c}"]) );
+			}
 
 			# 1. Delete
-			else
+			else {
 				unset( $instance["custom_{$c}"] );
+			}
 		}
 
 		return $instance;
