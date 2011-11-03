@@ -41,7 +41,7 @@ class kcEssentials {
 	private static function _options() {
 		$options = array(
 			'general'	=> array(
-				'components'	=> array( 'uniquetax', 'custom_widget_id_class', 'widgets' ),
+				'components'	=> array( 'uniquetax', 'custom_widget_id_class', 'widgets', 'insert_custom_size' ),
 				'uniquetax'		=> array( 'category' ),
 				'widgets'			=> array( 'post' )
 			)

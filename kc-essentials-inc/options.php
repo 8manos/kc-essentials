@@ -14,7 +14,8 @@ function kc_essentials_options( $settings ) {
 						'uniquetax'								=> __('Unique taxonomies', 'kc-essentials'),
 						'mediatax'								=> __('Media taxonomies', 'kc-essentials'),
 						'custom_widget_id_class'	=> __('Custom widget ID &amp; classes', 'kc-essentials'),
-						'widgets'									=> __('Additional widgets', 'kc-essentials')
+						'widgets'									=> __('Additional widgets', 'kc-essentials'),
+						'insert_custom_size'			=> __('Insert images with custom sizes', 'kc-essentials')
 					)
 				)
 			)
