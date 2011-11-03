@@ -12,6 +12,7 @@ function kc_essentials_options( $settings ) {
 					'type'		=> 'checkbox',
 					'options'	=> array(
 						'uniquetax'								=> __('Unique taxonomies', 'kc-essentials'),
+						'mediatax'								=> __('Media taxonomies', 'kc-essentials'),
 						'custom_widget_id_class'	=> __('Custom widget ID &amp; classes', 'kc-essentials'),
 						'widgets'									=> __('Additional widgets', 'kc-essentials')
 					)
@@ -22,19 +23,30 @@ function kc_essentials_options( $settings ) {
 
 
 	# Unique taxonomies
-	$taxonomies = get_taxonomies( array('show_ui' => true, 'hierarchical' => true), 'objects' );
+	$taxonomies = get_taxonomies( array('show_ui' => true), 'objects' );
 	if ( !empty($taxonomies) ) {
-		$tax_list = array();
-		foreach ( $taxonomies as $k => $v )
-			$tax_list[$k] = $v->label;
+		$tax_media = $tax_unique = array();
+		foreach ( $taxonomies as $tax_name => $tax_object ) {
+			$tax_media[$tax_name] = $tax_object->label;
+			if ( $tax_object->hierarchical )
+				$tax_unique[$tax_name] = $tax_object->label;
+		}
 
-		asort( $tax_list );
+		asort( $tax_media );
+		asort( $tax_unique );
 
 		$options['general']['fields'][] = array(
 			'id'			=> 'uniquetax',
 			'title'		=> __('Unique taxonomies', 'kc-essentials'),
 			'type'		=> 'checkbox',
-			'options'	=> $tax_list
+			'options'	=> $tax_unique
+		);
+
+		$options['general']['fields'][] = array(
+			'id'			=> 'mediatax',
+			'title'		=> __('Media taxonomies', 'kc-essentials'),
+			'type'		=> 'checkbox',
+			'options'	=> $tax_media
 		);
 
 	}

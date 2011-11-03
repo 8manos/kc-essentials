@@ -5,10 +5,12 @@ class kcEssentials_uniquetax {
 
 
   public static function init() {
-    if ( !isset(kcEssentials::$data['settings']['general']['uniquetax']) || empty(kcEssentials::$data['settings']['general']['uniquetax']) )
+    if ( !isset(kcEssentials::$data['settings']['general']['uniquetax'])
+					|| !is_array(kcEssentials::$data['settings']['general']['uniquetax'])
+					|| empty(kcEssentials::$data['settings']['general']['uniquetax']) )
       return false;
 
-    self::$data['taxonomies'] = $taxonomies = kcEssentials::$data['settings']['general']['uniquetax'];
+    self::$data['taxonomies'] = kcEssentials::$data['settings']['general']['uniquetax'];
 		add_action( 'add_meta_boxes', array(__CLASS__, '_create_meta_box'), 11, 2 );
   }
 
