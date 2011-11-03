@@ -22,7 +22,7 @@ function kc_essentials_options( $settings ) {
 
 
 	# Unique taxonomies
-	$taxonomies = get_taxonomies( array('show_ui' => true), 'objects' );
+	$taxonomies = get_taxonomies( array('show_ui' => true, 'hierarchical' => true), 'objects' );
 	if ( !empty($taxonomies) ) {
 		$tax_list = array();
 		foreach ( $taxonomies as $k => $v )

@@ -42,7 +42,7 @@ class kcEssentials {
 		$options = array(
 			'general'	=> array(
 				'components'	=> array( 'uniquetax', 'custom_widget_id_class', 'widgets' ),
-				'uniquetax'		=> array(),
+				'uniquetax'		=> array( 'category' ),
 				'widgets'			=> array( 'post' )
 			)
 		);

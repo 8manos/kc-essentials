@@ -20,12 +20,10 @@ class kcEssentials_uniquetax {
         continue;
 
       $tax_object = get_taxonomy( $tax_name );
-      if ( !$tax_object->show_ui || !in_array($post_type, $tax_object->object_type) )
+      if ( !$tax_object->hierarchical || !$tax_object->show_ui || !in_array($post_type, $tax_object->object_type) )
         continue;
 
-      $ol_meta_box = ( $tax_object->hierarchical ) ? "{$tax_name}div" : "tagsdiv-{$tax_name}";
-      remove_meta_box( $ol_meta_box, $post_type, 'side' );
-
+      remove_meta_box( "{$tax_name}div", $post_type, 'side' );
       add_meta_box( "unique-{$tax_name}-div", $tax_object->label, array(__CLASS__, '_fill_meta_box'), $post_type, 'side', 'low', $tax_name );
     }
 	}
@@ -96,15 +94,18 @@ class kcEssentials_uniquetax_Walker extends Walker {
   var $tree_type = 'category';
   var $db_fields = array ('parent' => 'parent', 'id' => 'term_id'); //TODO: decouple this
 
+
   function start_lvl(&$output, $depth, $args) {
     $indent = str_repeat("\t", $depth);
     $output .= "{$indent}<ul class='children'>\n";
   }
 
+
   function end_lvl(&$output, $depth, $args) {
     $indent = str_repeat("\t", $depth);
     $output .= "{$indent}</ul>\n";
   }
+
 
   function start_el(&$output, $category, $depth, $args) {
     extract($args);
@@ -112,12 +113,16 @@ class kcEssentials_uniquetax_Walker extends Walker {
       $taxonomy = 'category';
 
     if ( $taxonomy == 'category' )
-      $name = 'post_category';
+      $name = 'post_category[]';
     else
-      $name = 'tax_input['.$taxonomy.']';
+      $name = 'tax_input['.$taxonomy.'][]';
 
-    $output .= "\n<li id='{$taxonomy}-{$category->term_id}'>" . '<label class="selectit"><input value="' . $category->term_id . '" type="radio" name="'.$name.'" id="in-'.$taxonomy.'-' . $category->term_id . '"' . checked( in_array( $category->term_id, $selected_cats ), true, false ) . disabled( empty( $args['disabled'] ), false, false ) . ' /> ' . esc_html( apply_filters('the_category', $category->name )) . '</label>';
+    $output .= "\n<li id='{$taxonomy}-{$category->term_id}'>\n";
+    $output .= "\t<label class='selectit'>";
+    $output .= "<input value='{$category->term_id}' type='radio' name='{$name}' id='in-{$taxonomy}-{$category->term_id}'" .checked( in_array( $category->term_id, $selected_cats ), true, false ) . disabled( empty( $args['disabled'] ), false, false ) . ' />';
+    $output .= esc_html( apply_filters('the_category', $category->name )) . '</label>';
   }
+
 
   function end_el(&$output, $category, $depth, $args) {
     $output .= "</li>\n";
