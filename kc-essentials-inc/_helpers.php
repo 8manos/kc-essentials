@@ -110,7 +110,7 @@ if ( !class_exists('kcForm') ) {
 		public static function select( $args ) {
 			if ( !isset($args['none']) || $args['none'] !== false ) {
 				$args['none'] = array(
-					'value'   => '-1',
+					'value'   => '',
 					'label'   => '&mdash;&nbsp;'.__('Select', 'kc-settings').'&nbsp;&mdash;'
 				);
 				$args['options'] = array_merge( array($args['none']), $args['options'] );

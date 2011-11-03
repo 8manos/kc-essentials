@@ -12,7 +12,8 @@ function kc_essentials_options( $settings ) {
 					'type'		=> 'checkbox',
 					'options'	=> array(
 						'uniquetax'								=> __('Unique taxonomies', 'kc-essentials'),
-						'custom_widget_id_class'	=> __('Custom widget ID &amp; classes', 'kc-essentials')
+						'custom_widget_id_class'	=> __('Custom widget ID &amp; classes', 'kc-essentials'),
+						'widgets'									=> __('Additional widgets', 'kc-essentials')
 					)
 				)
 			)
@@ -53,6 +54,16 @@ function kc_essentials_options( $settings ) {
 		'type'		=> 'text',
 		'attr'		=> array('style' => 'width:98%' ),
 		'desc'		=> __('Predefined widget classes (optional, separate with spaces)', 'kc-essentials')
+	);
+
+	# Additional Widgets
+	$options['general']['fields'][] = array(
+		'id'			=> 'widgets',
+		'title'		=> __('Additional widgets', 'kc-essentials'),
+		'type'		=> 'checkbox',
+		'options'	=> array(
+			'post'	=> 'KC Posts'
+		)
 	);
 
 

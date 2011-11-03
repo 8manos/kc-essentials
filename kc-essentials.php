@@ -12,7 +12,9 @@ License: GPL v2
 
 
 class kcEssentials {
-	public static $data;
+	public static $data = array(
+		'version'	=> '0.1'
+	);
 
 
 	private static function _paths() {
@@ -39,8 +41,9 @@ class kcEssentials {
 	private static function _options() {
 		$options = array(
 			'general'	=> array(
-				'components'	=> array( 'uniquetax', 'custom_widget_id_class' ),
-				'uniquetax'		=> array()
+				'components'	=> array( 'uniquetax', 'custom_widget_id_class', 'widgets' ),
+				'uniquetax'		=> array(),
+				'widgets'			=> array( 'post' )
 			)
 		);
 
@@ -58,10 +61,14 @@ class kcEssentials {
 		require_once self::$data['paths']['inc'] . '/_helpers.php';
 
 		foreach ( $settings['general']['components'] as $c ) {
+			if ( $c == 'widgets' )
+				continue;
+
 			require_once self::$data['paths']['inc'] . "/{$c}.php";
 			add_action( 'init', array("kcEssentials_{$c}", 'init'), 99 );
 		}
 
+		# Dev
 		//add_action( 'admin_footer', array(__CLASS__, 'dev' ) );
 	}
 
@@ -77,4 +84,9 @@ class kcEssentials {
 
 require_once dirname(__FILE__) . '/kc-essentials-inc/options.php';
 add_action( 'init', array('kcEssentials', 'init'), 12 );
+
+
+require_once dirname(__FILE__) . '/kc-essentials-inc/widgets.php';
+add_action( 'widgets_init', array('kcEssentials_widgets', 'init') );
+
 ?>
