@@ -158,23 +158,24 @@ Class kc_widget_post extends WP_Widget {
 				$content = '';
 				switch ( $instance['content_type'] ) {
 					case 'content' :
-						$content = apply_filters( 'the_content', get_the_content() );
+						$content = get_the_content();
 					break;
 					case 'excerpt' :
-						$content = apply_filters( 'the_content', get_the_excerpt() );
+						$content = get_the_excerpt();
 					break;
 					case 'meta' :
 						if ( !empty($instance['content_meta']) )
-							$content = apply_filters( 'the_content', get_post_meta( get_the_ID(), $instance['content_meta'], true ) );
+							$content = get_post_meta( get_the_ID(), $instance['content_meta'], true );
 					break;
 				}
-				$content = apply_filters( 'kcw_posts_content', $content );
+				$content = apply_filters( 'the_content', $content );
 
 				# Blockquote (close)
 				if ( !empty($content) && $instance['content_wrapper'] == 'blockquote' )
 					$content = preg_replace(array('/^<p>/', '/<\/p>$/'), array('<p><span class="q q-open"></span>', '<span class="q q-close"></span></p>', ), $content, 1);
 
-				$output .= apply_filters( 'kcw_post_content', $content, get_the_ID() );
+				$content = apply_filters( "kcw_post_content-{$instance['action_id']}", $content, get_the_ID() );
+				$output .= apply_filters( 'kcw_post_content', $content, get_the_ID(), $instance['action_id'] );
 
 				# More link
 				if ( $instance['more_link'] )
