@@ -29,9 +29,9 @@ function kc_essentials_options( $settings ) {
 	if ( !empty($taxonomies) ) {
 		$tax_media = $tax_unique = array();
 		foreach ( $taxonomies as $tax_name => $tax_object ) {
-			$tax_media[$tax_name] = $tax_object->label;
+			$tax_media[$tax_name] = "{$tax_object->label} (<code>{$tax_name}</code>)";
 			if ( $tax_object->hierarchical )
-				$tax_unique[$tax_name] = $tax_object->label;
+				$tax_unique[$tax_name] = "{$tax_object->label} (<code>{$tax_name}</code>)";
 		}
 
 		asort( $tax_media );
