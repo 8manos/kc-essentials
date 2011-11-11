@@ -19,7 +19,7 @@ class kcEssentials_custom_widget_id_class {
 	 *
 	 */
 	public static function _widget_form( $instance, $widget ) {
-		$data = kcEssentials::$data['settings']['general'];
+		$data = kcEssentials::$data['settings']['custom_widget_id_class'];
 		$customs = array(
 			'id'	=> array(
 				__('Custom ID', 'kc-essentials'),
@@ -43,13 +43,13 @@ class kcEssentials_custom_widget_id_class {
 			$output .= "\t<p>\n";
 
 
-			if ( !isset($data["custom_widget_{$c}"]) || empty($data["custom_widget_{$c}"]) ) {
+			if ( !isset($data[$c]) || empty($data[$c]) ) {
 				$output .= "\t\t<label for='{$f_id}'>{$l[1]}</label>\n";
 				$output .= "\t\t<input type='text' name='{$f_name}' id='{$f_id}' class='widefat' value='{$f_current}'/>\n";
 			}
 			else {
 				$f_opt = array();
-				foreach ( explode( ' ', $data["custom_widget_{$c}"]) as $o )
+				foreach ( explode( ' ', $data[$c]) as $o )
 					$f_opt[] = array('value' => $o, 'label' => $o);
 
 				if ( $c == 'id' ) {
@@ -89,7 +89,6 @@ class kcEssentials_custom_widget_id_class {
 	 *
 	 */
 	public static function _widget_update( $instance, $new_instance ) {
-		print_r( $new_instance );
 		foreach ( array('id', 'class') as $c ) {
 			# 0. Add/Update
 			if ( !empty($new_instance["custom_{$c}"]) ) {

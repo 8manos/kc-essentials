@@ -5,14 +5,12 @@ class kcEssentials_mediatax {
 
 
 	public static function init() {
-    if ( !isset(kcEssentials::$data['settings']['general']['mediatax'])
-				|| !is_array(kcEssentials::$data['settings']['general']['mediatax'])
-				|| empty(kcEssentials::$data['settings']['general']['mediatax']) )
+    if ( !isset(kcEssentials::$data['settings']['mediatax']['taxonomies']) )
       return false;
 
     self::$data['taxonomies'] = array();
     $media_taxonomies = get_object_taxonomies( 'attachment' );
-    foreach ( kcEssentials::$data['settings']['general']['mediatax'] as $tax_name ) {
+    foreach ( kcEssentials::$data['settings']['mediatax']['taxonomies'] as $tax_name ) {
 			self::$data['taxonomies'][$tax_name] = get_taxonomy( $tax_name );
 
 			# Register the taxonomy for attachment post type

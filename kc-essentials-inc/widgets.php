@@ -6,21 +6,28 @@ class kcEssentials_widgets {
     $options = get_option( 'kc_essentials_settings' );
     if ( !$options ) {
       $options = array(
-        'general'	=> array(
-          'components'	=> array( 'uniquetax', 'custom_widget_id_class', 'widgets' ),
-          'uniquetax'		=> array(),
-          'widgets'			=> array( 'post' )
-        )
+        'general'		=> array(
+          'components'	=> array( 'custom_widget_id_class', 'widgets', 'insert_custom_size' ),
+        ),
+				'widgets'		=> array(
+					'widgets'		> array( 'post' )
+				)
       );
 
       $options = apply_filters( 'kc_essentials_setting', $options );
     }
 
-    if ( !isset($options['general']['widgets']) || empty($options['general']['widgets']) )
+    if ( !isset($options['general']['components'])
+					|| !in_array( 'widgets', $options['general']['components'] )
+					|| !isset($options['widgets']) )
       return false;
 
-    foreach ( $options['general']['widgets'] as $widget ) {
-      require_once dirname(__FILE__) . "/widget-{$widget}.php";
+    foreach ( $options['widgets']['widgets'] as $widget ) {
+			$file = dirname(__FILE__) . "/widget-{$widget}.php";
+			if ( !file_exists($file) || !is_readable($file) )
+				continue;
+
+      require_once $file;
       register_widget( "kc_widget_{$widget}" );
     }
 

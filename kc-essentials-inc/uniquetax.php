@@ -5,12 +5,10 @@ class kcEssentials_uniquetax {
 
 
   public static function init() {
-    if ( !isset(kcEssentials::$data['settings']['general']['uniquetax'])
-					|| !is_array(kcEssentials::$data['settings']['general']['uniquetax'])
-					|| empty(kcEssentials::$data['settings']['general']['uniquetax']) )
+    if ( !isset(kcEssentials::$data['settings']['uniquetax']['taxonomies']) )
       return false;
 
-    self::$data['taxonomies'] = kcEssentials::$data['settings']['general']['uniquetax'];
+    self::$data['taxonomies'] = kcEssentials::$data['settings']['uniquetax']['taxonomies'];
 		add_action( 'add_meta_boxes', array(__CLASS__, '_create_meta_box'), 11, 2 );
   }
 
@@ -48,7 +46,7 @@ class kcEssentials_uniquetax {
     <?php if ( !current_user_can($tax->cap->assign_terms) ) { ?>
       <p><em><?php _e('You cannot modify this taxonomy.'); ?></em></p>
     <?php } ?>
-    <?php if ( current_user_can($tax->cap->edit_terms) ) { ?>
+    <?php /* if ( current_user_can($tax->cap->edit_terms) ) { ?>
       <div id="<?php echo $taxonomy; ?>-adder" class="wp-hidden-children">
         <h4><a id="<?php echo $taxonomy; ?>-add-toggle" href="#<?php echo $taxonomy; ?>-add" class="hide-if-no-js" tabindex="3"><?php printf( __( '+ %s' ), $tax->labels->add_new_item ); ?></a></h4>
         <p id="<?php echo $taxonomy; ?>-add" class="category-add wp-hidden-child">
@@ -62,7 +60,7 @@ class kcEssentials_uniquetax {
         <span id="<?php echo $taxonomy; ?>-ajax-response"></span>
         </p>
       </div>
-    <?php } ?>
+    <?php } */ ?>
     </div>
   <?php
   }
@@ -94,7 +92,7 @@ class kcEssentials_uniquetax {
 
 class kcEssentials_uniquetax_Walker extends Walker {
   var $tree_type = 'category';
-  var $db_fields = array ('parent' => 'parent', 'id' => 'term_id'); //TODO: decouple this
+  var $db_fields = array ('parent' => 'parent', 'id' => 'term_id');
 
 
   function start_lvl(&$output, $depth, $args) {
@@ -121,7 +119,7 @@ class kcEssentials_uniquetax_Walker extends Walker {
 
     $output .= "\n<li id='{$taxonomy}-{$category->term_id}'>\n";
     $output .= "\t<label class='selectit'>";
-    $output .= "<input value='{$category->term_id}' type='radio' name='{$name}' id='in-{$taxonomy}-{$category->term_id}'" .checked( in_array( $category->term_id, $selected_cats ), true, false ) . disabled( empty( $args['disabled'] ), false, false ) . ' />';
+    $output .= "<input value='{$category->term_id}' type='radio' name='{$name}' id='in-{$taxonomy}-{$category->term_id}'" .checked( in_array( $category->term_id, $selected_cats ), true, false ) . disabled( empty( $args['disabled'] ), false, false ) . ' /> ';
     $output .= esc_html( apply_filters('the_category', $category->name )) . '</label>';
   }
 
