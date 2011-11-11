@@ -49,6 +49,9 @@ class kcEssentials_cc_archive_menu {
 		if ( is_post_type_archive($matches[1]) )
 			$classes[] = 'current-menu-item';
 
+		if ( is_singular($matches[1]) )
+			$classes[] = 'current-menu-ancestor';
+
 		self::$data['items'][$item->ID] = array( 'post_type' => $matches[1] );
 		return $classes;
 	}
