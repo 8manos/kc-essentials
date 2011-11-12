@@ -69,7 +69,8 @@ class KC_Adjacent_Post {
 		if ( $query->have_posts() ) {
 			while ( $query->have_posts() ) {
 				$query->the_post();
-				$output[get_the_ID()] = array(
+				$output[] = array(
+					'id'		=> get_the_ID(),
 					'title'	=> get_the_title(),
 					'url'		=> get_permalink()
 				);
