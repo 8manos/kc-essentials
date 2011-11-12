@@ -18,6 +18,14 @@ function kc_essentials_options( $settings ) {
 						'insert_custom_size'			=> __('Insert images with custom sizes', 'kc-essentials'),
 						'cc_archive_menu'					=> __('Custom post type archive menu', 'kc-essentials')
 					)
+				),
+				array(
+					'id'			=> 'helper',
+					'title'		=> __('Helper functions', 'kc-essentials'),
+					'type'		=> 'checkbox',
+					'options'	=> array(
+						'adjacent_post'	=> __('Get adjacent posts', 'kc-essentials') . ' (<code>KC_Adjacent_Post</code>)',
+					)
 				)
 			)
 		)

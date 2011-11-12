@@ -54,19 +54,28 @@ class kcEssentials {
 
 	static function init() {
 		$settings = ( class_exists('kcSettings') ) ? kc_get_option( 'kc_essentials' ) : self::_options();
-		if ( empty($settings) || !isset($settings['general']['components']) || empty($settings['general']['components']) )
+		if ( empty($settings) || !isset($settings['general']) || empty($settings['general']) )
 			return false;
 
 		self::$data['settings'] = $settings;
 		self::$data['paths'] = self::_paths();
 		require_once self::$data['paths']['inc'] . '/_helpers.php';
 
-		foreach ( $settings['general']['components'] as $c ) {
-			if ( $c == 'widgets' )
-				continue;
+		# Components
+		if ( isset($settings['general']['components']) && !empty($settings['general']['components']) ) {
+			foreach ( $settings['general']['components'] as $c ) {
+				if ( $c == 'widgets' )
+					continue;
 
-			require_once self::$data['paths']['inc'] . "/{$c}.php";
-			add_action( 'init', array("kcEssentials_{$c}", 'init'), 99 );
+				require_once self::$data['paths']['inc'] . "/{$c}.php";
+				add_action( 'init', array("kcEssentials_{$c}", 'init'), 99 );
+			}
+		}
+
+		# Helpers
+		if ( isset($settings['general']['helper']) && !empty($settings['general']['helper']) ) {
+			foreach ( $settings['general']['helper'] as $h )
+				require_once self::$data['paths']['inc'] . "/helper_{$h}.php";
 		}
 
 		# Dev
