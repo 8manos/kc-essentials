@@ -28,10 +28,18 @@ class KC_Adjacent_Post {
 				return false;
 
 		self::$data['date_current'] = $current->post_date;
-		self::$data['date_compare'] = $previous ? '<' : '>';
+		if ( $previous ) {
+			self::$data['date_compare'] = '<';
+			$order = 'DESC';
+			$pos = 'prev';
+		} else {
+			self::$data['date_compare'] = '>';
+			$order = 'ASC';
+			$pos = 'next';
+		}
 
 		$q_args = array(
-			'order'						=> $previous ? 'DESC' : 'ASC',
+			'order'						=> $order,
 			'orderby'					=> 'date',
 			'post_type'				=> $current->post_type,
 			'post_status'			=> ( $current->post_type == 'attachment' ) ? 'inherit' : 'publish',
@@ -72,7 +80,8 @@ class KC_Adjacent_Post {
 				$output[] = array(
 					'id'		=> get_the_ID(),
 					'title'	=> get_the_title(),
-					'url'		=> get_permalink()
+					'url'		=> get_permalink(),
+					'pos'		=> $pos
 				);
 			}
 		}
