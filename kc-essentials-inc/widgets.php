@@ -19,7 +19,7 @@ class kcEssentials_widgets {
 
     if ( !isset($options['general']['components'])
 					|| !in_array( 'widgets', $options['general']['components'] )
-					|| !isset($options['widgets']) )
+					|| !isset($options['widgets']['widgets']) )
       return false;
 
     foreach ( $options['widgets']['widgets'] as $widget ) {
