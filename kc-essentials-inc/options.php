@@ -116,6 +116,7 @@ function kc_essentials_options( $settings ) {
 		'menu_title'	=> __('KC Essentials', 'kc-essentials'),
 		'page_title'	=> __('KC Essentials Settings', 'kc-essentials'),
 		'display'			=> 'metabox',
+		'load_actions'	=> array( array('kcEssentials', '_sns') ),
 		'options'			=> $options
 	);
 
