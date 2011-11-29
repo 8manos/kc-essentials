@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @package KC_Essentials
+ * @version 0.1
+ */
+
 /*
 Plugin name: KC Essentials
 Plugin URI: http://kucrut.org/
