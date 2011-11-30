@@ -1,1 +1,0 @@
-jQuery(document).ready(function(a){a("#kc-metabox-settings_page_kc-settings-kc_essentials-general").find(":checkbox").change(function(){var c="#kc-metabox-settings_page_kc-settings-kc_essentials-",b=a(c+this.value);if(b.length){a(c+this.value+"-hide").prop("checked",this.checked).triggerHandler("click")}})});

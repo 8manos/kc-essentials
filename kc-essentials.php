@@ -77,11 +77,6 @@ class kcEssentials {
 	}
 
 
-	static function _sns() {
-		wp_enqueue_script( 'kc-essentials', self::$data['paths']['scripts'].'/kc-essentials.js', array('kc-settings'), self::$data['version'], true );
-	}
-
-
 	# Register to KC Settings
 	public static function _activate() {
 		if ( !class_exists('kcSettings') )
