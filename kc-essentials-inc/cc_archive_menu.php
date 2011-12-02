@@ -80,4 +80,5 @@ class kcEssentials_cc_archive_menu {
 	}
 }
 
+kcEssentials_cc_archive_menu::init();
 ?>

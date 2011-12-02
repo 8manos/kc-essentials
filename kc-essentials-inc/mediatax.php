@@ -1,16 +1,13 @@
 <?php
 
 class kcEssentials_mediatax {
-  public static $data;
+	public static $data;
 
 
 	public static function init() {
-    if ( !isset(kcEssentials::$data['settings']['mediatax']['taxonomies']) )
-      return false;
-
-    self::$data['taxonomies'] = array();
-    $media_taxonomies = get_object_taxonomies( 'attachment' );
-    foreach ( kcEssentials::$data['settings']['mediatax']['taxonomies'] as $tax_name ) {
+		self::$data['taxonomies'] = array();
+		$media_taxonomies = get_object_taxonomies( 'attachment' );
+		foreach ( kcEssentials::$data['settings']['mediatax']['taxonomies'] as $tax_name ) {
 			self::$data['taxonomies'][$tax_name] = get_taxonomy( $tax_name );
 
 			# Register the taxonomy for attachment post type
@@ -99,8 +96,9 @@ class kcEssentials_mediatax {
 			}
 		}
 	}
-
-
 }
 
+
+if ( isset(kcEssentials::$data['settings']['mediatax']['taxonomies']) )
+	kcEssentials_mediatax::init();
 ?>

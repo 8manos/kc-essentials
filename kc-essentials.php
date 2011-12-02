@@ -58,11 +58,8 @@ class kcEssentials {
 		# Components
 		if ( isset($settings['general']['components']) && !empty($settings['general']['components']) ) {
 			foreach ( $settings['general']['components'] as $c ) {
-				if ( $c == 'widgets' )
-					continue;
-
-				require_once "${paths['inc']}/{$c}.php";
-				add_action( 'init', array("kcEssentials_{$c}", 'init'), 99 );
+				if ( $c != 'widgets' )
+					require_once "${paths['inc']}/{$c}.php";
 			}
 		}
 

@@ -2,16 +2,16 @@
 
 class kcEssentials_custom_widget_id_class {
 
-  public static function init() {
-    # Add necessary input on widget configuration form
-    add_filter( 'widget_form_callback', array(__CLASS__, '_widget_form'), 10, 2 );
+	public static function init() {
+		# Add necessary input on widget configuration form
+		add_filter( 'widget_form_callback', array(__CLASS__, '_widget_form'), 10, 2 );
 
-    # Update widget with our custom options
-    add_filter( 'widget_update_callback', array(__CLASS__, '_widget_update'), 10, 2 );
+		# Update widget with our custom options
+		add_filter( 'widget_update_callback', array(__CLASS__, '_widget_update'), 10, 2 );
 
-    # Modify widget markup
-    add_filter( 'dynamic_sidebar_params', array(__CLASS__, '_dynamic_sidebar_params') );
-  }
+		# Modify widget markup
+		add_filter( 'dynamic_sidebar_params', array(__CLASS__, '_dynamic_sidebar_params') );
+	}
 
 
 	/**
@@ -133,7 +133,8 @@ class kcEssentials_custom_widget_id_class {
 
 		return $params;
 	}
-
 }
+
+kcEssentials_custom_widget_id_class::init();
 
 ?>
