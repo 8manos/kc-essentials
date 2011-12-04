@@ -99,7 +99,7 @@ class kcEssentials {
 	static function dev() {
 		echo '<pre>';
 
-		print_r( self::$settings );
+		print_r( self::$data );
 
 		echo '</pre>';
 	}

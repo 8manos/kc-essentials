@@ -1,6 +1,15 @@
 <?php
 
-class kcEssentials_custom_widget_id_class {
+/**
+ * @package KC_Essentials
+ * @version 0.1
+ *
+ * @subpackage Widget_Enhancements
+ *
+ */
+
+
+class kcEssentials_widget_enhancements {
 
 	public static function init() {
 		# Add necessary input on widget configuration form
@@ -10,7 +19,7 @@ class kcEssentials_custom_widget_id_class {
 		add_filter( 'widget_update_callback', array(__CLASS__, '_widget_update'), 10, 2 );
 
 		# Modify widget markup
-		add_filter( 'dynamic_sidebar_params', array(__CLASS__, '_dynamic_sidebar_params') );
+		add_filter( 'dynamic_sidebar_params', array(__CLASS__, '_set_id_class') );
 	}
 
 
@@ -19,7 +28,7 @@ class kcEssentials_custom_widget_id_class {
 	 *
 	 */
 	public static function _widget_form( $instance, $widget ) {
-		$data = kcEssentials::$data['settings']['custom_widget_id_class'];
+		$data = kcEssentials::$data['settings']['widget_enhancements'];
 		$customs = array(
 			'id'	=> array(
 				__('Custom ID', 'kc-essentials'),
@@ -112,7 +121,7 @@ class kcEssentials_custom_widget_id_class {
 	 * Modify widget markup to add custom ID/classes
 	 *
 	 */
-	public static function _dynamic_sidebar_params( $params ) {
+	public static function _set_id_class( $params ) {
 		global $wp_registered_widgets;
 		$widget_id	= $params[0]['widget_id'];
 		$widget_obj	= $wp_registered_widgets[$widget_id];
@@ -135,6 +144,6 @@ class kcEssentials_custom_widget_id_class {
 	}
 }
 
-kcEssentials_custom_widget_id_class::init();
+kcEssentials_widget_enhancements::init();
 
 ?>
