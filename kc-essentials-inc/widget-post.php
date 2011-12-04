@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * @package KC_Essentials
+ * @version 0.1
+ *
+ * @subpackage Custom_Widgets
+ *
+ */
+
+
 Class kc_widget_post extends WP_Widget {
 
 	function __construct() {

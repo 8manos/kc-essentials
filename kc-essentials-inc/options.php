@@ -104,7 +104,8 @@ function kc_essentials_options( $settings ) {
 				'title'		=> __('Widgets', 'kc-essentials'),
 				'type'		=> 'checkbox',
 				'options'	=> array(
-					'post'		=> __('KC Posts', 'kc-essentials')
+					'post'		=> __('KC Posts', 'kc-essentials'),
+					'menu'		=> __('KC Custom Menu', 'kc-essentials')
 				)
 			)
 		)
