@@ -65,18 +65,27 @@ class kcEssentials_widgets {
   public static function form( $widget, $options, $config, $list_class = 'kcw-control-normal' ) {
 		$form = "<ul class='${list_class}'>\n";
 		foreach ( $options as $id => $args ) {
-			$f_id = $widget->get_field_id($id);
-			$f_name = $widget->get_field_name($id);
-
-			$label = "<label for='${f_id}'>${args['label']}</label>";
-			if ( isset($args['heading']) ) {
-				$label = "<h5>${label}</h5>";
-				unset( $args['heading'] );
+			$f_id = $widget->get_field_id( $id );
+			$f_name = $widget->get_field_name( $id );
+			if ( isset($args['name_sfx']) ) {
+				$f_name .= $args['name_sfx'];
+				unset( $args['name_sfx'] );
 			}
-			unset( $args['label'] );
+
+
 
 			$form .= "\t<li>\n";
-			$form .= "\t\t${label}\n";
+
+			if ( isset($args['label']) && !empty($args['label']) ) {
+				$label = "<label for='${f_id}'>${args['label']}</label>";
+				if ( isset($args['heading']) ) {
+					$label = "<h5>${label}</h5>";
+					unset( $args['heading'] );
+				}
+				unset( $args['label'] );
+
+				$form .= "\t\t${label}\n";
+			}
 
 			if ( !isset($args['current']) )
 				$args['current'] = $config[$id];
@@ -92,6 +101,36 @@ class kcEssentials_widgets {
 		return $form;
   }
 
+
+	/**
+	 * Get widget settings
+	 */
+	public static function get_setting( $widget_id ) {
+		$setting = get_option( 'kc_essentials_we' );
+
+		if ( !$setting || !isset($setting[$widget_id]) )
+			return array();
+		else
+			return $setting[$widget_id];
+	}
+
+
+	/**
+	 * Save widget settings
+	 */
+	public static function save_setting( $widget_id, $value ) {
+		$settings = get_option( 'kc_essentials_we' );
+		if ( !$settings )
+			$settings = array();
+
+		if ( empty($value) )
+			unset( $settings[$widget_id] );
+		else
+			$settings[$widget_id] = $value;
+
+		update_option( 'kc_essentials_we', $settings );
+
+	}
 }
 
 ?>

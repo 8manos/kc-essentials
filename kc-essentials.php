@@ -53,6 +53,12 @@ class kcEssentials {
 		$settings = kc_get_option( 'kc_essentials' );
 		self::$data['settings'] = $settings;
 
+		# Widget settings
+		$widget_settings = get_option( 'kc_essentials_widgets' );
+		if ( !$widget_settings)
+			$widget_settings = array();
+		self::$data['widget_settings'] = $widget_settings;
+
 		require_once "${paths['inc']}/_helpers.php";
 
 		# Components
@@ -99,7 +105,7 @@ class kcEssentials {
 	static function dev() {
 		echo '<pre>';
 
-		print_r( self::$data );
+		print_r( get_option( 'kc_essentials_we' ) );
 
 		echo '</pre>';
 	}

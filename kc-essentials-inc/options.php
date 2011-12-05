@@ -11,12 +11,13 @@ function kc_essentials_options( $settings ) {
 					'title'		=> __('Components', 'kc-essentials'),
 					'type'		=> 'checkbox',
 					'options'	=> array(
-						'uniquetax'						=> __('Unique taxonomies', 'kc-essentials'),
-						'mediatax'						=> __('Media taxonomies', 'kc-essentials'),
-						'widget_enhancements'	=> __('Widget enhancements', 'kc-essentials'),
-						'widgets'							=> __('Additional widgets', 'kc-essentials'),
-						'insert_custom_size'	=> __('Insert images with custom sizes', 'kc-essentials'),
-						'cc_archive_menu'			=> __('Custom post type archive menu', 'kc-essentials')
+						'uniquetax'								=> __('Unique taxonomies', 'kc-essentials'),
+						'mediatax'								=> __('Media taxonomies', 'kc-essentials'),
+						'widget_custom_id_class'	=> __('Custom widget ID &amp; classes', 'kc-essentials'),
+						'widget_logic'						=> __('Widget logic', 'kc-essentials'),
+						'widgets'									=> __('Additional widgets', 'kc-essentials'),
+						'insert_custom_size'			=> __('Insert images with custom sizes', 'kc-essentials'),
+						'cc_archive_menu'					=> __('Custom post type archive menu', 'kc-essentials')
 					)
 				),
 				array(
@@ -74,8 +75,8 @@ function kc_essentials_options( $settings ) {
 
 	# Widget enhancements
 	$options[] = array(
-		'id'			=> 'widget_enhancements',
-		'title'		=> __('Widget enhancements', 'kc-essentials'),
+		'id'			=> 'widget_custom_id_class',
+		'title'		=> __('Custom widget ID &amp; classes', 'kc-essentials'),
 		'fields'	=> array(
 			array(
 				'id'			=> 'id',

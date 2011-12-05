@@ -58,6 +58,12 @@
 	line-height:1.2}
 
 .kcw-control-normal input,
-.kcw-control-normal select {width:98%}
-.kcw-control-normal {}
+.kcw-control-normal select,
+.kcwe select {
+	width:99%}
 
+.kcwe .logics {
+	max-height:11em;
+	overflow:auto;
+	padding-left:1em;
+}

@@ -81,10 +81,10 @@
 
 	$(document).ready(function($) {
 		var $widgets	= $('#widgets-right'),
-				$fields		= $widgets.find('.kcw-control-block'),
+				$fields		= $widgets.find('.kcw-control-block, .kcwe'),
 				$heads		= $widgets.find('h5');
 
-		$('.hasdep', $fields).live('change', function() {
+		$('.hasdep', $widgets).live('change', function() {
 			$(this).kcFormDep();
 		}).change();
 

@@ -9,25 +9,26 @@
  */
 
 
-class kcEssentials_widget_enhancements {
+class kcEssentials_widget_custom_id_class {
 
 	public static function init() {
-		# Add necessary input on widget configuration form
-		add_filter( 'widget_form_callback', array(__CLASS__, '_widget_form'), 10, 2 );
+		# Custom widget ID & classes
+		# 0. Add fields on widget configuration form
+		add_filter( 'widget_form_callback', array(__CLASS__, '_fields'), 10, 2 );
 
-		# Update widget with our custom options
-		add_filter( 'widget_update_callback', array(__CLASS__, '_widget_update'), 10, 2 );
+		# 1. Update widget options
+		add_filter( 'widget_update_callback', array(__CLASS__, '_save'), 10, 2 );
 
-		# Modify widget markup
-		add_filter( 'dynamic_sidebar_params', array(__CLASS__, '_set_id_class') );
+		# 2. Modify widget markup
+		add_filter( 'dynamic_sidebar_params', array(__CLASS__, '_set') );
 	}
 
 
 	/**
-	 * Add input field to widget configuration form
+	 * Add custom ID/classes fields to widget configuration form
 	 *
 	 */
-	public static function _widget_form( $instance, $widget ) {
+	public static function _fields( $instance, $widget ) {
 		$data = kcEssentials::$data['settings']['widget_enhancements'];
 		$customs = array(
 			'id'	=> array(
@@ -94,10 +95,10 @@ class kcEssentials_widget_enhancements {
 
 
 	/**
-	 * Add custom classes to widget options
+	 * Sanitize widget's custom ID and/or classes
 	 *
 	 */
-	public static function _widget_update( $instance, $new_instance ) {
+	public static function _save( $instance, $new_instance ) {
 		foreach ( array('id', 'class') as $c ) {
 			# 0. Add/Update
 			if ( !empty($new_instance["custom_{$c}"]) ) {
@@ -118,10 +119,10 @@ class kcEssentials_widget_enhancements {
 
 
 	/**
-	 * Modify widget markup to add custom ID/classes
+	 * Add custom ID/classes to widget's markup
 	 *
 	 */
-	public static function _set_id_class( $params ) {
+	public static function _set( $params ) {
 		global $wp_registered_widgets;
 		$widget_id	= $params[0]['widget_id'];
 		$widget_obj	= $wp_registered_widgets[$widget_id];
@@ -144,6 +145,6 @@ class kcEssentials_widget_enhancements {
 	}
 }
 
-kcEssentials_widget_enhancements::init();
+kcEssentials_widget_custom_id_class::init();
 
 ?>
