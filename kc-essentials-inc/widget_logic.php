@@ -13,8 +13,6 @@ class kcEssentials_widget_logic {
 	private static $data = array();
 
 	public static function init() {
-		self::$data['settings'] = isset( kcEssentials::$data['widget_settings'] ) ? kcEssentials::$data['widget_settings'] : array();
-
 		# Custom widget ID & classes
 		# 0. Add fields on widget configuration form
 		add_filter( 'widget_form_callback', array(__CLASS__, '_fields'), 10, 2 );

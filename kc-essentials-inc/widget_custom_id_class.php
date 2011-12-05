@@ -29,7 +29,6 @@ class kcEssentials_widget_custom_id_class {
 	 *
 	 */
 	public static function _fields( $instance, $widget ) {
-		$data = kcEssentials::$data['settings']['widget_enhancements'];
 		$customs = array(
 			'id'	=> array(
 				__('Custom ID', 'kc-essentials'),
