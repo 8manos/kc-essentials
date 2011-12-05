@@ -63,7 +63,7 @@ class kcEssentials_widgets {
 	 * @return string Configuration form
 	 */
   public static function form( $widget, $options, $config, $list_class = 'kcw-control-normal' ) {
-		$form = "<ul class='${list_class}'>\n";
+		$form = "<ul class='{$list_class}'>\n";
 		foreach ( $options as $id => $args ) {
 			$f_id = $widget->get_field_id( $id );
 			$f_name = $widget->get_field_name( $id );
@@ -72,19 +72,17 @@ class kcEssentials_widgets {
 				unset( $args['name_sfx'] );
 			}
 
-
-
 			$form .= "\t<li>\n";
 
 			if ( isset($args['label']) && !empty($args['label']) ) {
-				$label = "<label for='${f_id}'>${args['label']}</label>";
+				$label = "<label for='{$f_id}'>{$args['label']}</label>";
 				if ( isset($args['heading']) ) {
-					$label = "<h5>${label}</h5>";
+					$label = "<h5>{$label}</h5>";
 					unset( $args['heading'] );
 				}
 				unset( $args['label'] );
 
-				$form .= "\t\t${label}\n";
+				$form .= "\t\t{$label}\n";
 			}
 
 			if ( !isset($args['current']) )

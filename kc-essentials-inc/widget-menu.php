@@ -27,8 +27,8 @@ Class kc_widget_menu extends WP_Widget {
 		$instance['title'] = apply_filters( 'widget_title', empty( $instance['title'] ) ? '' : $instance['title'], $instance, $this->id_base );
 		$instance['fallback_cb'] = '';
 		if ( $instance['action_id'] ) {
-			$args['before_widget'] = apply_filters( "kc_widget-${instance['action_id']}", $args['before_widget'], 'before_widget', 'widget_menu' );
-			$args['after_widget'] = apply_filters( "kc_widget-${instance['action_id']}", $args['after_widget'], 'after_widget', 'widget_menu' );
+			$args['before_widget'] = apply_filters( "kc_widget-{$instance['action_id']}", $args['before_widget'], 'before_widget', 'widget_menu' );
+			$args['after_widget'] = apply_filters( "kc_widget-{$instance['action_id']}", $args['after_widget'], 'after_widget', 'widget_menu' );
 		}
 		unset( $instance['action_id'] );
 

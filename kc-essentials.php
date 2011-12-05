@@ -53,20 +53,20 @@ class kcEssentials {
 		$settings = kc_get_option( 'kc_essentials' );
 		self::$data['settings'] = $settings;
 
-		require_once "${paths['inc']}/_helpers.php";
+		require_once "{$paths['inc']}/_helpers.php";
 
 		# Components
 		if ( isset($settings['general']['components']) && !empty($settings['general']['components']) ) {
 			foreach ( $settings['general']['components'] as $c ) {
 				if ( $c != 'widgets' )
-					require_once "${paths['inc']}/{$c}.php";
+					require_once "{$paths['inc']}/{$c}.php";
 			}
 		}
 
 		# Helpers
 		if ( isset($settings['general']['helper']) && !empty($settings['general']['helper']) ) {
 			foreach ( $settings['general']['helper'] as $h )
-				require_once "${paths['inc']}/helper_{$h}.php";
+				require_once "{$paths['inc']}/helper_{$h}.php";
 		}
 
 		# Dev

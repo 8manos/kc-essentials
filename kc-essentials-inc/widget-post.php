@@ -20,8 +20,8 @@ Class kc_widget_post extends WP_Widget {
 
 	function widget( $args, $instance ) {
 		if ( $instance['action_id'] ) {
-			$args['before_widget'] = apply_filters( "kc_widget-${instance['action_id']}", $args['before_widget'], 'before_widget', 'widget_post' );
-			$args['after_widget'] = apply_filters( "kc_widget-${instance['action_id']}", $args['after_widget'], 'after_widget', 'widget_post' );
+			$args['before_widget'] = apply_filters( "kc_widget-{$instance['action_id']}", $args['before_widget'], 'before_widget', 'widget_post' );
+			$args['after_widget'] = apply_filters( "kc_widget-{$instance['action_id']}", $args['after_widget'], 'after_widget', 'widget_post' );
 		}
 		extract( $args );
 
