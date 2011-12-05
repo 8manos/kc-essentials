@@ -17,7 +17,7 @@ class kcEssentials_widget_custom_id_class {
 		add_filter( 'widget_form_callback', array(__CLASS__, '_fields'), 10, 2 );
 
 		# 1. Update widget options
-		add_filter( 'widget_update_callback', array(__CLASS__, '_save'), 10, 2 );
+		add_filter( 'widget_update_callback', array(__CLASS__, '_save'), 10, 4 );
 
 		# 2. Modify widget markup
 		add_filter( 'dynamic_sidebar_params', array(__CLASS__, '_set') );
@@ -29,6 +29,8 @@ class kcEssentials_widget_custom_id_class {
 	 *
 	 */
 	public static function _fields( $instance, $widget ) {
+		$data = kcEssentials::$data['settings']['widget_custom_id_class'];
+		$setting = kcEssentials_widgets::get_setting( $widget->id );
 		$customs = array(
 			'id'	=> array(
 				__('Custom ID', 'kc-essentials'),
@@ -42,10 +44,7 @@ class kcEssentials_widget_custom_id_class {
 
 		$output = "<div class='kcwe'>\n";
 		foreach ( $customs as $c => $l ) {
-			if ( !isset($instance["custom_{$c}"]) )
-				$instance["custom_{$c}"] = '';
-
-			$f_current = $instance["custom_{$c}"];
+			$f_current = isset($setting["custom_{$c}"]) ? $setting["custom_{$c}"] : '';
 			$f_name	= "widget-{$widget->id_base}[{$widget->number}][custom_{$c}]";
 			$f_id		= "widget-{$widget->id_base}-{$widget->number}-custom_{$c}";
 
@@ -94,25 +93,27 @@ class kcEssentials_widget_custom_id_class {
 
 
 	/**
-	 * Sanitize widget's custom ID and/or classes
+	 * Sanitize and save widget's custom ID and/or classes
 	 *
 	 */
-	public static function _save( $instance, $new_instance ) {
+	public static function _save( $instance, $new, $old, $widget ) {
+		$setting = kcEssentials_widgets::get_setting( $widget->id );
 		foreach ( array('id', 'class') as $c ) {
 			# 0. Add/Update
-			if ( !empty($new_instance["custom_{$c}"]) ) {
+			if ( isset($new["custom_{$c}"]) && !empty($new["custom_{$c}"]) ) {
 				if ( $c == 'id' )
-					$instance["custom_{$c}"] = trim( sanitize_html_class($new_instance["custom_{$c}"]) );
+					$setting["custom_{$c}"] = trim( sanitize_html_class($new["custom_{$c}"]) );
 				else
-					$instance["custom_{$c}"] = trim( kc_essentials_sanitize_html_classes($new_instance["custom_{$c}"]) );
+					$setting["custom_{$c}"] = trim( kc_essentials_sanitize_html_classes($new["custom_{$c}"]) );
 			}
 
 			# 1. Delete
 			else {
-				unset( $instance["custom_{$c}"] );
+				unset( $setting["custom_{$c}"] );
 			}
 		}
 
+		kcEssentials_widgets::save_setting( $widget->id, $setting );
 		return $instance;
 	}
 
@@ -122,23 +123,15 @@ class kcEssentials_widget_custom_id_class {
 	 *
 	 */
 	public static function _set( $params ) {
-		global $wp_registered_widgets;
-		$widget_id	= $params[0]['widget_id'];
-		$widget_obj	= $wp_registered_widgets[$widget_id];
-
-		if ( !isset($widget_obj['callback'][0]) || !is_object($widget_obj['callback'][0]) )
-			return $params;
-
-		$widget_opt	= get_option($widget_obj['callback'][0]->option_name);
-		$widget_num	= $widget_obj['params'][0]['number'];
+		$setting = kcEssentials_widgets::get_setting( $params[0]['widget_id'] );
 
 		# 0. Custom ID
-		if ( isset($widget_opt[$widget_num]['custom_id']) )
-			$params[0]['before_widget'] = preg_replace( '/id=".*?"/', "id=\"{$widget_opt[$widget_num]['custom_id']}\"", $params[0]['before_widget'], 1 );
+		if ( isset($setting['custom_id']) )
+			$params[0]['before_widget'] = preg_replace( '/id=".*?"/', "id=\"{$setting['custom_id']}\"", $params[0]['before_widget'], 1 );
 
 		# 1. Custom Classes
-		if ( isset($widget_opt[$widget_num]['custom_class']) )
-			$params[0]['before_widget'] = preg_replace( '/class="/', "class=\"{$widget_opt[$widget_num]['custom_class']} ", $params[0]['before_widget'], 1 );
+		if ( isset($setting['custom_class']) )
+			$params[0]['before_widget'] = preg_replace( '/class="/', "class=\"{$setting['custom_class']} ", $params[0]['before_widget'], 1 );
 
 		return $params;
 	}
