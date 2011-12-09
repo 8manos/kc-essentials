@@ -99,7 +99,8 @@ class kcEssentials {
 	static function dev() {
 		echo '<pre>';
 
-		print_r( get_option( 'kc_essentials_we' ) );
+		print_r( self::$data );
+		//echo dirname( plugin_basename(__FILE__) );
 
 		echo '</pre>';
 	}

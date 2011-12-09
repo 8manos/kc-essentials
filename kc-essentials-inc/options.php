@@ -16,6 +16,7 @@ function kc_essentials_options( $settings ) {
 						'widget_custom_id_class'	=> __('Custom widget ID &amp; classes', 'kc-essentials'),
 						'widget_logic'						=> __('Widget logic', 'kc-essentials'),
 						'widgets'									=> __('Additional widgets', 'kc-essentials'),
+						'responsive_images'				=> __('Responsive Images', 'kc-essentials'),
 						'insert_custom_size'			=> __('Insert images with custom sizes', 'kc-essentials'),
 						'cc_archive_menu'					=> __('Custom post type archive menu', 'kc-essentials')
 					)
@@ -95,7 +96,7 @@ function kc_essentials_options( $settings ) {
 		)
 	);
 
-	# Custom widget ID & classes
+	# Additional widgets
 	$options[] = array(
 		'id'			=> 'widgets',
 		'title'		=> __('Additional widgets', 'kc-essentials'),
@@ -112,8 +113,28 @@ function kc_essentials_options( $settings ) {
 		)
 	);
 
+	# Responsive images
+	$options[] = array(
+		'id'			=> 'responsive_images',
+		'title'		=> __('Responsive Images', 'kc-essentials'),
+		'fields'	=> array(
+			array(
+				'id'			=> 'sizes',
+				'title'		=> __('Image sizes', 'kc-essentials'),
+				'type'		=> 'text',
+				'attr'		=> array( 'style' => 'width:98%' ),
+				'desc'		=> __('Comma separated list of image sizes to be delivered', 'kc-essentials')
+			),
+			array(
+				'id'			=> 'default',
+				'title'		=> __('Default size', 'kc-essentials'),
+				'type'		=> 'text'
+			)
+		)
+	);
+
 	# The entry for KC Settings
-	$my_settings = array(
+	$kcss_settings = array(
 		'prefix'			=> 'kc_essentials',
 		'menu_title'	=> __('KC Essentials', 'kc-essentials'),
 		'page_title'	=> __('KC Essentials Settings', 'kc-essentials'),
@@ -121,7 +142,7 @@ function kc_essentials_options( $settings ) {
 		'options'			=> $options
 	);
 
-	$settings[] = $my_settings;
+	$settings[] = $kcss_settings;
 	return $settings;
 }
 
