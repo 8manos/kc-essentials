@@ -22,27 +22,6 @@ class kcEssentials {
 	);
 
 
-	private static function _paths() {
-		$paths = array();
-		$inc_prefix = "/kc-essentials-inc";
-		$fname = basename( __FILE__ );
-
-		if ( file_exists(WPMU_PLUGIN_DIR . "/{$fname}") )
-			$file = WPMU_PLUGIN_DIR . "/{$fname}";
-		else
-			$file = WP_PLUGIN_DIR . "/kc-essentials/{$fname}";
-
-		$paths['file']		= $file;
-		$paths['inc']			= dirname( $file ) . $inc_prefix;
-		$url							= plugins_url( '', $file );
-		$paths['url']			= $url;
-		$paths['scripts']	= "{$url}{$inc_prefix}/scripts";
-		$paths['styles']	= "{$url}{$inc_prefix}/styles";
-
-		return $paths;
-	}
-
-
 	static function init() {
 		$paths = kcSettings::_paths( __FILE__ );
 		if ( !is_array($paths) )
