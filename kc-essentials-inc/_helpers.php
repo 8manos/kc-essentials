@@ -1,6 +1,12 @@
 <?php
 
 /**
+ * @package KC_Essentials
+ * @version 0.1
+ */
+
+
+/**
  * Get additional image sizes registered with add_image_size()
  *
  * @return array Addition image sizes

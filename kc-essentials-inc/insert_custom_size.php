@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @package KC_Essentials
+ * @version 0.1
+ */
+
+
 function kc_essentials_insert_custom_image_sizes( $fields, $post ) {
 	$image_sizes = kc_essentials_get_additional_image_sizes();
 	if ( empty($image_sizes) || !isset($fields['image-size']['html']) || substr($post->post_mime_type, 0, 5) != 'image' )

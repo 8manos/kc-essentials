@@ -1,4 +1,11 @@
 <?php
+
+/**
+ * @package KC_Essentials
+ * @version 0.1
+ */
+
+
 add_filter( 'kc_plugin_settings', 'kc_essentials_options' );
 function kc_essentials_options( $settings ) {
 	$options = array(

@@ -1,4 +1,11 @@
 <?php
+
+/**
+ * @package KC_Essentials
+ * @version 0.1
+ */
+
+
 class kcEssentials_cc_archive_menu {
 	public static $data = array(
 		'items' => array()
