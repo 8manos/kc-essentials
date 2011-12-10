@@ -144,7 +144,7 @@ function kc_essentials_options( $settings ) {
 	# The entry for KC Settings
 	$kcss_settings = array(
 		'prefix'			=> 'kc_essentials',
-		'menu_title'	=> __('KC Essentials', 'kc-essentials'),
+		'menu_title'	=> 'KC Essentials',
 		'page_title'	=> __('KC Essentials Settings', 'kc-essentials'),
 		'display'			=> 'metabox',
 		'options'			=> $options

@@ -59,8 +59,9 @@ class kcEssentials {
 			wp_die( 'Please install and activate <a href="http://wordpress.org/extend/plugins/kc-settings/">KC Settings</a> before activating this plugin.<br /> <a href="'.wp_get_referer().'">&laquo; Go back</a> to plugins page.' );
 
 		$kcs = get_option('kc_settings');
-		$kcs['kids']['kc-essentials'] = array(
+		$kcs['kids']['kc_essentials'] = array(
 			'name'	=> 'KC Essentials',
+			'type'	=> 'plugin',
 			'file'	=> kc_plugin_file( __FILE__ )
 		);
 		update_option( 'kc_settings', $kcs );
