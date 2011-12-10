@@ -26,10 +26,10 @@ function kc_essentials_get_additional_image_sizes() {
  *
  * @return array Image sizes
  */
-function kc_essentials_get_image_sizes() {
-	$out = array();
+function kc_essentials_get_image_sizes( $pair = false ) {
+	$sizes = array();
 	foreach ( array('thumbnail', 'medium', 'large') as $size ) {
-		$out[$size] = array(
+		$sizes[$size] = array(
 			'width'		=> get_option( "{$size}_size_w" ),
 			'height'	=> get_option( "{$size}_size_h" )
 		);
@@ -37,9 +37,17 @@ function kc_essentials_get_image_sizes() {
 
 	global $_wp_additional_image_sizes;
 	if ( is_array($_wp_additional_image_sizes) )
-		$out = array_merge( $out, $_wp_additional_image_sizes );
+		$sizes = array_merge( $sizes, $_wp_additional_image_sizes );
 
-	return $out;
+	if ( !$pair )
+		return $sizes;
+
+	$pairs = array();
+	foreach ( $sizes as $name => $dim )
+		$pairs[$name] = $dim['width'];
+	$pairs = array_unique($pairs);
+	asort( $pairs, SORT_NUMERIC );
+	return $pairs;
 }
 
 

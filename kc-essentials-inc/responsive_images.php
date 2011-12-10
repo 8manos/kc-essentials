@@ -13,12 +13,20 @@ class kcEssentials_responsive_images {
 	public static function init() {
 		$settings = isset( kcEssentials::$data['settings']['responsive_images'] ) ? kcEssentials::$data['settings']['responsive_images'] : array();
 
-		$sizes = array();
-		foreach ( kc_essentials_get_image_sizes() as $id => $dim )
-			$sizes[$id] = $dim['width'];
-		$sizes = array_unique($sizes);
-		asort( $sizes, SORT_NUMERIC );
-		self::$data['sizes'] = $sizes;
+		$sizes = kc_essentials_get_image_sizes( true );
+		if ( isset($settings['sizes']) && !empty($settings['sizes']) ) {
+			$_sizes = explode( ',', $settings['sizes'] );
+			$count = 0;
+			foreach ( $_sizes as $_s ) {
+				$_w = absint( $_s );
+				if ( !$_w || in_array($_w, $sizes) )
+					continue;
+
+				add_image_size( "kcai-{$count}", $_w );
+				$count++;
+			}
+		}
+		self::$data['sizes'] = kc_essentials_get_image_sizes( true );
 
 		if ( isset($settings['default']) && absint($settings['default']) )
 			self::$data['default'] = absint($settings['default']);
@@ -84,9 +92,7 @@ class kcEssentials_responsive_images {
 		}
 	}
 }
-
-if ( !is_admin() )
-	kcEssentials_responsive_images::init();
+kcEssentials_responsive_images::init();
 
 
 /**
@@ -97,7 +103,5 @@ if ( !is_admin() )
 function kc_get_responsive_image( $id, $max = false, $stepup = true, $get_url = true ) {
 	return kcEssentials_responsive_images::get_image( $id, $max, $stepup, $get_url );
 }
-
-
 
 ?>

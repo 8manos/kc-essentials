@@ -121,6 +121,7 @@ function kc_essentials_options( $settings ) {
 	);
 
 	# Responsive images
+	$rgt_link = class_exists( 'RegenerateThumbnails' ) ? admin_url('tools.php?page=regenerate-thumbnails') : 'http://wordpress.org/extend/plugins/regenerate-thumbnails/';
 	$options[] = array(
 		'id'			=> 'responsive_images',
 		'title'		=> __('Responsive Images', 'kc-essentials'),
@@ -130,7 +131,7 @@ function kc_essentials_options( $settings ) {
 				'title'		=> __('Image sizes', 'kc-essentials'),
 				'type'		=> 'text',
 				'attr'		=> array( 'style' => 'width:98%' ),
-				'desc'		=> __('Comma separated list of image sizes to be delivered', 'kc-essentials')
+				'desc'		=> sprintf( __('Comma separated list of image widths. <span class="impo">Don&#39;t forget to <a href="%s">regenerate the thumbnails</a></span>.', 'kc-essentials'), $rgt_link )
 			),
 			array(
 				'id'			=> 'default',
@@ -154,8 +155,20 @@ function kc_essentials_options( $settings ) {
 }
 
 
-add_filter( 'kcv_setting_kc_essentials_general_custom_widget_id', 'kc_essentials_sanitize_html_classes' );
-add_filter( 'kcv_setting_kc_essentials_general_custom_widget_class', 'kc_essentials_sanitize_html_classes' );
+add_filter( 'kcv_setting_kc_essentials_widget_custom_id_class_id', 'kc_essentials_sanitize_html_classes' );
+add_filter( 'kcv_setting_kc_essentials_widget_custom_id_class_class', 'kc_essentials_sanitize_html_classes' );
+
+
+function _kc_essentials_sanitize_image_sizes( $value ) {
+	$_sizes = explode( ',', $value );
+	foreach ( $_sizes as $idx => $_s ) {
+		$_w = absint( $_s );
+		if ( !$_w )
+			unset( $_sizes[$idx] );
+	}
+	return implode( ',', $_sizes );
+}
+add_filter( 'kcv_setting_kc_essentials_responsive_images_sizes', '_kc_essentials_sanitize_image_sizes' );
 
 
 ?>
