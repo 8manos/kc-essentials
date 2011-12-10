@@ -6,12 +6,12 @@
  */
 
 
-class kcEssentials_responsive_images {
+class kcEssentials_adaptive_images {
 	public static $data = array();
 
 
 	public static function init() {
-		$settings = isset( kcEssentials::$data['settings']['responsive_images'] ) ? kcEssentials::$data['settings']['responsive_images'] : array();
+		$settings = isset( kcEssentials::$data['settings']['adaptive_images'] ) ? kcEssentials::$data['settings']['adaptive_images'] : array();
 
 		$sizes = kc_essentials_get_image_sizes( true );
 		if ( isset($settings['sizes']) && !empty($settings['sizes']) ) {
@@ -92,16 +92,16 @@ class kcEssentials_responsive_images {
 		}
 	}
 }
-kcEssentials_responsive_images::init();
+kcEssentials_adaptive_images::init();
 
 
 /**
  * Get image depending on max screen size
  *
- * @see kcEssentials_responsive_images::get_image()
+ * @see kcEssentials_adaptive_images::get_image()
  */
-function kc_get_responsive_image( $id, $max = false, $stepup = true, $get_url = true ) {
-	return kcEssentials_responsive_images::get_image( $id, $max, $stepup, $get_url );
+function kc_get_adaptive_image( $id, $max = false, $stepup = true, $get_url = true ) {
+	return kcEssentials_adaptive_images::get_image( $id, $max, $stepup, $get_url );
 }
 
 ?>

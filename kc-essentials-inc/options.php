@@ -23,7 +23,7 @@ function kc_essentials_options( $settings ) {
 						'widget_custom_id_class'	=> __('Custom widget ID &amp; classes', 'kc-essentials'),
 						'widget_logic'						=> __('Widget logic', 'kc-essentials'),
 						'widgets'									=> __('Additional widgets', 'kc-essentials'),
-						'responsive_images'				=> __('Responsive Images', 'kc-essentials'),
+						'adaptive_images'					=> __('Adaptive Images', 'kc-essentials'),
 						'insert_custom_size'			=> __('Insert images with custom sizes', 'kc-essentials'),
 						'cc_archive_menu'					=> __('Custom post type archive menu', 'kc-essentials')
 					)
@@ -120,11 +120,11 @@ function kc_essentials_options( $settings ) {
 		)
 	);
 
-	# Responsive images
+	# Adaptive images
 	$rgt_link = class_exists( 'RegenerateThumbnails' ) ? admin_url('tools.php?page=regenerate-thumbnails') : 'http://wordpress.org/extend/plugins/regenerate-thumbnails/';
 	$options[] = array(
-		'id'			=> 'responsive_images',
-		'title'		=> __('Responsive Images', 'kc-essentials'),
+		'id'			=> 'adaptive_images',
+		'title'		=> __('Adaptive Images', 'kc-essentials'),
 		'fields'	=> array(
 			array(
 				'id'			=> 'sizes',
@@ -168,7 +168,7 @@ function _kc_essentials_sanitize_image_sizes( $value ) {
 	}
 	return implode( ',', $_sizes );
 }
-add_filter( 'kcv_setting_kc_essentials_responsive_images_sizes', '_kc_essentials_sanitize_image_sizes' );
+add_filter( 'kcv_setting_kc_essentials_adaptive_images_sizes', '_kc_essentials_sanitize_image_sizes' );
 
 
 ?>

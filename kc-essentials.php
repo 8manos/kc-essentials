@@ -49,7 +49,7 @@ class kcEssentials {
 		}
 
 		# Dev
-		add_action( 'admin_footer', array(__CLASS__, 'dev' ) );
+		//add_action( 'admin_footer', array(__CLASS__, 'dev' ) );
 	}
 
 
@@ -78,7 +78,7 @@ class kcEssentials {
 	static function dev() {
 		echo '<pre>';
 
-	print_r( kc_essentials_get_image_sizes() );
+		#print_r(  );
 
 		echo '</pre>';
 	}
