@@ -37,7 +37,7 @@ class kcEssentials {
 		# Components
 		if ( isset($settings['general']['components']) && !empty($settings['general']['components']) ) {
 			foreach ( $settings['general']['components'] as $c ) {
-				if ( $c != 'widgets' )
+				if ( $c != 'widgets' && file_exists("{$paths['inc']}/{$c}.php") )
 					require_once "{$paths['inc']}/{$c}.php";
 			}
 		}
