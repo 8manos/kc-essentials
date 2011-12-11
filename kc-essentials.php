@@ -71,7 +71,7 @@ class kcEssentials {
 	# Unregister from KC Settings
 	public static function _deactivate() {
 		$kcs = get_option('kc_settings');
-		unset( $kcs['kids']['kc-essentials'] );
+		unset( $kcs['kids']['kc_essentials'] );
 		update_option( 'kc_settings', $kcs );
 	}
 
