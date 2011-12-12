@@ -13,7 +13,7 @@ function kc_essentials_options( $settings ) {
 			'id'			=> 'general',
 			'title'		=> __('General Settings', 'kc-essentials'),
 			'fields'	=> array(
-				array(
+				'components' => array(
 					'id'			=> 'components',
 					'title'		=> __('Components', 'kc-essentials'),
 					'type'		=> 'checkbox',
@@ -28,7 +28,7 @@ function kc_essentials_options( $settings ) {
 						'cc_archive_menu'					=> __('Custom post type archive menu', 'kc-essentials')
 					)
 				),
-				array(
+				'helper' => array(
 					'id'			=> 'helper',
 					'title'		=> __('Helper functions', 'kc-essentials'),
 					'type'		=> 'checkbox',
@@ -39,6 +39,11 @@ function kc_essentials_options( $settings ) {
 			)
 		)
 	);
+
+	# Wp 3.3+
+	if ( version_compare(get_bloginfo('version'), '3.2.9999', '>=') ) {
+		$options['general']['fields']['components']['options']['help_popup'] = __('Contextual help popup', 'kc-essentials');
+	}
 
 
 	# Unique taxonomies
