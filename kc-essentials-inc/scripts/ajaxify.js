@@ -162,6 +162,13 @@
 					if ( $body.ScrollTo||false ) { $body.ScrollTo(scrollOptions); } /* http://balupton.com/projects/jquery-scrollto */
 					$body.removeClass('loading');
 
+					// Replace body class & id
+					$.each( ['id', 'class'], function(idx, attr) {
+						var val = $body.attr( attr );
+						if (typeof val !== 'undefined' && val !== false)
+							$body.attr(attr, ( data.match( new RegExp('body.*'+attr+'=\["\'\](.*)\["|\'\]') ) || val )[1]  );
+					});
+
 					// Inform Google Analytics of the change
 					if ( typeof window.pageTracker !== 'undefined' ) {
 						window.pageTracker._trackPageview(relativeUrl);
@@ -172,6 +179,7 @@
 						reinvigorate.ajax_track(url);
 						// ^ we use the full url here as that is what reinvigorate supports
 					}
+
 				},
 				error: function(jqXHR, textStatus, errorThrown){
 					document.location.href = url;
