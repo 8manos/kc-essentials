@@ -25,7 +25,8 @@ function kc_essentials_options( $settings ) {
 						'widgets'									=> __('Additional widgets', 'kc-essentials'),
 						'adaptive_images'					=> __('Adaptive Images', 'kc-essentials'),
 						'insert_custom_size'			=> __('Insert images with custom sizes', 'kc-essentials'),
-						'cc_archive_menu'					=> __('Custom post type archive menu', 'kc-essentials')
+						'cc_archive_menu'					=> __('Custom post type archive menu', 'kc-essentials'),
+						'history_js'							=> sprintf( __('Ajaxify the whole site using <a href="%s">history.js</a> and jQuery', 'kc-essentials'), 'https://github.com/balupton/History.js/' )
 					)
 				),
 				'helper' => array(
@@ -145,6 +146,64 @@ function kc_essentials_options( $settings ) {
 			)
 		)
 	);
+
+	# History.js
+	$options[] = array(
+		'id'			=> 'history_js',
+		'title'		=> __('History.js', 'kc-essentials'),
+		'fields'	=> array(
+			array(
+				'id'			=> 'el_excludes',
+				'title'		=> __('Excluded link selectors', 'kc-essentials'),
+				'type'		=> 'text',
+				'attr'		=> array( 'style' => 'width:98%' ),
+				'desc'		=> __('<b>Comma</b> separated list of jQuery selectors for link elements that shouldn&#39;t be ajaxified, default is <code>#comment-popup-link</code>', 'kc-essentials'),
+				'default'	=> '#comment-popup-link'
+			),
+			array(
+				'id'			=> 'el_content',
+				'title'		=> __('Content selectors', 'kc-essentials'),
+				'type'		=> 'text',
+				'attr'		=> array( 'style' => 'width:98%' ),
+				'desc'		=> __('<b>Comma</b> separated list of jQuery selectors for the content element, default is <code>#content, article:first, .article:first, .post:first</code>', 'kc-essentials'),
+				'default'	=> '#content, article:first, .article:first, .post:first'
+			),
+			array(
+				'id'			=> 'el_menu',
+				'title'		=> __('Menu selectors', 'kc-essentials'),
+				'type'		=> 'text',
+				'attr'		=> array( 'style' => 'width:98%' ),
+				'desc'		=> __('<b>Comma</b> separated list of jQuery selectors for the menu elements, default is <code>nav, .menu</code>', 'kc-essentials'),
+				'default'	=> 'nav, .menu'
+			),
+			array(
+				'id'			=> 'el_menu_children',
+				'title'		=> __('Children menu selectors', 'kc-essentials'),
+				'type'		=> 'text',
+				'attr'		=> array( 'style' => 'width:98%' ),
+				'desc'		=> __('<b>Comma</b> separated list of jQuery selectors for the children menu elements, default is <code>&gt; li, &gt; ul &gt; li</code>', 'kc-essentials'),
+				'default'	=> '&gt; li, &gt; ul &gt; li'
+			),
+			array(
+				'id'			=> 'el_active',
+				'title'		=> __('Active selectors', 'kc-essentials'),
+				'type'		=> 'text',
+				'attr'		=> array( 'style' => 'width:98%' ),
+				'desc'		=> __('<b>Comma</b> separated list of jQuery selectors for the menu elements, default is <code>.active, .selected, .current, .youarehere</code>', 'kc-essentials'),
+				'default'	=> '.active, .selected, .current, .youarehere'
+			),
+			array(
+				'id'			=> 'class_active',
+				'title'		=> __('Active classes', 'kc-essentials'),
+				'type'		=> 'text',
+				'attr'		=> array( 'style' => 'width:98%' ),
+				'desc'		=> __('<b>Space</b> separated list of active classes, default is <code>active selected current youarehere</code>', 'kc-essentials'),
+				'default'	=> 'active selected current youarehere'
+			)
+		)
+	);
+
+
 
 	# The entry for KC Settings
 	$kcss_settings = array(

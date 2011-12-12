@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @package KC_Essentials
+ * @version 0.1
+ */
+
+
+class kcEssentials_history_js {
+	public static function init() {
+		wp_register_script( 'jquery-scrollto', kcEssentials::$data['paths']['scripts'].'/jquery.scrollto.min.js', false, '1.0.1', true );
+		wp_register_script( 'jquery-history', kcEssentials::$data['paths']['scripts'].'/jquery.history.js', false, '1.7.1', true );
+		wp_enqueue_script( 'kc-ajaxify', kcEssentials::$data['paths']['scripts'].'/ajaxify.js', array('jquery', 'jquery-scrollto', 'jquery-history'), '0.1', true );
+
+		$defaults = array (
+			'el_excludes'				=> '#comment-popup-link',
+			'el_content'				=> '#content, article:first, .article:first, .post:first',
+			'el_menu'						=> 'nav, .menu',
+			'el_menu_children'	=> '> li, > ul > li',
+			'el_active'					=> '.active, .selected, .current, .youarehere',
+			'class_active'			=> 'active selected current youarehere'
+		);
+		$vars = wp_parse_args( kcs_array_remove_empty(kcEssentials::$data['settings']['history_js']), $defaults );
+		wp_localize_script( 'kc-ajaxify', 'kcAjaxify', $vars );
+
+		#echo '<pre>'.print_r(kcEssentials::$data, true).'</pre>';
+		//echo '<pre>'.print_r($vars, true).'</pre>';
+	}
+}
+
+add_action( 'wp_head', array('kcEssentials_history_js', 'init') );
