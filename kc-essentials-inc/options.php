@@ -177,6 +177,14 @@ function kc_essentials_options( $settings ) {
 				'default'	=> '.menu, nav'
 			),
 			array(
+				'id'			=> 'el_menu_children',
+				'title'		=> __('Children menu selectors', 'kc-essentials'),
+				'type'		=> 'text',
+				'attr'		=> array( 'style' => 'width:98%' ),
+				'desc'		=> __('Comma separated list of jQuery selectors for the children menu elements, default is <code>.sub-menu, .children</code>', 'kc-essentials'),
+				'default'	=> '.sub-menu, .children'
+			),
+			array(
 				'id'			=> 'el_active',
 				'title'		=> __('Active menu item selectors', 'kc-essentials'),
 				'type'		=> 'text',
@@ -189,14 +197,6 @@ function kc_essentials_options( $settings ) {
 				'type'		=> 'text',
 				'attr'		=> array( 'style' => 'width:98%' ),
 				'desc'		=> __('<b>Space</b> separated list of additional active menu class(es). <code>.current-menu-item</code> class will always be added to the clicked menu item.', 'kc-essentials')
-			),
-			array(
-				'id'			=> 'el_menu_children',
-				'title'		=> __('Children menu selectors', 'kc-essentials'),
-				'type'		=> 'text',
-				'attr'		=> array( 'style' => 'width:98%' ),
-				'desc'		=> __('Comma separated list of jQuery selectors for the children menu elements, default is <code>&gt; li, &gt; ul &gt; li</code>', 'kc-essentials'),
-				'default'	=> '&gt; li, &gt; ul &gt; li'
 			)
 		)
 	);
