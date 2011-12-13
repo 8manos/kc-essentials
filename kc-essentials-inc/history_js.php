@@ -13,18 +13,26 @@ class kcEssentials_history_js {
 		wp_enqueue_script( 'kc-ajaxify', kcEssentials::$data['paths']['scripts'].'/ajaxify.js', array('jquery', 'jquery-scrollto', 'jquery-history'), '0.1', true );
 
 		$defaults = array (
-			'el_excludes'				=> '#comment-popup-link',
-			'el_content'				=> '#content, article:first, .article:first, .post:first',
+			'el_content'				=> '#main, #content, article:first, .article:first, .post:first',
 			'el_menu'						=> 'nav, .menu',
-			'el_menu_children'	=> '> li, > ul > li',
-			'el_active'					=> '.active, .selected, .current, .youarehere',
-			'class_active'			=> 'active selected current youarehere'
+			'el_menu_children'	=> '> li, > ul > li'
 		);
 		$vars = wp_parse_args( kcs_array_remove_empty(kcEssentials::$data['settings']['history_js']), $defaults );
-		wp_localize_script( 'kc-ajaxify', 'kcAjaxify', $vars );
 
-		#echo '<pre>'.print_r(kcEssentials::$data, true).'</pre>';
-		//echo '<pre>'.print_r($vars, true).'</pre>';
+		$excludes = array('#comment-popup-link', '.no-ajaxy');
+		if ( isset($vars['el_excludes']) )
+			$excludes = array_merge( $excludes, explode(',', $vars['el_excludes']) );
+		$vars['el_excludes'] = implode(',', $excludes);
+
+		$currents = array('current-menu-item');
+		if ( isset($vars['class_active']) )
+			$currents = array_merge( $currents, explode(',', $vars['class_active']) );
+		$vars['class_active'] = implode(',', $currents);
+
+		$vars['el_active_wp'] = '.current-menu-item, .current_page_item';
+		$vars['class_active_wp'] = 'current-menu-item current_page_item';
+
+		wp_localize_script( 'kc-ajaxify', 'kcAjaxify', $vars );
 	}
 }
 

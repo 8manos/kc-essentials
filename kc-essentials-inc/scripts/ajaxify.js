@@ -20,7 +20,8 @@
 			contentSelector = window.kcAjaxify.el_content,
 			$content = $(contentSelector).filter(':first'),
 			contentNode = $content.get(0),
-			$menu = $(window.kcAjaxify.el_menu).filter(':first'),
+			$clicked,
+			//$menu = $(window.kcAjaxify.el_menu).filter(':first'),
 			activeClass = window.kcAjaxify.class_active,
 			activeSelector = window.kcAjaxify.el_active,
 			menuChildrenSelector = window.kcAjaxify.el_menu_children,
@@ -71,7 +72,7 @@
 			var $this = $(this);
 
 			// Ajaxify
-			$this.find('a:internal:not(.no-ajaxy)').click(function(event){
+			$this.find('a:internal:not('+window.kcAjaxify.el_excludes+')').click(function(event){
 				// Prepare
 				var
 					$this = $(this),
@@ -84,6 +85,7 @@
 				// Ajaxify this link
 				History.pushState(null,title,url);
 				event.preventDefault();
+				$clicked = $this;
 				return false;
 			});
 
@@ -134,11 +136,27 @@
 						return false;
 					}
 
+					// Update clicked element class, ONLY if it's NOT inside the ajax content
+					if ( !$clicked.closest( $content ).length ) {
+						$menu = $clicked.closest(window.kcAjaxify.el_menu);
+						// Menu item?
+						if ( $menu.length ) {
+							$menu.find(window.kcAjaxify.el_active_wp).removeClass(window.kcAjaxify.class_active_wp);
+							$clicked.blur().parent('li').addClass('current-menu-item');
+						}
+						else {
+
+						}
+
+					}
+
 					// Update the menu
+					/*
 					$menuChildren = $menu.find(menuChildrenSelector);
 					$menuChildren.filter(activeSelector).removeClass(activeClass);
 					$menuChildren = $menuChildren.has('a[href^="'+relativeUrl+'"],a[href^="/'+relativeUrl+'"],a[href^="'+url+'"]');
 					if ( $menuChildren.length === 1 ) { $menuChildren.addClass(activeClass); }
+					*/
 
 					// Update the content
 					$content.stop(true,true);
