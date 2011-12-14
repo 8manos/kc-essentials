@@ -181,22 +181,29 @@ function kc_essentials_options( $settings ) {
 				'title'		=> __('Children menu selectors', 'kc-essentials'),
 				'type'		=> 'text',
 				'attr'		=> array( 'style' => 'width:98%' ),
-				'desc'		=> __('Comma separated list of jQuery selectors for the children menu elements, default is <code>.sub-menu, .children</code>', 'kc-essentials'),
-				'default'	=> '.sub-menu, .children'
+				'desc'		=> __('Comma separated list of jQuery selectors for the children menu elements, <code>.sub-menu, .children</code> will always be used.', 'kc-essentials')
 			),
 			array(
-				'id'			=> 'el_active',
+				'id'			=> 'el_active_menu',
 				'title'		=> __('Active menu item selectors', 'kc-essentials'),
 				'type'		=> 'text',
 				'attr'		=> array( 'style' => 'width:98%' ),
-				'desc'		=> __('Comma separated list of jQuery selectors for active menu item.', 'kc-essentials')
+				'desc'		=> __('Comma separated list of additional jQuery selectors for active menu item, <code>.current-menu-item</code> will always be used.', 'kc-essentials')
 			),
 			array(
-				'id'			=> 'class_active',
-				'title'		=> __('Active classes', 'kc-essentials'),
+				'id'			=> 'class_active_menu',
+				'title'		=> __('Active menu item classes', 'kc-essentials'),
 				'type'		=> 'text',
 				'attr'		=> array( 'style' => 'width:98%' ),
-				'desc'		=> __('<b>Space</b> separated list of additional active menu class(es). <code>.current-menu-item</code> class will always be added to the clicked menu item.', 'kc-essentials')
+				'desc'		=> __('<b>Space</b> separated list of additional active menu classes. <code>current-menu-item</code> class will always be added to the clicked <b>menu</b> item.', 'kc-essentials')
+			),
+			array(
+				'id'			=> 'class_active_others',
+				'title'		=> __('Active classes (non-menu)', 'kc-essentials'),
+				'type'		=> 'text',
+				'attr'		=> array( 'style' => 'width:98%' ),
+				'desc'		=> __('<b>Space</b> separated list of active non-menu item classes.', 'kc-essentials'),
+				'default'	=> 'current active'
 			)
 		)
 	);

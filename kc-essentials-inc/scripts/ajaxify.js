@@ -16,14 +16,11 @@
 	$(function(){
 		// Prepare Variables
 		var
+			$clicked,
 			/* Application Specific Variables */
 			contentSelector = window.kcAjaxify.el_content,
 			$content = $(contentSelector).filter(':first'),
 			contentNode = $content.get(0),
-			$clicked,
-			//$menu = $(window.kcAjaxify.el_menu).filter(':first'),
-			activeClass = window.kcAjaxify.class_active,
-			activeSelector = window.kcAjaxify.el_active,
 			menuChildrenSelector = window.kcAjaxify.el_menu_children,
 			/* Application Generic Variables */
 			$body = $(document.body),
@@ -141,8 +138,9 @@
 						$menu = $clicked.closest(window.kcAjaxify.el_menu);
 						// Menu item?
 						if ( $menu.length ) {
-							$menu.find(window.kcAjaxify.el_active_wp).removeClass(window.kcAjaxify.class_active_wp);
-							$clicked.blur().parent('li').addClass('current-menu-item');
+						console.log( 'pret' );
+							$menu.find(window.kcAjaxify.el_active_menu).removeClass(window.kcAjaxify.class_active_menu);
+							$clicked.blur().parent('li').addClass(window.kcAjaxify.class_active_menu);
 						}
 						else {
 

@@ -14,19 +14,21 @@ class kcEssentials_history_js {
 
 		$vars = wp_parse_args( kcs_array_remove_empty(kc_get_option('kc_essentials', 'history_js')), kc_get_default('plugin', 'kc_essentials', 'history_js') );
 
-		$excludes = array('#comment-popup-link', '.no-ajaxy');
-		if ( isset($vars['el_excludes']) )
-			$excludes = array_merge( $excludes, explode(',', $vars['el_excludes']) );
-		$vars['el_excludes'] = implode(',', $excludes);
+		$must = array(
+			'el_excludes'				=> array('#comment-popup-link', '.no-ajaxy'),
+			'el_menu_children'	=> array('.sub-menu', '.children'),
+			'el_active_menu'		=> array('.current-menu-item', '.current_page_item'),
+			'class_active_menu'	=> array('current-menu-item', 'current_page_item')
+		);
+		foreach ( $must as $key => $values ) {
+			$glue = ( $key == 'class_active_menu' ) ? ' ' : ',';
+			if ( !isset($vars[$key]) )
+				$vars[$key] = array();
+			else
+				$vars[$key] = explode( $glue, $vars[$key] );
 
-		$currents = array('current-menu-item');
-		if ( isset($vars['class_active']) )
-			$currents = array_merge( $currents, explode(',', $vars['class_active']) );
-		$vars['class_active'] = implode(',', $currents);
-
-		$vars['el_active_wp'] = '.current-menu-item, .current_page_item';
-		$vars['class_active_wp'] = 'current-menu-item current_page_item';
-
+			$vars[$key] = implode( $glue, array_unique( array_merge($vars[$key], $values) ) );
+		}
 		wp_localize_script( 'kc-ajaxify', 'kcAjaxify', $vars );
 	}
 }
