@@ -12,12 +12,7 @@ class kcEssentials_history_js {
 		wp_register_script( 'jquery-history', kcEssentials::$data['paths']['scripts'].'/jquery.history.js', false, '1.7.1', true );
 		wp_enqueue_script( 'kc-ajaxify', kcEssentials::$data['paths']['scripts'].'/ajaxify.js', array('jquery', 'jquery-scrollto', 'jquery-history'), '0.1', true );
 
-		$defaults = array (
-			'el_content'				=> '#main, #content, article:first, .article:first, .post:first',
-			'el_menu'						=> 'nav, .menu',
-			'el_menu_children'	=> '> li, > ul > li'
-		);
-		$vars = wp_parse_args( kcs_array_remove_empty(kcEssentials::$data['settings']['history_js']), $defaults );
+		$vars = wp_parse_args( kcs_array_remove_empty(kc_get_option('kc_essentials', 'history_js')), kc_get_default('plugin', 'kc_essentials', 'history_js') );
 
 		$excludes = array('#comment-popup-link', '.no-ajaxy');
 		if ( isset($vars['el_excludes']) )
