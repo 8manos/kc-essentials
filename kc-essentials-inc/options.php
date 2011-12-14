@@ -198,6 +198,13 @@ function kc_essentials_options( $settings ) {
 				'desc'		=> __('<b>Space</b> separated list of additional active menu classes. <code>current-menu-item</code> class will always be added to the clicked <b>menu</b> item.', 'kc-essentials')
 			),
 			array(
+				'id'			=> 'el_active_others',
+				'title'		=> __('Active non-menu item selectors', 'kc-essentials'),
+				'type'		=> 'text',
+				'attr'		=> array( 'style' => 'width:98%' ),
+				'desc'		=> __('Comma separated list of jQuery selectors for active non-menu link elements, default is <code>.current, .active</code>.', 'kc-essentials')
+			),
+			array(
 				'id'			=> 'class_active_others',
 				'title'		=> __('Active classes (non-menu)', 'kc-essentials'),
 				'type'		=> 'text',

@@ -21,7 +21,9 @@
 			contentSelector = window.kcAjaxify.el_content,
 			$content = $(contentSelector).filter(':first'),
 			contentNode = $content.get(0),
+			$menus = $(window.kcAjaxify.el_menu),
 			menuChildrenSelector = window.kcAjaxify.el_menu_children,
+			$updateNonMenu = ( window.kcAjaxify.el_active_others !== undefined && window.kcAjaxify.el_active_others.length && window.kcAjaxify.class_active_others !== undefined && window.kcAjaxify.class_active_others.length ) ? true : false,
 			/* Application Generic Variables */
 			$body = $(document.body),
 			rootUrl = History.getRootUrl(),
@@ -135,15 +137,15 @@
 
 					// Update clicked element class, ONLY if it's NOT inside the ajax content
 					if ( !$clicked.closest( $content ).length ) {
-						$menu = $clicked.closest(window.kcAjaxify.el_menu);
 						// Menu item?
-						if ( $menu.length ) {
-						console.log( 'pret' );
-							$menu.find(window.kcAjaxify.el_active_menu).removeClass(window.kcAjaxify.class_active_menu);
+						if ( $menus.length ) {
+							$menus.find(window.kcAjaxify.el_active_menu).removeClass(window.kcAjaxify.class_active_menu);
 							$clicked.blur().parent('li').addClass(window.kcAjaxify.class_active_menu);
 						}
-						else {
-
+						// Non menu item
+						else if ( $updateNonMenu ) {
+							$body.find(window.kcAjaxify.el_active_others).removeClass(window.kcAjaxify.class_active_others);
+							$clicked.blur().addClass(window.kcAjaxify.class_active_others);
 						}
 
 					}
