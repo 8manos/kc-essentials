@@ -67,7 +67,7 @@ class kcEssentials_adaptive_images {
 		if ( $stepup === true ) {
 			$last = end( $sizes );
 			foreach ( $sizes as $size => $width ) {
-				if ( $width >= $max || $width == $last )
+				if ( ($width >= $max || $width == $last) && $image = image_get_intermediate_size($id, $size) )
 					break;
 			}
 		}
@@ -75,21 +75,18 @@ class kcEssentials_adaptive_images {
 			arsort( $sizes );
 			$last = end( $sizes );
 			foreach ( $sizes as $size => $width ) {
-				if ( $width <= $max || $width == $last )
+				if ( ($width <= $max || $width == $last) && $image = image_get_intermediate_size($id, $size) )
 					break;
 			}
 		}
 
+		if ( !$image )
+			$image = image_get_intermediate_size($id, 'full');
 
-		if ( $image = image_get_intermediate_size( $id, $size ) ) {
-			if ( $get_url )
-				return $image['url'];
-			else
-				return $image;
-		}
-		else {
-			return false;
-		}
+		if ( $get_url )
+			return $image['url'];
+		else
+			return $image;
 	}
 }
 kcEssentials_adaptive_images::init();
