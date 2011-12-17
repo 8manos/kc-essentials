@@ -8,7 +8,7 @@
 
 add_filter( 'kc_plugin_settings', 'kc_essentials_options' );
 function kc_essentials_options( $settings ) {
-	$options = array(
+	$sections = array(
 		'general'	=> array(
 			'id'			=> 'general',
 			'title'		=> __('General Settings', 'kc-essentials'),
@@ -43,7 +43,7 @@ function kc_essentials_options( $settings ) {
 
 	# Wp 3.3+
 	if ( version_compare(get_bloginfo('version'), '3.2.9999', '>=') ) {
-		$options['general']['fields']['components']['options']['help_popup'] = __('Contextual help popup', 'kc-essentials');
+		$sections['general']['fields']['components']['options']['help_popup'] = __('Contextual help popup', 'kc-essentials');
 	}
 
 
@@ -60,7 +60,7 @@ function kc_essentials_options( $settings ) {
 		asort( $tax_media );
 		asort( $tax_unique );
 
-		$options[] = array(
+		$sections[] = array(
 			'id'			=> 'uniquetax',
 			'title'		=> __('Unique taxonomies', 'kc-essentials'),
 			'fields'	=> array(
@@ -70,10 +70,14 @@ function kc_essentials_options( $settings ) {
 					'type'		=> 'checkbox',
 					'options'	=> $tax_unique
 				)
+			),
+			'metabox'	=> array(
+				'context'		=> 'side',
+				'priority'	=> 'default'
 			)
 		);
 
-		$options[] = array(
+		$sections[] = array(
 			'id'			=> 'mediatax',
 			'title'		=> __('Media taxonomies', 'kc-essentials'),
 			'fields'	=> array(
@@ -83,12 +87,16 @@ function kc_essentials_options( $settings ) {
 					'type'		=> 'checkbox',
 					'options'	=> $tax_media
 				)
+			),
+			'metabox'	=> array(
+				'context'		=> 'side',
+				'priority'	=> 'default'
 			)
 		);
 	}
 
 	# Widget enhancements
-	$options[] = array(
+	$sections[] = array(
 		'id'			=> 'widget_custom_id_class',
 		'title'		=> __('Custom widget ID &amp; classes', 'kc-essentials'),
 		'fields'	=> array(
@@ -106,11 +114,15 @@ function kc_essentials_options( $settings ) {
 				'attr'		=> array('style' => 'width:98%' ),
 				'desc'		=> __('Predefined widget classes (optional, separate with spaces)', 'kc-essentials')
 			)
+		),
+		'metabox'	=> array(
+			'context'		=> 'side',
+			'priority'	=> 'default'
 		)
 	);
 
 	# Additional widgets
-	$options[] = array(
+	$sections[] = array(
 		'id'			=> 'widgets',
 		'title'		=> __('Additional widgets', 'kc-essentials'),
 		'fields'	=> array(
@@ -123,12 +135,16 @@ function kc_essentials_options( $settings ) {
 					'menu'		=> __('KC Custom Menu', 'kc-essentials')
 				)
 			)
+		),
+		'metabox'	=> array(
+			'context'		=> 'side',
+			'priority'	=> 'default'
 		)
 	);
 
 	# Adaptive images
 	$rgt_link = class_exists( 'RegenerateThumbnails' ) ? admin_url('tools.php?page=regenerate-thumbnails') : 'http://wordpress.org/extend/plugins/regenerate-thumbnails/';
-	$options[] = array(
+	$sections[] = array(
 		'id'			=> 'adaptive_images',
 		'title'		=> __('Adaptive Images', 'kc-essentials'),
 		'fields'	=> array(
@@ -148,70 +164,60 @@ function kc_essentials_options( $settings ) {
 	);
 
 	# History.js
-	$options[] = array(
+	$sections[] = array(
 		'id'			=> 'history_js',
 		'title'		=> __('History.js', 'kc-essentials'),
+		'desc'		=> sprintf( __('<b>Please</b> read the <a%s>guide</a> before using this component!', 'kc-essentials'), ' href="#" class="kc-help-trigger"' ),
 		'fields'	=> array(
 			array(
 				'id'			=> 'el_excludes',
 				'title'		=> __('Excluded link selectors', 'kc-essentials'),
 				'type'		=> 'text',
-				'attr'		=> array( 'style' => 'width:98%' ),
-				'desc'		=> __('Comma separated list of jQuery selectors for link elements that shouldn&#39;t be ajaxified, default is <code>#comment-popup-link</code>', 'kc-essentials'),
 				'default'	=> '#comment-popup-link'
 			),
 			array(
 				'id'			=> 'el_content',
 				'title'		=> __('Content selectors', 'kc-essentials'),
 				'type'		=> 'text',
-				'attr'		=> array( 'style' => 'width:98%' ),
-				'desc'		=> __('Comma separated list of jQuery selectors for the content element, default is <code>#main, #content, article:first, .article:first, .post:first</code>', 'kc-essentials'),
 				'default'	=> '#main, #content, article:first, .article:first, .post:first'
 			),
 			array(
 				'id'			=> 'el_menu',
 				'title'		=> __('Menu selectors', 'kc-essentials'),
 				'type'		=> 'text',
-				'attr'		=> array( 'style' => 'width:98%' ),
-				'desc'		=> __('Comma separated list of jQuery selectors for the menu elements, default is <code>.menu, nav</code>', 'kc-essentials'),
 				'default'	=> '.menu, nav'
 			),
 			array(
 				'id'			=> 'el_menu_children',
 				'title'		=> __('Children menu selectors', 'kc-essentials'),
-				'type'		=> 'text',
-				'attr'		=> array( 'style' => 'width:98%' ),
-				'desc'		=> __('Comma separated list of jQuery selectors for the children menu elements, <code>.sub-menu, .children</code> will always be used.', 'kc-essentials')
+				'type'		=> 'text'
 			),
 			array(
 				'id'			=> 'el_active_menu',
 				'title'		=> __('Active menu item selectors', 'kc-essentials'),
-				'type'		=> 'text',
-				'attr'		=> array( 'style' => 'width:98%' ),
-				'desc'		=> __('Comma separated list of additional jQuery selectors for active menu item, <code>.current-menu-item</code> will always be used.', 'kc-essentials')
+				'type'		=> 'text'
 			),
 			array(
 				'id'			=> 'class_active_menu',
 				'title'		=> __('Active menu item classes', 'kc-essentials'),
-				'type'		=> 'text',
-				'attr'		=> array( 'style' => 'width:98%' ),
-				'desc'		=> __('<b>Space</b> separated list of additional active menu classes. <code>current-menu-item</code> class will always be added to the clicked <b>menu</b> item.', 'kc-essentials')
+				'type'		=> 'text'
 			),
 			array(
 				'id'			=> 'el_active_others',
-				'title'		=> __('Active non-menu item selectors', 'kc-essentials'),
-				'type'		=> 'text',
-				'attr'		=> array( 'style' => 'width:98%' ),
-				'desc'		=> __('Comma separated list of jQuery selectors for active non-menu link elements, default is <code>.current, .active</code>.', 'kc-essentials')
+				'title'		=> __('Active non-menu link selectors', 'kc-essentials'),
+				'type'		=> 'text'
 			),
 			array(
 				'id'			=> 'class_active_others',
-				'title'		=> __('Active classes (non-menu)', 'kc-essentials'),
+				'title'		=> __('Active non-menu link classes', 'kc-essentials'),
 				'type'		=> 'text',
-				'attr'		=> array( 'style' => 'width:98%' ),
-				'desc'		=> __('<b>Space</b> separated list of active non-menu item classes.', 'kc-essentials'),
+				'desc'		=> __('', 'kc-essentials'),
 				'default'	=> 'current active'
 			)
+		),
+		'metabox'	=> array(
+			'context'		=> 'advanced',
+			'priority'	=> 'default'
 		)
 	);
 
@@ -223,7 +229,31 @@ function kc_essentials_options( $settings ) {
 		'menu_title'	=> 'KC Essentials',
 		'page_title'	=> __('KC Essentials Settings', 'kc-essentials'),
 		'display'			=> 'metabox',
-		'options'			=> $options
+		'options'			=> $sections,
+		'help'				=> array(
+			array(
+				'id'			=> 'history_js',
+				'title'		=> __('History.js', 'kc-essentials'),
+				'content'	=> '
+					<h4>'.__('Excluded link selectors', 'kc-essentials').'</h4>
+					<p>'.__('Comma separated list of jQuery selectors for link elements that shouldn&#39;t be ajaxified, default is <code>#comment-popup-link</code>', 'kc-essentials').'</p>
+					<h4>'.__('Content selectors', 'kc-essentials').'</h4>
+					<p>'.__('Comma separated list of jQuery selectors for the content element, default is <code>#main, #content, article:first, .article:first, .post:first</code>', 'kc-essentials').'</p>
+					<h4>'.__('Menu selectors', 'kc-essentials').'</h4>
+					<p>'.__('Comma separated list of jQuery selectors for the menu elements, default is <code>.menu, nav</code>', 'kc-essentials').'</p>
+					<h4>'.__('Children menu selectors', 'kc-essentials').'</h4>
+					<p>'.__('Comma separated list of jQuery selectors for the children menu elements, <code>.sub-menu, .children</code> will always be used.', 'kc-essentials').'</p>
+					<h4>'.__('Active menu item selectors', 'kc-essentials').'</h4>
+					<p>'.__('Comma separated list of additional jQuery selectors for active menu item, <code>.current-menu-item</code> will always be used.', 'kc-essentials').'</p>
+					<h4>'.__('Active menu item classes', 'kc-essentials').'</h4>
+					<p>'.__('<b>Space</b> separated list of additional active menu classes. <code>current-menu-item</code> class will always be added to the clicked <b>menu</b> item.', 'kc-essentials').'</p>
+					<h4>'.__('Active non-menu link selectors', 'kc-essentials').'</h4>
+					<p>'.__('Comma separated list of jQuery selectors for active non-menu link elements, default is <code>.current, .active</code>.', 'kc-essentials').'</p>
+					<h4>'.__('Active non-menu link classes', 'kc-essentials').'</h4>
+					<p>'.__('<b>Space</b> separated list of active non-menu item classes.', 'kc-essentials').'</p>
+				'
+			)
+		)
 	);
 
 	$settings[] = $kcss_settings;
