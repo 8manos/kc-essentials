@@ -83,7 +83,7 @@ class kcEssentials_widgets {
 			}
 
 			if ( !isset($args['current']) )
-				$args['current'] = $config[$id];
+				$args['current'] = isset($config[$id]) ? $config[$id] : '';
 			$args['attr'] = array(
 				'id'		=> $f_id,
 				'name'	=> $f_name
