@@ -19,6 +19,9 @@ class kcEssentials_widget_logic {
 
 		# 2. Remove widgets from sidebars as needed
 		add_filter( 'sidebars_widgets', array(__CLASS__, '_filter_widgets') );
+
+		# Admin scripts & styles
+		add_action( 'load-widgets.php', array(__CLASS__, '_sns') );
 	}
 
 
@@ -247,6 +250,15 @@ class kcEssentials_widget_logic {
 		}
 
 		return $sidebars_widgets;
+	}
+
+
+	/**
+	 * Scripts n styles for the widget configuration forms
+	 */
+	public static function _sns() {
+		wp_enqueue_script( 'kc-widgets-admin' );
+		wp_enqueue_style( 'kc-widgets-admin' );
 	}
 }
 

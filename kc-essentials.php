@@ -48,8 +48,19 @@ class kcEssentials {
 				require_once "{$paths['inc']}/helper_{$h}.php";
 		}
 
+
+		# Scripts n styles
+		if ( is_admin() )
+			self::_sns();
+
 		# Dev
 		//add_action( 'admin_footer', array(__CLASS__, 'dev' ) );
+	}
+
+
+	private static function _sns() {
+		wp_register_script( 'kc-widgets-admin', kcEssentials::$data['paths']['scripts'].'/widgets.js', array('jquery'), kcEssentials::$data['version'], true );
+		wp_register_style( 'kc-widgets-admin', kcEssentials::$data['paths']['styles'].'/widgets.css', false, kcEssentials::$data['version'] );
 	}
 
 

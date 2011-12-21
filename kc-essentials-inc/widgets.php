@@ -45,8 +45,8 @@ class kcEssentials_widgets {
 	 * Scripts n styles for the widget configuration forms
 	 */
 	public static function _sns() {
-		wp_enqueue_script( 'kc-widgets-admin', kcEssentials::$data['paths']['scripts'].'/widgets.js', array('jquery'), kcEssentials::$data['version'], true );
-		wp_enqueue_style( 'kc-widgets-admin', kcEssentials::$data['paths']['styles'].'/widgets.css', false, kcEssentials::$data['version'] );
+		wp_enqueue_script( 'kc-widgets-admin' );
+		wp_enqueue_style( 'kc-widgets-admin' );
 	}
 
 
