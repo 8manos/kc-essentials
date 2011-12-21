@@ -78,6 +78,7 @@
 
 			// Ajaxify
 			$this.find('a:internal:not('+window.kcAjaxify.el_excludes+')').click(function(event){
+				event.preventDefault();
 				// Prepare
 				var
 					$this = $(this),
@@ -97,7 +98,7 @@
 				History.pushState(null,title,url);
 				event.preventDefault();
 				$clicked = $this;
-				return false;
+				//return false;
 			});
 
 			// Chain
@@ -148,6 +149,7 @@
 					}
 
 					// Update clicked element class, ONLY if it's NOT inside the ajax content
+					/*
 					if ( !$clicked.closest( $content ).length ) {
 						// Menu item?
 						if ( $menus.length ) {
@@ -161,6 +163,7 @@
 						}
 
 					}
+					*/
 
 					// Update the menu
 					/*
