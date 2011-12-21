@@ -185,8 +185,8 @@ function kc_essentials_options( $settings ) {
 				'id'			=> 'url_excludes',
 				'title'		=> __('Excluded URLs', 'kc-essentials'),
 				'type'		=> 'text',
-				'default'	=> 'wp-admin, feed',
-				'desc'		=> __('Default: <code>wp-admin, feed</code>', 'kc-essentials')
+				'default'	=> '/wp-admin/, /feed/',
+				'desc'		=> __('Default: <code>/wp-admin/, /feed/</code>', 'kc-essentials')
 			),
 			array(
 				'id'			=> 'el_content',
