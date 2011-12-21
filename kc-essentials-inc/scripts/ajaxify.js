@@ -30,7 +30,13 @@
 			scrollOptions = {
 				duration: 800,
 				easing:'swing'
-			};
+			},
+			url_excludes = false;
+
+			if ( window.kcAjaxify.hasOwnProperty('url_excludes') ) {
+				url_excludes = window.kcAjaxify.url_excludes.split(',');
+			}
+
 
 		// Ensure Content
 		if ( $content.length === 0 ) {
@@ -77,6 +83,12 @@
 					$this = $(this),
 					url = $this.attr('href'),
 					title = $this.attr('title')||null;
+
+				if ( url_excludes !== false ) {
+					for ( var i = 0; i < url_excludes.length; i++ )
+						if ( url.match( new RegExp(url_excludes[i]) ) )
+							return;
+				}
 
 				// Continue as normal for cmd clicks etc
 				if ( event.which == 2 || event.metaKey ) { return true; }
