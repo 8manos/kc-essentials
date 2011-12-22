@@ -85,6 +85,9 @@
 					url = $this.attr('href'),
 					title = $this.attr('title')||null;
 
+				if (url == '' || url == 'undefined' || typeof url == 'undefined')
+					return;
+
 				if ( url_excludes !== false ) {
 					for ( var i = 0; i < url_excludes.length; i++ )
 						if ( url.match( new RegExp(url_excludes[i]) ) )
