@@ -29,7 +29,7 @@ class kcEssentials_mediatax {
 		add_filter( 'attachment_fields_to_edit', array(__CLASS__, '_attachment_fields'), 10, 2 );
 
 		# Modify posted attachment data and save terms for attachment.
-		add_action( 'init', array(__CLASS__, '_save_terms'), 100 );
+		add_action( 'init', array(__CLASS__, '_save_terms'), 110 );
 	}
 
 
