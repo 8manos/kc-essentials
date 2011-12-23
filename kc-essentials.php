@@ -98,7 +98,7 @@ class kcEssentials {
 
 
 require_once dirname(__FILE__) . '/kc-essentials-inc/options.php';
-add_action( 'init', array('kcEssentials', 'init'), 12 );
+add_action( 'init', array('kcEssentials', 'init'), 100 );
 
 
 # A hack for symlinks
