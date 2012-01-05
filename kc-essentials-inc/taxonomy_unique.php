@@ -7,16 +7,17 @@
 
 
 class kcEssentials_uniquetax {
-	public static $data;
+	private static $pdata;
 
 
 	# Create metabox
 	public static function _create_meta_box( $post_type, $post ) {
-		if ( !isset(kcEssentials::$data['settings']['uniquetax']['taxonomies']) )
+		$taxonomies = kcEssentials::get_data('settings', 'taxonomy_unique', 'taxonomies');
+		if ( !$taxonomies )
 			return $post_type;
 
-		self::$data['taxonomies'] = kcEssentials::$data['settings']['uniquetax']['taxonomies'];
-		foreach ( self::$data['taxonomies'] as $tax_name ) {
+		self::$pdata['taxonomies'] = array();
+		foreach ( $taxonomies as $tax_name ) {
 			if ( !taxonomy_exists( $tax_name ) )
 				continue;
 
@@ -24,6 +25,7 @@ class kcEssentials_uniquetax {
 			if ( !$tax_object->hierarchical || !$tax_object->show_ui || !in_array($post_type, $tax_object->object_type) )
 				continue;
 
+			self::$pdata['taxonomies'][$tax_name] = $tax_object;
 			remove_meta_box( "{$tax_name}div", $post_type, 'side' );
 			add_meta_box( "unique-{$tax_name}-div", $tax_object->label, array(__CLASS__, '_fill_meta_box'), $post_type, 'side', 'low', $tax_name );
 		}
@@ -32,19 +34,18 @@ class kcEssentials_uniquetax {
 
 	# Fill em
 	public static function _fill_meta_box( $post, $box ) {
-		$taxonomy = $box['args'];
-		$tax = get_taxonomy($taxonomy); ?>
-		<div id="taxonomy-<?php echo $taxonomy; ?>" class="categorydiv">
+		$tax_object = self::$pdata['taxonomies'][$box['args']]; ?>
+		<div id="taxonomy-<?php echo $tax_object->name; ?>" class="categorydiv">
 			<?php
-				$name = ( $taxonomy == 'category' ) ? 'post_category' : 'tax_input[' . $taxonomy . ']';
-				echo "<input type='hidden' name='{$name}' value='0' />"; // Allows for an empty term set to be sent. 0 is an invalid Term ID and will be ignored by empty() checks.
+				$i_name = ( $tax_object->name == 'category' ) ? 'post_category' : 'tax_input[' . $tax_object->name . ']';
+				echo "<input type='hidden' name='{$i_name}' value='0' />"; // Allows for an empty term set to be sent. 0 is an invalid Term ID and will be ignored by empty() checks.
 			?>
 			<div class="tabs-panel">
-			<ul id="<?php echo $taxonomy; ?>checklist" class="list:<?php echo $taxonomy?> categorychecklist form-no-clear">
-				<?php self::_term_list( $post->ID, $taxonomy ) ?>
+			<ul id="<?php echo $tax_object->name; ?>checklist" class="list:<?php echo $tax_object->name ?> categorychecklist form-no-clear">
+				<?php self::_term_list( $post->ID, $tax_object->name ) ?>
 			</ul>
 			</div>
-		<?php if ( !current_user_can($tax->cap->assign_terms) ) { ?>
+		<?php if ( !current_user_can($tax_object->cap->assign_terms) ) { ?>
 			<p><em><?php _e('You cannot modify this taxonomy.'); ?></em></p>
 		<?php } ?>
 		<?php /* if ( current_user_can($tax->cap->edit_terms) ) { ?>
@@ -67,17 +68,17 @@ class kcEssentials_uniquetax {
 	}
 
 
-	private static function _term_list( $post_id, $taxonomy, $echo = true ) {
+	private static function _term_list( $post_id, $tax_name, $echo = true ) {
 		$walker = new kcEssentials_uniquetax_Walker;
 		$args = array(
 			'descendants_and_self' => 0,
-			'selected_cats' => wp_get_object_terms($post_id, $taxonomy, array('fields' => 'ids')),
+			'selected_cats' => wp_get_object_terms($post_id, $tax_name, array('fields' => 'ids')),
 			'popular_cats' => array(),
 			'walker' => null,
-			'taxonomy' => $taxonomy,
+			'taxonomy' => $tax_name,
 			'checked_ontop' => false
 		);
-		$terms = get_terms( $taxonomy, array('hide_empty' => false) );
+		$terms = get_terms( $tax_name, array('hide_empty' => false) );
 
 		$output = call_user_func_array(array(&$walker, 'walk'), array($terms, 0, $args));
 

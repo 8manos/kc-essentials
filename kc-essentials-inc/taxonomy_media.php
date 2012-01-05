@@ -7,18 +7,18 @@
 
 
 class kcEssentials_mediatax {
-	public static $data;
+	private static $pdata;
 
 
-	public static function init() {
-		self::$data['taxonomies'] = array();
+	public static function init( $taxonomies ) {
+		self::$pdata['taxonomies'] = array();
 		$media_taxonomies = get_object_taxonomies( 'attachment' );
-		foreach ( kcEssentials::$data['settings']['mediatax']['taxonomies'] as $tax_name ) {
-			self::$data['taxonomies'][$tax_name] = get_taxonomy( $tax_name );
+		foreach ( $taxonomies as $tax ) {
+			self::$pdata['taxonomies'][$tax] = get_taxonomy( $tax );
 
 			# Register the taxonomy for attachment post type
-			if ( !in_array($tax_name, $media_taxonomies) )
-				register_taxonomy_for_object_type( $tax_name, 'attachment' );
+			if ( !in_array($tax, $media_taxonomies) )
+				register_taxonomy_for_object_type( $tax, 'attachment' );
 		}
 
 
@@ -37,7 +37,7 @@ class kcEssentials_mediatax {
 	 * Add submenus under 'Media' for attachments' taxonomies
 	 */
 	public static function _create_menu() {
-		foreach ( self::$data['taxonomies'] as $tax )
+		foreach ( self::$pdata['taxonomies'] as $tax )
 			add_submenu_page( 'upload.php', $tax->labels->name, $tax->labels->menu_name, $tax->cap->manage_terms, 'edit-tags.php?taxonomy=' . $tax->name );
 	}
 
@@ -50,7 +50,7 @@ class kcEssentials_mediatax {
 	 * @return array $fields Modified attachment form fields
 	 */
 	public static function _attachment_fields( $fields, $post ) {
-		foreach ( self::$data['taxonomies'] as $tax ) {
+		foreach ( self::$pdata['taxonomies'] as $tax ) {
 			if ( !isset($tax->args) )
 				$tax->args = array();
 
@@ -105,6 +105,7 @@ class kcEssentials_mediatax {
 }
 
 
-if ( isset(kcEssentials::$data['settings']['mediatax']['taxonomies']) )
-	kcEssentials_mediatax::init();
+if ( $taxonomies = kcEssentials::get_data('settings', 'taxonomy_media', 'taxonomies') )
+	kcEssentials_mediatax::init( $taxonomies );
+
 ?>

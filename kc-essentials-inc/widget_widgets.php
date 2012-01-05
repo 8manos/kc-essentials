@@ -10,26 +10,14 @@ class kcEssentials_widgets {
 
 	public function init() {
 		$options = get_option( 'kc_essentials_settings' );
-		if ( !$options ) {
-			$options = array(
-				'general'		=> array(
-					'components'	=> array( 'custom_widget_id_class', 'widgets', 'insert_custom_size' ),
-				),
-				'widgets'		=> array(
-					'widgets'		> array( 'post', 'menu' )
-				)
-			);
-
-			$options = apply_filters( 'kc_essentials_setting', $options );
-		}
-
-		if ( !isset($options['general']['components'])
-					|| !in_array( 'widgets', $options['general']['components'] )
-					|| !isset($options['widgets']['widgets']) )
+		if ( !$options
+					|| !isset($options['components']['widget'])
+					|| !in_array( 'widget_widgets', $options['components']['widget'] )
+					|| !isset($options['widget_widgets']['widgets']) )
 			return false;
 
-		foreach ( $options['widgets']['widgets'] as $widget ) {
-			$file = dirname(__FILE__) . "/widget-{$widget}.php";
+		foreach ( $options['widget_widgets']['widgets'] as $widget ) {
+			$file = dirname(__FILE__) . "/widgets/{$widget}.php";
 			if ( !file_exists($file) || !is_readable($file) )
 				continue;
 

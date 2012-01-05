@@ -17,7 +17,7 @@ License: GPL v2
 
 
 class kcEssentials {
-	public static $data = array(
+	protected static $pdata = array(
 		'version'	=> '0.1'
 	);
 
@@ -27,45 +27,47 @@ class kcEssentials {
 		if ( !is_array($paths) )
 			return false;
 
-		self::$data['paths'] = $paths;
+		self::$pdata['paths'] = $paths;
 
 		$settings = kc_get_option( 'kc_essentials' );
-		self::$data['settings'] = $settings;
+		self::$pdata['settings'] = $settings;
 
 		require_once "{$paths['inc']}/_helpers.php";
 
 		# Components
-		if ( isset($settings['general']['components']) && !empty($settings['general']['components']) ) {
-			foreach ( $settings['general']['components'] as $c ) {
-				if ( $c != 'widgets' && file_exists("{$paths['inc']}/{$c}.php") )
-					require_once "{$paths['inc']}/{$c}.php";
-			}
-		}
+		if ( !isset($settings['components']) || empty($settings['components']) )
+			return false;
 
-		# Helpers
-		if ( isset($settings['general']['helper']) && !empty($settings['general']['helper']) ) {
-			foreach ( $settings['general']['helper'] as $h )
-				require_once "{$paths['inc']}/helper_{$h}.php";
-		}
-
+		foreach ( $settings['components'] as $group )
+			foreach ( $group as $component )
+				if ( file_exists("{$paths['inc']}/{$component}.php") )
+					require_once "{$paths['inc']}/{$component}.php";
 
 		# Scripts n styles
-		if ( is_admin() )
-			self::_sns();
-
-		# Dev
-		//add_action( 'admin_footer', array(__CLASS__, 'dev' ) );
+		self::_sns();
 	}
 
 
 	private static function _sns() {
-		wp_register_script( 'kc-widgets-admin', kcEssentials::$data['paths']['scripts'].'/widgets.js', array('jquery'), kcEssentials::$data['version'], true );
-		wp_register_style( 'kc-widgets-admin', kcEssentials::$data['paths']['styles'].'/widgets.css', false, kcEssentials::$data['version'] );
+		wp_register_script( 'kc-widgets-admin', kcEssentials::$pdata['paths']['scripts'].'/widgets.js', array('jquery'), kcEssentials::$pdata['version'], true );
+		wp_register_style( 'kc-widgets-admin', kcEssentials::$pdata['paths']['styles'].'/widgets.css', false, kcEssentials::$pdata['version'] );
+	}
+
+
+	public static function get_data() {
+		if ( !func_num_args() )
+			return self::$pdata;
+
+		$args = func_get_args();
+		return kcs_array_multi_get_value( self::$pdata, $args );
 	}
 
 
 	# Register to KC Settings
 	public static function _activate() {
+		if ( version_compare(get_bloginfo('version'), '3.3', '<') )
+			wp_die( 'Please upgrade your WordPress to version 3.3 before using this plugin.' );
+
 		if ( !class_exists('kcSettings') )
 			wp_die( 'Please install and activate <a href="http://wordpress.org/extend/plugins/kc-settings/">KC Settings</a> before activating this plugin.<br /> <a href="'.wp_get_referer().'">&laquo; Go back</a> to plugins page.' );
 
@@ -85,19 +87,10 @@ class kcEssentials {
 		unset( $kcs['kids']['kc_essentials'] );
 		update_option( 'kc_settings', $kcs );
 	}
-
-
-	static function dev() {
-		echo '<pre>';
-
-		#print_r(  );
-
-		echo '</pre>';
-	}
 }
 
 
-require_once dirname(__FILE__) . '/kc-essentials-inc/options.php';
+require_once dirname(__FILE__) . '/kc-essentials-inc/_options.php';
 add_action( 'init', array('kcEssentials', 'init'), 100 );
 
 
@@ -120,7 +113,7 @@ $plugin_file = kc_plugin_file( __FILE__ );
 register_activation_hook( $plugin_file, array('kcEssentials', '_activate') );
 register_deactivation_hook( $plugin_file, array('kcEssentials', '_deactivate') );
 
-require_once dirname(__FILE__) . '/kc-essentials-inc/widgets.php';
+require_once dirname(__FILE__) . '/kc-essentials-inc/widget_widgets.php';
 add_action( 'widgets_init', array('kcEssentials_widgets', 'init') );
 
 ?>

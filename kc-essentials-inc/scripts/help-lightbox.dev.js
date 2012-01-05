@@ -39,7 +39,7 @@ var win = window.dialogArguments || opener || parent || top;
 		}
 
 		if ( help !== '' ) {
-			win.kcHelpBox = $('<div id="kc-help-popup" class="hidden"><div class="_wrap"><div class="_inside">'+help+'</div></div></div>').appendTo(win.kcBody);
+			win.kcHelpBox = $('<div id="kc-help-lightbox" class="hidden"><div class="_wrap"><div class="_inside">'+help+'</div></div></div>').appendTo(win.kcBody);
 
 			$(document).bind('keypress', function(e) {
 				if ( !$(e.target).is(':input') && e.which == 63 ) {

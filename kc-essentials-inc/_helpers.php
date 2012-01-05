@@ -73,4 +73,18 @@ function kc_essentials_sanitize_html_classes( $input ) {
 }
 
 
+function kc_essentials_sanitize_numbers( $value, $glue = ',' ) {
+	$_sizes = explode( $glue, $value );
+	foreach ( $_sizes as $idx => $_s ) {
+		$_w = absint( $_s );
+		if ( !$_w )
+			unset( $_sizes[$idx] );
+		else
+			$_sizes[$idx] = $_w;
+	}
+
+	return implode( $glue, $_sizes );
+}
+
+
 ?>

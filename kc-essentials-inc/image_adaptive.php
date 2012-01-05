@@ -7,11 +7,13 @@
 
 
 class kcEssentials_adaptive_images {
-	public static $data = array();
+	private static $pdata = array();
 
 
 	public static function init() {
-		$settings = isset( kcEssentials::$data['settings']['adaptive_images'] ) ? kcEssentials::$data['settings']['adaptive_images'] : array();
+		$settings = kcEssentials::get_data('settings', 'image_adaptive');
+		if ( !$settings )
+			$settings = array();
 
 		$sizes = kc_essentials_get_image_sizes( true );
 		if ( isset($settings['sizes']) && !empty($settings['sizes']) ) {
@@ -26,12 +28,9 @@ class kcEssentials_adaptive_images {
 				$count++;
 			}
 		}
-		self::$data['sizes'] = kc_essentials_get_image_sizes( true );
 
-		if ( isset($settings['default']) && absint($settings['default']) )
-			self::$data['default'] = absint($settings['default']);
-		else
-			self::$data['default'] = 1280;
+		self::$pdata['sizes'] = kc_essentials_get_image_sizes( true );
+		self::$pdata['default'] = ( isset($settings['default']) && absint($settings['default']) ) ? $settings['default'] : kc_get_default('kc_essentials', 'image_adaptive', 'default');
 
 		add_action( 'wp_head', array(__CLASS__, '_cookie_script') );
 	}
@@ -61,9 +60,9 @@ class kcEssentials_adaptive_images {
 	 */
 	function get_image( $id, $max = false, $stepup = true, $get_url = true ) {
 		if ( !absint($max) )
-			$max = isset( $_COOKIE['kc-resolution'] ) ? $_COOKIE['kc-resolution'] : self::$data['default'];
+			$max = isset( $_COOKIE['kc-resolution'] ) ? $_COOKIE['kc-resolution'] : self::$pdata['default'];
 
-		$sizes = self::$data['sizes'];
+		$sizes = self::$pdata['sizes'];
 		if ( $stepup === true ) {
 			$last = end( $sizes );
 			foreach ( $sizes as $size => $width ) {
@@ -83,7 +82,7 @@ class kcEssentials_adaptive_images {
 		if ( !$image )
 			$image = image_get_intermediate_size($id, 'full');
 
-		if ( $get_url )
+		if ( $get_url && isset($image['url']) )
 			return $image['url'];
 		else
 			return $image;

@@ -9,43 +9,67 @@
 add_filter( 'kc_plugin_settings', 'kc_essentials_options' );
 function kc_essentials_options( $settings ) {
 	$sections = array(
-		'general'	=> array(
-			'id'			=> 'general',
+		array(
+			'id'			=> 'components',
 			'title'		=> __('General Settings', 'kc-essentials'),
 			'desc'		=> sprintf( __('<b>Please</b> read the <a%s>guide</a> before using this plugin!', 'kc-essentials'), ' href="#" class="kc-help-trigger"' ),
 			'fields'	=> array(
-				'components' => array(
-					'id'			=> 'components',
-					'title'		=> __('Components', 'kc-essentials'),
+				array(
+					'id'			=> 'taxonomy',
+					'title'		=> __('Taxonomies', 'kc-essentials'),
 					'type'		=> 'checkbox',
 					'options'	=> array(
-						'uniquetax'								=> __('Unique taxonomies', 'kc-essentials'),
-						'mediatax'								=> __('Media taxonomies', 'kc-essentials'),
-						'widget_custom_id_class'	=> __('Custom widget ID &amp; classes', 'kc-essentials'),
-						'widget_logic'						=> __('Widget logic', 'kc-essentials'),
-						'widgets'									=> __('Additional widgets', 'kc-essentials'),
-						'adaptive_images'					=> __('Adaptive Images', 'kc-essentials'),
-						'insert_custom_size'			=> __('Insert images with custom sizes', 'kc-essentials'),
-						'cc_archive_menu'					=> __('Custom post type archive menu', 'kc-essentials'),
-						'history_js'							=> sprintf( __('Ajaxify the whole site using <a href="%s">history.js</a> and jQuery', 'kc-essentials'), 'https://github.com/balupton/History.js/' )
+						'taxonomy_unique'	=> __('Unique taxonomies', 'kc-essentials'),
+						'taxonomy_media'	=> __('Media taxonomies', 'kc-essentials')
 					)
 				),
-				'helper' => array(
+				array(
+					'id'			=> 'widget',
+					'title'		=> __('Widgets', 'kc-essentials'),
+					'type'		=> 'checkbox',
+					'options'	=> array(
+						'widget_widgets'	=> __('Additional widgets', 'kc-essentials'),
+						'widget_logic'		=> __('Conditional widgets, <em>a.k.a.</em> widget logic', 'kc-essentials'),
+						'widget_attr'			=> __('Custom widget ID &amp; classes', 'kc-essentials')
+					)
+				),
+				array(
+					'id'			=> 'image',
+					'title'		=> __('Images', 'kc-essentials'),
+					'type'		=> 'checkbox',
+					'options'	=> array(
+						'image_adaptive'	=> __('Adaptive images', 'kc-essentials'),
+						'image_insert'		=> __('Insert images with custom sizes into post editor', 'kc-essentials')
+					)
+				),
+				array(
+					'id'			=> 'menu',
+					'title'		=> __('Menu', 'kc-essentials'),
+					'type'		=> 'checkbox',
+					'options'	=> array(
+						'menu_cpt_archive'	=> __('Custom post type archive menu', 'kc-essentials')
+					)
+				),
+				array(
+					'id'			=> 'enhancement',
+					'title'		=> __('Enhancements', 'kc-essentials'),
+					'type'		=> 'checkbox',
+					'options'	=> array(
+						'enhc_history_js'			=> sprintf( __('Ajaxify the whole site using <a href="%s">history.js</a> and jQuery, <em>(experimental)</em>', 'kc-essentials'), 'https://github.com/balupton/History.js/' ),
+						'enhc_help_lightbox'	=> __('Contextual help lightbox', 'kc-essentials')
+					)
+				),
+				array(
 					'id'			=> 'helper',
 					'title'		=> __('Helper functions', 'kc-essentials'),
 					'type'		=> 'checkbox',
 					'options'	=> array(
-						'adjacent_post'	=> __('Get adjacent posts', 'kc-essentials') . ' (<code>KC_Adjacent_Post</code>)',
+						'helper_adjacent_post'	=> __('Get adjacent posts', 'kc-essentials') . ' (<code>KC_Adjacent_Post</code>)'
 					)
 				)
 			)
 		)
 	);
-
-	# Wp 3.3+
-	if ( version_compare(get_bloginfo('version'), '3.2.9999', '>=') ) {
-		$sections['general']['fields']['components']['options']['help_popup'] = __('Contextual help popup', 'kc-essentials');
-	}
 
 
 	# Unique taxonomies
@@ -62,7 +86,7 @@ function kc_essentials_options( $settings ) {
 		asort( $tax_unique );
 
 		$sections[] = array(
-			'id'			=> 'uniquetax',
+			'id'			=> 'taxonomy_unique',
 			'title'		=> __('Unique taxonomies', 'kc-essentials'),
 			'fields'	=> array(
 				array(
@@ -79,7 +103,7 @@ function kc_essentials_options( $settings ) {
 		);
 
 		$sections[] = array(
-			'id'			=> 'mediatax',
+			'id'			=> 'taxonomy_media',
 			'title'		=> __('Media taxonomies', 'kc-essentials'),
 			'fields'	=> array(
 				array(
@@ -98,7 +122,7 @@ function kc_essentials_options( $settings ) {
 
 	# Widget enhancements
 	$sections[] = array(
-		'id'			=> 'widget_custom_id_class',
+		'id'			=> 'widget_attr',
 		'title'		=> __('Custom widget ID &amp; classes', 'kc-essentials'),
 		'fields'	=> array(
 			array(
@@ -124,7 +148,7 @@ function kc_essentials_options( $settings ) {
 
 	# Additional widgets
 	$sections[] = array(
-		'id'			=> 'widgets',
+		'id'			=> 'widget_widgets',
 		'title'		=> __('Additional widgets', 'kc-essentials'),
 		'fields'	=> array(
 			array(
@@ -146,7 +170,7 @@ function kc_essentials_options( $settings ) {
 	# Adaptive images
 	$rgt_link = class_exists( 'RegenerateThumbnails' ) ? admin_url('tools.php?page=regenerate-thumbnails') : 'http://wordpress.org/extend/plugins/regenerate-thumbnails/';
 	$sections[] = array(
-		'id'			=> 'adaptive_images',
+		'id'			=> 'image_adaptive',
 		'title'		=> __('Adaptive Images', 'kc-essentials'),
 		'fields'	=> array(
 			array(
@@ -159,14 +183,16 @@ function kc_essentials_options( $settings ) {
 			array(
 				'id'			=> 'default',
 				'title'		=> __('Default size', 'kc-essentials'),
-				'type'		=> 'text'
+				'type'		=> 'text',
+				'default'	=> 1280
 			)
 		)
 	);
 
+
 	# History.js
 	$sections[] = array(
-		'id'			=> 'history_js',
+		'id'			=> 'enhc_history_js',
 		'title'		=> __('History.js', 'kc-essentials'),
 		'desc'		=> __('Leave each field empty for default values. Separate <em>selectors</em> with commas, and <em>classes</em> with spaces.', 'kc-essentials'),
 		'metabox'	=> array(
@@ -283,20 +309,9 @@ function kc_essentials_options( $settings ) {
 }
 
 
-add_filter( 'kcv_setting_kc_essentials_widget_custom_id_class_id', 'kc_essentials_sanitize_html_classes' );
-add_filter( 'kcv_setting_kc_essentials_widget_custom_id_class_class', 'kc_essentials_sanitize_html_classes' );
-
-
-function _kc_essentials_sanitize_image_sizes( $value ) {
-	$_sizes = explode( ',', $value );
-	foreach ( $_sizes as $idx => $_s ) {
-		$_w = absint( $_s );
-		if ( !$_w )
-			unset( $_sizes[$idx] );
-	}
-	return implode( ',', $_sizes );
-}
-add_filter( 'kcv_setting_kc_essentials_adaptive_images_sizes', '_kc_essentials_sanitize_image_sizes' );
-
+add_filter( 'kcv_setting_kc_essentials_widget_attr_id', 'kc_essentials_sanitize_html_classes' );
+add_filter( 'kcv_setting_kc_essentials_widget_attr_class', 'kc_essentials_sanitize_html_classes' );
+add_filter( 'kcv_setting_kc_essentials_image_adaptive_sizes', 'kc_essentials_sanitize_numbers' );
+add_filter( 'kcv_setting_kc_essentials_image_adaptive_default', 'kc_essentials_sanitize_numbers' );
 
 ?>
