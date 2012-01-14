@@ -14,9 +14,9 @@ class kcEssentials_menu_cpt_archive {
 
 	public static function init() {
 		$post_types = get_post_types(array(
-			'_builtin'					=> false,
-			'show_in_nav_menus'	=> true,
-			'has_archive'				=> true
+			'_builtin'          => false,
+			'show_in_nav_menus' => true,
+			'has_archive'       => true
 		), 'objects');
 		if ( empty($post_types) )
 			return false;
@@ -35,15 +35,15 @@ class kcEssentials_menu_cpt_archive {
 		$_nav_menu_placeholder = ( 0 > $_nav_menu_placeholder ) ? intval($_nav_menu_placeholder) - 1 : -1;
 
 		array_unshift( $posts, (object) array(
-			'ID'						=> 0,
-			'object_id'			=> $_nav_menu_placeholder,
-			'post_content'	=> '',
-			'post_excerpt'	=> '',
-			'post_parent'		=> '',
-			'post_title'		=> $post_type['args']->label,
-			'post_type'			=> 'nav_menu_item',
-			'type'					=> 'custom',
-			'url'						=> "###cca###{$post_type['args']->name}###"
+			'ID'           => 0,
+			'object_id'    => $_nav_menu_placeholder,
+			'post_content' => '',
+			'post_excerpt' => '',
+			'post_parent'  => '',
+			'post_title'   => $post_type['args']->label,
+			'post_type'    => 'nav_menu_item',
+			'type'         => 'custom',
+			'url'          => "###cca###{$post_type['args']->name}###"
 		) );
 
 		return $posts;

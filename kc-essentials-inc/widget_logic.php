@@ -55,139 +55,139 @@ class kcEssentials_widget_logic {
 
 		$logics = array(
 			array(
-				'label'	=> __('Homepage', 'kc-essentials'),
-				'key'		=> 'is_home',
-				'value'	=> true
+				'label' => __('Homepage', 'kc-essentials'),
+				'key'   => 'is_home',
+				'value' => true
 			),
 			array(
-				'label'	=> __('Static front page', 'kc-essentials'),
-				'key'		=> 'is_front_page',
-				'value'	=> true
+				'label' => __('Static front page', 'kc-essentials'),
+				'key'   => 'is_front_page',
+				'value' => true
 			),
 			array(
-				'label'	=> __('Singular', 'kc-essentials'),
-				'key'		=> 'is_singular',
-				'value'	=> true,
-				'args'	=> true
+				'label' => __('Singular', 'kc-essentials'),
+				'key'   => 'is_singular',
+				'value' => true,
+				'args'  => true
 			),
 			array(
-				'label'	=> __('Page', 'kc-essentials'),
-				'key'		=> 'is_page',
-				'value'	=> true,
-				'args'	=> true
+				'label' => __('Page', 'kc-essentials'),
+				'key'   => 'is_page',
+				'value' => true,
+				'args'  => true
 			),
 			array(
-				'label'	=> __('Custom page template', 'kc-essentials'),
-				'key'		=> 'is_page_template',
-				'value'	=> true,
-				'args'	=> true
+				'label' => __('Custom page template', 'kc-essentials'),
+				'key'   => 'is_page_template',
+				'value' => true,
+				'args'  => true
 			),
 			array(
-				'label'	=> __('Single post', 'kc-essentials'),
-				'key'		=> 'is_single',
-				'value'	=> true,
-				'args'	=> true
+				'label' => __('Single post', 'kc-essentials'),
+				'key'   => 'is_single',
+				'value' => true,
+				'args'  => true
 			),
 			array(
-				'label'	=> __('Sticky post', 'kc-essentials'),
-				'key'		=> 'is_sticky',
-				'value'	=> true,
-				'args'	=> true
+				'label' => __('Sticky post', 'kc-essentials'),
+				'key'   => 'is_sticky',
+				'value' => true,
+				'args'  => true
 			),
 			array(
-				'label'	=> __('Attachment', 'kc-essentials'),
-				'key'		=> 'is_attachment',
-				'value'	=> true,
-				'args'	=> true
+				'label' => __('Attachment', 'kc-essentials'),
+				'key'   => 'is_attachment',
+				'value' => true,
+				'args'  => true
 			),
 			array(
-				'label'	=> __('Archive', 'kc-essentials'),
-				'key'		=> 'is_archive',
-				'value'	=> true
+				'label' => __('Archive', 'kc-essentials'),
+				'key'   => 'is_archive',
+				'value' => true
 			),
 			array(
-				'label'	=> __('Post type archive', 'kc-essentials'),
-				'key'		=> 'is_post_type_archive',
-				'value'	=> true,
-				'args'	=> true
+				'label' => __('Post type archive', 'kc-essentials'),
+				'key'   => 'is_post_type_archive',
+				'value' => true,
+				'args'  => true
 			),
 			array(
-				'label'	=> __('Category', 'kc-essentials'),
-				'key'		=> 'is_category',
-				'value'	=> true,
-				'args'	=> true
+				'label' => __('Category', 'kc-essentials'),
+				'key'   => 'is_category',
+				'value' => true,
+				'args'  => true
 			),
 			array(
-				'label'	=> __('Tag', 'kc-essentials'),
-				'key'		=> 'is_tag',
-				'value'	=> true,
-				'args'	=> true
+				'label' => __('Tag', 'kc-essentials'),
+				'key'   => 'is_tag',
+				'value' => true,
+				'args'  => true
 			),
 			array(
-				'label'	=> __('Taxonomy', 'kc-essentials'),
-				'key'		=> 'is_tax',
-				'value'	=> true
+				'label' => __('Taxonomy', 'kc-essentials'),
+				'key'   => 'is_tax',
+				'value' => true
 			),
 			array(
-				'label'	=> __('Author', 'kc-essentials'),
-				'key'		=> 'is_tax',
-				'value'	=> true,
-				'args'	=> true
+				'label' => __('Author', 'kc-essentials'),
+				'key'   => 'is_tax',
+				'value' => true,
+				'args'  => true
 			),
 			array(
-				'label'	=> __('404', 'kc-essentials'),
-				'key'		=> 'is_404',
-				'value'	=> true
+				'label' => __('404', 'kc-essentials'),
+				'key'   => 'is_404',
+				'value' => true
 			),
 			array(
-				'label'	=> __('Search page', 'kc-essentials'),
-				'key'		=> 'is_search',
-				'value'	=> true
+				'label' => __('Search page', 'kc-essentials'),
+				'key'   => 'is_search',
+				'value' => true
 			),
 			array(
-				'label'	=> __('Paged archive', 'kc-essentials'),
-				'key'		=> 'is_paged',
-				'value'	=> true
+				'label' => __('Paged archive', 'kc-essentials'),
+				'key'   => 'is_paged',
+				'value' => true
 			),
 			array(
-				'label'	=> __('Year archive', 'kc-essentials'),
-				'key'		=> 'is_year',
-				'value'	=> true
+				'label' => __('Year archive', 'kc-essentials'),
+				'key'   => 'is_year',
+				'value' => true
 			),
 			array(
-				'label'	=> __('Month archive', 'kc-essentials'),
-				'key'		=> 'is_month',
-				'value'	=> true
+				'label' => __('Month archive', 'kc-essentials'),
+				'key'   => 'is_month',
+				'value' => true
 			),
 			array(
-				'label'	=> __('Date archive', 'kc-essentials'),
-				'key'		=> 'is_date',
-				'value'	=> true
+				'label' => __('Date archive', 'kc-essentials'),
+				'key'   => 'is_date',
+				'value' => true
 			),
 			array(
-				'label'	=> __('Day archive', 'kc-essentials'),
-				'key'		=> 'is_day',
-				'value'	=> true
+				'label' => __('Day archive', 'kc-essentials'),
+				'key'   => 'is_day',
+				'value' => true
 			),
 			array(
-				'label'	=> __('New day', 'kc-essentials'),
-				'key'		=> 'is_new_day',
-				'value'	=> true
+				'label' => __('New day', 'kc-essentials'),
+				'key'   => 'is_new_day',
+				'value' => true
 			),
 			array(
-				'label'	=> __('Time archive', 'kc-essentials'),
-				'key'		=> 'is_time',
-				'value'	=> true
+				'label' => __('Time archive', 'kc-essentials'),
+				'key'   => 'is_time',
+				'value' => true
 			),
 			array(
-				'label'	=> __('Preview page', 'kc-essentials'),
-				'key'		=> 'is_preview',
-				'value'	=> true
+				'label' => __('Preview page', 'kc-essentials'),
+				'key'   => 'is_preview',
+				'value' => true
 			),
 			array(
-				'label'	=> __('Logged in user', 'kc-essentials'),
-				'key'		=> 'is_preview',
-				'value'	=> true
+				'label' => __('Logged in user', 'kc-essentials'),
+				'key'   => 'is_preview',
+				'value' => true
 			)
 		);
 

@@ -50,7 +50,7 @@ class kcEssentials {
 
 	private static function _sns() {
 		wp_register_script( 'kc-widgets-admin', kcEssentials::$pdata['paths']['scripts'].'/widgets.js', array('jquery'), kcEssentials::$pdata['version'], true );
-		wp_register_style( 'kc-widgets-admin', kcEssentials::$pdata['paths']['styles'].'/widgets.css', false, kcEssentials::$pdata['version'] );
+		wp_register_style( 'kc-widgets-admin',  kcEssentials::$pdata['paths']['styles'].'/widgets.css', false, kcEssentials::$pdata['version'] );
 	}
 
 
@@ -73,9 +73,9 @@ class kcEssentials {
 
 		$kcs = get_option('kc_settings');
 		$kcs['kids']['kc_essentials'] = array(
-			'name'	=> 'KC Essentials',
-			'type'	=> 'plugin',
-			'file'	=> kc_plugin_file( __FILE__ )
+			'name' => 'KC Essentials',
+			'type' => 'plugin',
+			'file' => kc_plugin_file( __FILE__ )
 		);
 		update_option( 'kc_settings', $kcs );
 	}

@@ -6,9 +6,9 @@ class KC_Adjacent_Post {
 
 	public static function get( $args = array() ) {
 		$defaults = array(
-			'current'					=> '',
-			'previous'				=> true,
-			'in_same_tax'			=> false
+			'current'     => '',
+			'previous'    => true,
+			'in_same_tax' => false
 		);
 
 		$args = wp_parse_args( (array) $args, $defaults );
@@ -39,11 +39,11 @@ class KC_Adjacent_Post {
 		}
 
 		$q_args = array(
-			'order'						=> $order,
-			'orderby'					=> 'date',
-			'post_type'				=> $current->post_type,
-			'post_status'			=> ( $current->post_type == 'attachment' ) ? 'inherit' : 'publish',
-			'posts_per_page'	=> 1
+			'order'          => $order,
+			'orderby'        => 'date',
+			'post_type'      => $current->post_type,
+			'post_status'    => ( $current->post_type == 'attachment' ) ? 'inherit' : 'publish',
+			'posts_per_page' => 1
 		);
 
 		# tax query
@@ -56,10 +56,10 @@ class KC_Adjacent_Post {
 					continue;
 
 				$tax_query[] = array(
-					'taxonomy'	=> $tax,
-					'operator'	=> 'IN',
-					'field'			=> 'id',
-					'terms'			=> $terms
+					'taxonomy' => $tax,
+					'operator' => 'IN',
+					'field'    => 'id',
+					'terms'    => $terms
 				);
 			}
 
@@ -78,10 +78,10 @@ class KC_Adjacent_Post {
 			while ( $query->have_posts() ) {
 				$query->the_post();
 				$output[] = array(
-					'id'		=> get_the_ID(),
-					'title'	=> get_the_title(),
-					'url'		=> get_permalink(),
-					'pos'		=> $pos
+					'id'    => get_the_ID(),
+					'title' => get_the_title(),
+					'url'   => get_permalink(),
+					'pos'   => $pos
 				);
 			}
 		}

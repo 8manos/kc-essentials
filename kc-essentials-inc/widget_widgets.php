@@ -11,9 +11,9 @@ class kcEssentials_widgets {
 	public function init() {
 		$options = get_option( 'kc_essentials_settings' );
 		if ( !$options
-					|| !isset($options['components']['widget'])
-					|| !in_array( 'widget_widgets', $options['components']['widget'] )
-					|| !isset($options['widget_widgets']['widgets']) )
+		     || !isset($options['components']['widget'])
+		     || !in_array( 'widget_widgets', $options['components']['widget'] )
+		     || !isset($options['widget_widgets']['widgets']) )
 			return false;
 
 		foreach ( $options['widget_widgets']['widgets'] as $widget ) {
@@ -73,8 +73,8 @@ class kcEssentials_widgets {
 			if ( !isset($args['current']) )
 				$args['current'] = isset($config[$id]) ? $config[$id] : '';
 			$args['attr'] = array(
-				'id'		=> $f_id,
-				'name'	=> $f_name
+				'id'   => $f_id,
+				'name' => $f_name
 			);
 			$form .= "\t\t".kcForm::field( $args )."\n";
 			$form .= "\t</li>\n";

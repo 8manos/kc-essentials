@@ -45,15 +45,15 @@ Class kc_widget_menu extends WP_Widget {
 
 
 	function update( $new, $old ) {
-		$new['title'] = strip_tags( stripslashes($new['title']) );
-		$new['menu'] = (int) $new['menu'];
-		$new['depth'] = absint($new['depth']);
+		$new['title']           = strip_tags( stripslashes($new['title']) );
+		$new['menu']            = (int) $new['menu'];
+		$new['depth']           = absint($new['depth']);
 		$new['container_class'] = kc_essentials_sanitize_html_classes( $new['container_class'] );
-		$new['container_id'] = sanitize_html_class( $new['container_id'] );
-		$new['menu_class'] = kc_essentials_sanitize_html_classes( $new['menu_class'] );
-		$new['menu_id'] = sanitize_html_class( $new['menu_id'] );
-		$new['walker'] = sanitize_html_class( $new['walker'] );
-		$new['action_id'] = sanitize_html_class( $new['action_id'] );
+		$new['container_id']    = sanitize_html_class( $new['container_id'] );
+		$new['menu_class']      = kc_essentials_sanitize_html_classes( $new['menu_class'] );
+		$new['menu_id']         = sanitize_html_class( $new['menu_id'] );
+		$new['walker']          = sanitize_html_class( $new['walker'] );
+		$new['action_id']       = sanitize_html_class( $new['action_id'] );
 
 		return $new;
 	}
@@ -74,77 +74,77 @@ Class kc_widget_menu extends WP_Widget {
 			$nav_menus[] = array( 'value' => $m->term_id, 'label' => $m->name );
 
 		$options = array(
-			'title'						=> array(
-				'label'							=> __('Title', 'kc-essentials'),
-				'type'							=> 'text',
-				'heading'						=> true
+			'title' => array(
+				'label'   => __('Title', 'kc-essentials'),
+				'type'    => 'text',
+				'heading' => true
 			),
-			'menu'						=> array(
-				'label'							=> __('Menu', 'kc-essentials'),
-				'type'							=> 'select',
-				'options'						=> $nav_menus,
-				'none'							=> false
+			'menu' => array(
+				'label'   => __('Menu', 'kc-essentials'),
+				'type'    => 'select',
+				'options' => $nav_menus,
+				'none'    => false
 			),
-			'depth'						=> array(
-				'label'							=> __('Depth', 'kc-essentials'),
-				'type'							=> 'text',
-				'current'						=> isset( $instance['depth'] ) ? $instance['depth'] : '0'
+			'depth' => array(
+				'label'   => __('Depth', 'kc-essentials'),
+				'type'    => 'text',
+				'current' => isset( $instance['depth'] ) ? $instance['depth'] : '0'
 			),
-			'container'				=> array(
-				'label'							=> __('Container tag', 'kc-essentials'),
-				'type'							=> 'select',
-				'options'						=> array(
+			'container' => array(
+				'label'   => __('Container tag', 'kc-essentials'),
+				'type'    => 'select',
+				'options' => array(
 					array( 'value' => 'div', 'label' => 'div' ),
 					array( 'value' => 'nav', 'label' => 'nav' ),
-					array( 'value' => '0', 'label' => __('None', 'kc-essentials') )
+					array( 'value' => '0',   'label' => __('None', 'kc-essentials') )
 				),
-				'none'							=> false
+				'none'    => false
 			),
-			'container_class'	=> array(
-				'label'							=> __('Container class', 'kc-essentials'),
-				'type'							=> 'text'
+			'container_class' => array(
+				'label'   => __('Container class', 'kc-essentials'),
+				'type'    => 'text'
 			),
-			'container_id'		=> array(
-				'label'							=> __('Container ID', 'kc-essentials'),
-				'type'							=> 'text'
+			'container_id' => array(
+				'label'   => __('Container ID', 'kc-essentials'),
+				'type'    => 'text'
 			),
-			'menu_class'			=> array(
-				'label'							=> __('Menu class', 'kc-essentials'),
-				'type'							=> 'text',
-				'current'						=> isset( $instance['menu_class'] ) ? $instance['menu_class'] : 'menu'
+			'menu_class' => array(
+				'label'   => __('Menu class', 'kc-essentials'),
+				'type'    => 'text',
+				'current' => isset( $instance['menu_class'] ) ? $instance['menu_class'] : 'menu'
 			),
-			'menu_id'					=> array(
-				'label'							=> __('Menu ID', 'kc-essentials'),
-				'type'							=> 'text'
+			'menu_id' => array(
+				'label'   => __('Menu ID', 'kc-essentials'),
+				'type'    => 'text'
 			),
-			'before'					=> array(
-				'label'							=> __('Before link text', 'kc-essentials'),
-				'type'							=> 'text'
+			'before' => array(
+				'label'   => __('Before link text', 'kc-essentials'),
+				'type'    => 'text'
 			),
-			'after'						=> array(
-				'label'							=> __('After link text', 'kc-essentials'),
-				'type'							=> 'text'
+			'after' => array(
+				'label'   => __('After link text', 'kc-essentials'),
+				'type'    => 'text'
 			),
-			'link_before'			=> array(
-				'label'							=> __('Before link', 'kc-essentials'),
-				'type'							=> 'text'
+			'link_before' => array(
+				'label'   => __('Before link', 'kc-essentials'),
+				'type'    => 'text'
 			),
-			'link_after'			=> array(
-				'label'							=> __('After link', 'kc-essentials'),
-				'type'							=> 'text'
+			'link_after' => array(
+				'label'   => __('After link', 'kc-essentials'),
+				'type'    => 'text'
 			),
-			'items_wrap'			=> array(
-				'label'							=> __('Items wrap', 'kc-essentials'),
-				'type'							=> 'text',
-				'current'						=> isset( $instance['items_wrap'] ) ? $instance['items_wrap'] : '<ul id="%1$s" class="%2$s">%3$s</ul>'
+			'items_wrap' => array(
+				'label'   => __('Items wrap', 'kc-essentials'),
+				'type'    => 'text',
+				'current' => isset( $instance['items_wrap'] ) ? $instance['items_wrap'] : '<ul id="%1$s" class="%2$s">%3$s</ul>'
 			),
-			'walker'					=> array(
-				'label'							=> __('Walker function', 'kc-essentials'),
-				'type'							=> 'text'
+			'walker' => array(
+				'label'   => __('Walker function', 'kc-essentials'),
+				'type'    => 'text'
 			),
-			'action_id'					=> array(
-				'label'							=> __('Action ID', 'kc-essentials'),
-				'type'							=> 'text'
+			'action_id' => array(
+				'label'   => __('Action ID', 'kc-essentials'),
+				'type'    => 'text'
 			)
 		);
 

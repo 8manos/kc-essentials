@@ -69,14 +69,14 @@ class kcEssentials_widget_custom_id_class {
 
 				$output .= "\t\t<label for='{$f_id}'>{$l[0]}</label><br />\n";
 				$output .= kcForm::field(array(
-					'attr'	=> array(
-						'id'		=> $f_id,
-						'name'	=> $f_name,
-						'class'	=> $f_class
+					'attr'    => array(
+						'id'    => $f_id,
+						'name'  => $f_name,
+						'class' => $f_class
 					),
-					'type'		=> $f_type,
-					'options'	=> $f_opt,
-					'current'	=> $f_current
+					'type'    => $f_type,
+					'options' => $f_opt,
+					'current' => $f_current
 				));
 			}
 			$output .= "\t</p>\n";
