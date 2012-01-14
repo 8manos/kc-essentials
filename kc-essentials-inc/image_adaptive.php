@@ -17,7 +17,7 @@ class kcEssentials_adaptive_images {
 
 		if ( isset($settings['sizes']) && !empty($settings['sizes']) ) {
 			$sizes_current = array();
-			foreach ( kcs_get_image_sizes() as $s_id => $s_prop )
+			foreach ( kc_get_image_sizes() as $s_id => $s_prop )
 				$sizes_current[$s_id] = $s_prop['width'];
 
 			$count = 0;
@@ -31,7 +31,7 @@ class kcEssentials_adaptive_images {
 		}
 
 		$sizes = array();
-		foreach ( kcs_get_image_sizes() as $s_id => $s_prop )
+		foreach ( kc_get_image_sizes() as $s_id => $s_prop )
 			$sizes[$s_id] = $s_prop['width'];
 		self::$pdata['sizes'] = $sizes;
 		self::$pdata['default'] = ( isset($settings['default']) && absint($settings['default']) ) ? $settings['default'] : kc_get_default('kc_essentials', 'image_adaptive', 'default');

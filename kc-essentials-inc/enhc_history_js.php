@@ -13,7 +13,7 @@ class kcEssentials_history_js {
 		wp_register_script( 'jquery-history', "{$script_dir_uri}/jquery.history.js", array('jquery'), '1.7.1', true );
 		wp_enqueue_script( 'kc-ajaxify', "{$script_dir_uri}/ajaxify.js", array('jquery', 'jquery-scrollto', 'jquery-history'), '0.1', true );
 
-		$vars = wp_parse_args( kcs_array_remove_empty(kc_get_option('kc_essentials', 'enhc_history_js')), kc_get_default('plugin', 'kc_essentials', 'enhc_history_js') );
+		$vars = wp_parse_args( kc_array_remove_empty(kc_get_option('kc_essentials', 'enhc_history_js')), kc_get_default('plugin', 'kc_essentials', 'enhc_history_js') );
 
 		$must = array(
 			'el_excludes'		=> array('#comment-popup-link', '.no-ajaxy'),

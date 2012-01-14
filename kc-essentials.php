@@ -59,7 +59,7 @@ class kcEssentials {
 			return self::$pdata;
 
 		$args = func_get_args();
-		return kcs_array_multi_get_value( self::$pdata, $args );
+		return kc_array_multi_get_value( self::$pdata, $args );
 	}
 
 
