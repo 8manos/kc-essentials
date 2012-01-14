@@ -23,10 +23,10 @@ Class kc_widget_post extends WP_Widget {
 		extract( $args );
 
 		$q_args = array(
-			'post_type'				=> $instance['post_type'],
-			'posts_per_page'	=> $instance['posts_per_page'],
-			'order'						=> $instance['posts_order'],
-			'orderby'					=> $instance['posts_orderby']
+			'post_type'      => $instance['post_type'],
+			'posts_per_page' => $instance['posts_per_page'],
+			'order'          => $instance['posts_order'],
+			'orderby'        => $instance['posts_orderby']
 		);
 
 		# post orderby
@@ -247,10 +247,10 @@ Class kc_widget_post extends WP_Widget {
 			$new['tax_query'] = array(
 				'relation' => '',
 				array(
-					'taxonomy'	=> '',
-					'terms'			=> '',
-					'field'			=> 'slug',
-					'operator'	=> ''
+					'taxonomy' => '',
+					'terms'    => '',
+					'field'    => 'slug',
+					'operator' => ''
 				)
 			);
 		}
@@ -274,10 +274,10 @@ Class kc_widget_post extends WP_Widget {
 		else
 			$new['meta_query'] = array(
 				array(
-					'key'			=> '',
-					'value'		=> '',
-					'type'		=> 'CHAR',
-					'compare'	=> '='
+					'key'     => '',
+					'value'   => '',
+					'type'    => 'CHAR',
+					'compare' => '='
 				)
 			);
 
@@ -287,76 +287,56 @@ Class kc_widget_post extends WP_Widget {
 
 	function form( $instance ) {
 		$defaults = array(
-			'title'							=> '',
-			'post_type'					=> array('post'),
-			'post_status'				=> array('publish'),
-			'posts_per_page'		=> get_option('posts_per_page'),
-			'include'						=> '',
-			'exclude'						=> '',
-			'posts_order'				=> 'DESC',
-			'posts_orderby'			=> 'date',
-			'meta_key'					=> '',
-			'tax_query'					=> array(
+			'title'             => '',
+			'post_type'         => array('post'),
+			'post_status'       => array('publish'),
+			'posts_per_page'    => get_option('posts_per_page'),
+			'include'           => '',
+			'exclude'           => '',
+			'posts_order'       => 'DESC',
+			'posts_orderby'     => 'date',
+			'meta_key'          => '',
+			'tax_query'         => array(
 				'relation' => '',
 				array(
-					'taxonomy'	=> '',
-					'terms'			=> '',
-					'field'			=> 'slug',
-					'operator'	=> ''
+					'taxonomy' => '',
+					'terms'    => '',
+					'field'    => 'slug',
+					'operator' => ''
 				)
 			),
-			'meta_query'				=> array(
+			'meta_query'        => array(
 				array(
-					'key'			=> '',
-					'value'		=> '',
-					'type'		=> 'CHAR',
-					'compare'	=> '='
+					'key'     => '',
+					'value'   => '',
+					'type'    => 'CHAR',
+					'compare' => '='
 				)
 			),
-			'posts_wrapper'			=> '',
-			'posts_class'				=> '',
-			'entry_wrapper'			=> 'div',
-			'entry_class'				=> '',
-			'entry_title'				=> 'h4',
-			'title_link'				=> true,
-			'title_class'				=> 'title',
-			'content_wrapper'		=> '',
-			'content_class'			=> '',
-			'content_type'			=> 'excerpt',
-			'content_meta'			=> '',
-			'thumb_size'				=> '',
-			'thumb_link'				=> 'post',
-			'more_link'					=> '',
-			'index_link'				=> '',
-			'action_id'					=> '',
-			'debug'							=> false
+			'posts_wrapper'   => '',
+			'posts_class'     => '',
+			'entry_wrapper'   => 'div',
+			'entry_class'     => '',
+			'entry_title'     => 'h4',
+			'title_link'      => true,
+			'title_class'     => 'title',
+			'content_wrapper' => '',
+			'content_class'   => '',
+			'content_type'    => 'excerpt',
+			'content_meta'    => '',
+			'thumb_size'      => '',
+			'thumb_link'      => 'post',
+			'more_link'       => '',
+			'index_link'      => '',
+			'action_id'       => '',
+			'debug'           => false
 		);
 		$instance = wp_parse_args( (array) $instance, $defaults );
 		$title = strip_tags( $instance['title'] );
 
 		# Options
-		$yesno = array(
-			array( 'value' => 1, 'label' => __('Yes', 'kc-essentials') ),
-			array( 'value' => 0, 'label' => __('No', 'kc-essentials') )
-		);
-
-		$post_types = array();
-		foreach ( get_post_types( array('public' => true), 'objects' ) as $pt )
-			$post_types[] = array(
-				'value'	=> $pt->name,
-				'label'	=> $pt->label
-			);
-
-		$_post_statuses = array_merge( get_post_statuses(), array(
-			'auto-draft'	=> __('Auto draft', 'kc-essentials'),
-			'inherit'			=> __('Inherit', 'kc-essentials'),
-			'trash'				=> __('Trash', 'kc-essentials'),
-			'future'			=> __('Future', 'kc-essentials')
-		) );
-		asort($_post_statuses);
-		$post_statuses = array();
-		foreach ( $_post_statuses as $v => $l )
-			$post_statuses[] = array( 'value' => $v, 'label' => $l );
+		$post_types = kcSettings_options::$post_types;
+		$post_statuses = kcSettings_options::$post_statuses;
 
 		$taxonomies = $terms = array();
 		foreach ( get_taxonomies( array('public' => true), 'objects' ) as $t ) {
@@ -390,49 +370,45 @@ Class kc_widget_post extends WP_Widget {
 		}
 
 		$relations = array(
-			array( 'value' => 'AND',	'label'	=> 'AND'),
-			array( 'value' => 'OR',		'label'	=> 'OR')
+			array( 'value' => 'AND', 'label'	=> 'AND'),
+			array( 'value' => 'OR',  'label'	=> 'OR')
 		);
 		$operators = array(
-			array( 'value' => 'IN',						'label' => 'IN' ),
-			array( 'value' => 'NOT IN',				'label' => 'NOT IN' ),
-			array( 'value' => 'LIKE',					'label' => 'LIKE' ),
-			array( 'value' => 'NOT LIKE',			'label' => 'NOT LIKE' ),
-			array( 'value' => 'BETWEEN',			'label' => 'BETWEEN' ),
-			array( 'value' => 'NOT BETWEEN',	'label' => 'NOT BETWEEN' )
+			array( 'value' => 'IN',          'label' => 'IN' ),
+			array( 'value' => 'NOT IN',      'label' => 'NOT IN' ),
+			array( 'value' => 'LIKE',        'label' => 'LIKE' ),
+			array( 'value' => 'NOT LIKE',    'label' => 'NOT LIKE' ),
+			array( 'value' => 'BETWEEN',     'label' => 'BETWEEN' ),
+			array( 'value' => 'NOT BETWEEN', 'label' => 'NOT BETWEEN' )
 		);
 		$meta_compare = array(
-			array( 'value' => '=',	'label' => '=' ),
-			array( 'value' => '!=',	'label' => '!=' ),
-			array( 'value' => '>',	'label' => '>' ),
-			array( 'value' => '>=',	'label' => '>=' ),
-			array( 'value' => '<',	'label' => '<' ),
-			array( 'value' => '<=',	'label' => '<=' )
+			array( 'value' => '=',  'label' => '=' ),
+			array( 'value' => '!=', 'label' => '!=' ),
+			array( 'value' => '>',  'label' => '>' ),
+			array( 'value' => '>=', 'label' => '>=' ),
+			array( 'value' => '<',  'label' => '<' ),
+			array( 'value' => '<=', 'label' => '<=' )
 		);
 		$meta_type = array(
-			array( 'value' => 'BINARY',		'label'=> 'Binary' ),
-			array( 'value' => 'CHAR',			'label'=> 'Char' ),
-			array( 'value' => 'DATE',			'label'=> 'Date' ),
-			array( 'value' => 'DATETIME',	'label'=> 'Datetime' ),
-			array( 'value' => 'DECIMAL',	'label'=> 'Decimal' ),
-			array( 'value' => 'NUMERIC',	'label'=> 'Numeric' ),
-			array( 'value' => 'SIGNED',		'label'=> 'Signed' ),
-			array( 'value' => 'UNSIGNED',	'label'=> 'Unsigned' ),
-			array( 'value' => 'TIME',			'label'=> 'Time' )
+			array( 'value' => 'BINARY',   'label'=> 'Binary' ),
+			array( 'value' => 'CHAR',     'label'=> 'Char' ),
+			array( 'value' => 'DATE',     'label'=> 'Date' ),
+			array( 'value' => 'DATETIME', 'label'=> 'Datetime' ),
+			array( 'value' => 'DECIMAL',  'label'=> 'Decimal' ),
+			array( 'value' => 'NUMERIC',  'label'=> 'Numeric' ),
+			array( 'value' => 'SIGNED',   'label'=> 'Signed' ),
+			array( 'value' => 'UNSIGNED', 'label'=> 'Unsigned' ),
+			array( 'value' => 'TIME',     'label'=> 'Time' )
 		);
 
-		$image_sizes = $image_sizes_s = array();
-		foreach ( get_intermediate_image_sizes() as $s ) {
-			$image_sizes[] = array( 'value' => $s, 'label' => $s );
-			$image_sizes_s[] = $s;
-		} ?>
+		$image_sizes = kcSettings_options::$image_sizes; ?>
 
 		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget title', 'kc-essentials') ?></label></h5>
 		<ul class="kcw-control-block">
 			<li>
 				<?php echo kcForm::input(array(
-					'attr' => array('id' => $this->get_field_id('title'), 'name' => $this->get_field_name('title'), 'class' => 'widefat'),
-					'current'	=> $title
+					'attr'    => array('id' => $this->get_field_id('title'), 'name' => $this->get_field_name('title'), 'class' => 'widefat'),
+					'current' => $title
 				)) ?>
 			</li>
 		</ul>
@@ -442,52 +418,54 @@ Class kc_widget_post extends WP_Widget {
 			<li>
 				<label><?php _e('Post type', 'kc-essentials') ?></label>
 				<div class="checks">
-					<?php echo kcForm::checkbox(array(
-						'attr' => array('id' => $this->get_field_id('post_type'), 'name' => $this->get_field_name('post_type').'[]'),
-						'current'	=> $instance['post_type'],
-						'options'	=> $post_types
+					<?php echo kcForm::field(array(
+						'type'    => 'checkbox',
+						'attr'    => array('id' => $this->get_field_id('post_type'), 'name' => $this->get_field_name('post_type').'[]'),
+						'current' => $instance['post_type'],
+						'options' => $post_types
 					)) ?>
 				</div>
 			</li>
 			<li>
 				<label><?php _e('Post status', 'kc-essentials') ?></label>
 				<div class="checks">
-					<?php echo kcForm::checkbox(array(
-						'attr' => array('id' => $this->get_field_id('post_status'), 'name' => $this->get_field_name('post_status').'[]'),
-						'current'	=> $instance['post_status'],
-						'options'	=> $post_statuses
+					<?php echo kcForm::field(array(
+						'type'    => 'checkbox',
+						'attr'    => array('id' => $this->get_field_id('post_status'), 'name' => $this->get_field_name('post_status').'[]'),
+						'current' => $instance['post_status'],
+						'options' => $post_statuses
 					)) ?>
 				</div>
 			</li>
 			<li>
 				<label for="<?php echo $this->get_field_id('posts_per_page'); ?>" title="<?php _e("Use -1 to show all posts") ?>"><?php _e('Count', 'kc-essentials') ?> <small class="impo">(?)</small></label>
 				<?php echo kcForm::input(array(
-					'attr' => array('id' => $this->get_field_id('posts_per_page'), 'name' => $this->get_field_name('posts_per_page')),
-					'current'	=> $instance['posts_per_page']
+					'attr'    => array('id' => $this->get_field_id('posts_per_page'), 'name' => $this->get_field_name('posts_per_page')),
+					'current' => $instance['posts_per_page']
 				)) ?>
 			</li>
 			<li>
 				<label for="<?php echo $this->get_field_id('include'); ?>" title="<?php _e('Separate post IDs with commas') ?>"><?php _e('Incl. IDs', 'kc-essentials') ?> <small class="impo">(?)</small></label>
 				<?php echo kcForm::input(array(
-					'attr' => array('id' => $this->get_field_id('include'), 'name' => $this->get_field_name('include')),
-					'current'	=> $instance['include']
+					'attr'    => array('id' => $this->get_field_id('include'), 'name' => $this->get_field_name('include')),
+					'current' => $instance['include']
 				)) ?>
 			</li>
 			<li>
 				<label for="<?php echo $this->get_field_id('exclude'); ?>" title="<?php _e('Separate post IDs with commas') ?>"><?php _e('Excl. IDs', 'kc-essentials') ?> <small class="impo">(?)</small></label>
 				<?php echo kcForm::input(array(
-					'attr' => array('id' => $this->get_field_id('exclude'), 'name' => $this->get_field_name('exclude')),
-					'current'	=> $instance['exclude']
+					'attr'    => array('id' => $this->get_field_id('exclude'), 'name' => $this->get_field_name('exclude')),
+					'current' => $instance['exclude']
 				)) ?>
 			</li>
 			<li>
 				<label for="<?php echo $this->get_field_id('posts_order'); ?>"><?php _e('Order', 'kc-essentials') ?></label>
 				<?php echo kcForm::select(array(
-					'attr' => array('id' => $this->get_field_id('posts_order'), 'name' => $this->get_field_name('posts_order')),
-					'current'	=> $instance['posts_order'],
-					'options'	=> array(
+					'attr'    => array('id' => $this->get_field_id('posts_order'), 'name' => $this->get_field_name('posts_order')),
+					'current' => $instance['posts_order'],
+					'options' => array(
 						array( 'value' => 'DESC', 'label' => __('Descending', 'kc-essentials') ),
-						array( 'value' => 'ASC', 'label' => __('Ascending', 'kc-essentials') )
+						array( 'value' => 'ASC',  'label' => __('Ascending', 'kc-essentials') )
 					),
 					'none'		=> false
 				)) ?>
@@ -496,34 +474,34 @@ Class kc_widget_post extends WP_Widget {
 				<label for="<?php echo $this->get_field_id('posts_orderby'); ?>"><?php _e('Order by', 'kc-essentials') ?></label>
 				<?php echo kcForm::select(array(
 					'attr' => array(
-						'id'					=> $this->get_field_id('posts_orderby'),
-						'name'				=> $this->get_field_name('posts_orderby'),
-						'class'				=> 'hasdep',
-						'data-child'	=> '#p-'.$this->get_field_id('meta_key')
+						'id'         => $this->get_field_id('posts_orderby'),
+						'name'       => $this->get_field_name('posts_orderby'),
+						'class'      => 'hasdep',
+						'data-child' => '#p-'.$this->get_field_id('meta_key')
 					),
-					'current'	=> $instance['posts_orderby'],
-					'options'	=> array(
-						array( 'value' => 'date', 'label' => __('Publish date', 'kc-essentials') ),
-						array( 'value' => 'ID', 'label' => __('ID', 'kc-essentials') ),
-						array( 'value' => 'title', 'label' => __('Title', 'kc-essentials') ),
-						array( 'value' => 'author', 'label' => __('Author', 'kc-essentials') ),
-						array( 'value' => 'modified', 'label' => __('Modification date', 'kc-essentials') ),
-						array( 'value' => 'menu_order', 'label' => __('Menu order', 'kc-essentials') ),
-						array( 'value' => 'parent', 'label' => __('Parent', 'kc-essentials') ),
-						array( 'value' => 'comment_count', 'label' => __('Comment count', 'kc-essentials') ),
-						array( 'value' => 'rand', 'label' => __('Random', 'kc-essentials') ),
-						array( 'value' => 'post__in', 'label' => __('Included IDs', 'kc-essentials') ),
-						array( 'value' => 'meta_value', 'label' => __('Meta value', 'kc-essentials') ),
+					'current' => $instance['posts_orderby'],
+					'options' => array(
+						array( 'value' => 'date',           'label' => __('Publish date', 'kc-essentials') ),
+						array( 'value' => 'ID',             'label' => __('ID', 'kc-essentials') ),
+						array( 'value' => 'title',          'label' => __('Title', 'kc-essentials') ),
+						array( 'value' => 'author',         'label' => __('Author', 'kc-essentials') ),
+						array( 'value' => 'modified',       'label' => __('Modification date', 'kc-essentials') ),
+						array( 'value' => 'menu_order',     'label' => __('Menu order', 'kc-essentials') ),
+						array( 'value' => 'parent',         'label' => __('Parent', 'kc-essentials') ),
+						array( 'value' => 'comment_count',  'label' => __('Comment count', 'kc-essentials') ),
+						array( 'value' => 'rand',           'label' => __('Random', 'kc-essentials') ),
+						array( 'value' => 'post__in',       'label' => __('Included IDs', 'kc-essentials') ),
+						array( 'value' => 'meta_value',     'label' => __('Meta value', 'kc-essentials') ),
 						array( 'value' => 'meta_value_num', 'label'	=> __('Meta value num', 'kc-essentials') )
 					),
-					'none'		=> false
+					'none'    => false
 				)) ?>
 			</li>
 			<li id="<?php echo 'p-'.$this->get_field_id('meta_key') ?>" data-dep='["meta_value", "meta_value_num"]'>
 				<label for="<?php echo $this->get_field_id('meta_key') ?>" title="<?php _e("Fill this if you select 'Meta value' or 'Meta value num' above", 'kc-essentials') ?>"><?php _e('Meta key', 'kc-essentials') ?> <small class="impo">(?)</small></label>
 				<?php echo kcForm::input(array(
-					'attr' => array('id' => $this->get_field_id('meta_key'), 'name' => $this->get_field_name('meta_key') ),
-					'current'	=> $instance['meta_key']
+					'attr'    => array('id' => $this->get_field_id('meta_key'), 'name' => $this->get_field_name('meta_key') ),
+					'current' => $instance['meta_key']
 				)) ?>
 			</li>
 		</ul>
@@ -541,10 +519,10 @@ Class kc_widget_post extends WP_Widget {
 			<li class="relation">
 				<label for="<?php echo "{$tq_id}-relation" ?>"><?php _e('Relation', 'kc-essentials') ?></label>
 				<?php echo kcForm::select(array(
-					'attr' => array('id' => "{$tq_id}-relation", 'name' => "{$tq_name}[relation]"),
-					'current'	=> $tq_rel,
-					'options'	=> $relations,
-					'none'		=> false
+					'attr'    => array('id' => "{$tq_id}-relation", 'name' => "{$tq_name}[relation]"),
+					'current' => $tq_rel,
+					'options' => $relations,
+					'none'    => false
 				)) ?>
 			</li>
 			<li>
@@ -553,22 +531,22 @@ Class kc_widget_post extends WP_Widget {
 					<li class="row">
 						<label for="<?php echo "{$tq_id}-{$idx}-taxonomy" ?>"><?php _e('Taxonomy', 'kc-essentials') ?></label>
 						<?php echo kcForm::select(array(
-							'attr' => array(
-								'id'					=> "{$tq_id}-{$idx}-taxonomy",
-								'name'				=> "{$tq_name}[{$idx}][taxonomy]",
-								'class'				=> 'hasdep',
-								'data-scope'	=> 'li.row',
-								'data-child'	=> '.terms'
+							'attr'    => array(
+								'id'         => "{$tq_id}-{$idx}-taxonomy",
+								'name'       => "{$tq_name}[{$idx}][taxonomy]",
+								'class'      => 'hasdep',
+								'data-scope' => 'li.row',
+								'data-child' => '.terms'
 							),
-							'current'	=> $query['taxonomy'],
-							'options'	=> $taxonomies
+							'current' => $query['taxonomy'],
+							'options' => $taxonomies
 						)) ?>
 						<label for="<?php echo "{$tq_id}-{$idx}-operator" ?>"><?php _e('Operator', 'kc-essentials') ?></label>
 						<?php echo kcForm::select(array(
-							'attr' => array('id' => "{$tq_id}-{$idx}-operator", 'name' => "{$tq_name}[{$idx}][operator]"),
-							'current'	=> $query['operator'],
-							'options'	=> $operators,
-							'none'		=> false
+							'attr'    => array('id' => "{$tq_id}-{$idx}-operator", 'name' => "{$tq_name}[{$idx}][operator]"),
+							'current' => $query['operator'],
+							'options' => $operators,
+							'none'    => false
 						)) ?>
 						<label><?php _e('Terms', 'kc-essentials') ?></label>
 						<p class='checks terms hide-if-js info' data-dep=''><?php _e('Please select a taxonomy above to see its terms.', 'kc-essentials') ?>
@@ -577,9 +555,9 @@ Class kc_widget_post extends WP_Widget {
 						<div class='checks terms hide-if-js' data-dep='<?php echo $tax_name ?>'>
 						<?php  if ( !empty($terms[$tax_name]) ) {
 							echo kcForm::checkbox(array(
-									'attr' => array('name' => "{$tq_name}[{$idx}][terms][]", 'class' => 'term'),
-									'current'	=> $query['terms'],
-									'options'	=> $tax_terms
+									'attr'    => array('name' => "{$tq_name}[{$idx}][terms][]", 'class' => 'term'),
+									'current' => $query['terms'],
+									'options' => $tax_terms
 							));
 						} else {
 							echo "\t<p>".__("This taxonomy doesn't have any term with posts.", 'kc-essentials')."</p>\n\n";
@@ -607,27 +585,27 @@ Class kc_widget_post extends WP_Widget {
 					<li class="row">
 						<label for="<?php echo "{$mq_id}-{$mq_idx}-key" ?>"><?php _e('Key', 'kc-essentials') ?></label>
 						<?php echo kcForm::input(array(
-							'attr' => array('id' => "{$mq_id}-{$mq_idx}-key", 'name' => "{$mq_name}[{$mq_idx}][key]"),
-							'current'	=> $mq['key']
+							'attr'    => array('id' => "{$mq_id}-{$mq_idx}-key", 'name' => "{$mq_name}[{$mq_idx}][key]"),
+							'current' => $mq['key']
 						)) ?>
 						<label for="<?php echo "{$mq_id}-{$mq_idx}-value" ?>"><?php _e('Value', 'kc-essentials') ?></label>
 						<?php echo kcForm::input(array(
-							'attr' => array('id' => "{$mq_id}-{$mq_idx}-value", 'name' => "{$mq_name}[{$mq_idx}][value]"),
-							'current'	=> $mq['value']
+							'attr'    => array('id' => "{$mq_id}-{$mq_idx}-value", 'name' => "{$mq_name}[{$mq_idx}][value]"),
+							'current' => $mq['value']
 						)) ?>
 						<label for="<?php echo "{$mq_id}-{$mq_idx}-compare" ?>"><?php _e('Compare', 'kc-essentials') ?></label>
 						<?php echo kcForm::select(array(
-							'attr' => array('id' => "{$mq_id}-{$idx}-compare", 'name' => "{$mq_name}[{$mq_idx}][compare]"),
-							'current'	=> $mq['compare'],
-							'options'	=> array_merge($meta_compare, $operators),
-							'none'		=> false
+							'attr'    => array('id' => "{$mq_id}-{$idx}-compare", 'name' => "{$mq_name}[{$mq_idx}][compare]"),
+							'current' => $mq['compare'],
+							'options' => array_merge($meta_compare, $operators),
+							'none'    => false
 						)) ?>
 						<label for="<?php echo "{$mq_id}-{$mq_idx}-type" ?>"><?php _e('Type', 'kc-essentials') ?></label>
 						<?php echo kcForm::select(array(
-							'attr' => array('id' => "{$mq_id}-{$mq_idx}-type", 'name' => "{$mq_name}[{$mq_idx}][type]"),
-							'current'	=> $mq['type'],
-							'options'	=> $meta_type,
-							'none'		=> false
+							'attr'    => array('id' => "{$mq_id}-{$mq_idx}-type", 'name' => "{$mq_name}[{$mq_idx}][type]"),
+							'current' => $mq['type'],
+							'options' => $meta_type,
+							'none'    => false
 						)) ?>
 					<a class="hide-if-no-js del action" rel="meta_query" title="<?php _e('Remove this taxonomy query', 'kc-essentials') ?>"><?php _e('Remove', 'kc-essentials') ?></a>
 					</li>
@@ -642,21 +620,21 @@ Class kc_widget_post extends WP_Widget {
 			<li>
 				<label for="<?php echo $this->get_field_id('posts_wrapper') ?>"><?php _e('Tag', 'kc-essentials') ?></label>
 				<?php echo kcForm::select(array(
-					'attr' => array('id' => $this->get_field_id('posts_wrapper'), 'name' => $this->get_field_name('posts_wrapper')),
-					'current'	=> $instance['posts_wrapper'],
-					'options'	=> array(
-						array( 'value' => 'div',			'label' => 'div' ),
-						array( 'value' => 'section',	'label' => 'section' ),
-						array( 'value' => 'ol',				'label' => 'ol' ),
-						array( 'value' => 'ul',				'label' => 'ul' )
+					'attr'    => array('id' => $this->get_field_id('posts_wrapper'), 'name' => $this->get_field_name('posts_wrapper')),
+					'current' => $instance['posts_wrapper'],
+					'options' => array(
+						array( 'value' => 'div',     'label' => 'div' ),
+						array( 'value' => 'section', 'label' => 'section' ),
+						array( 'value' => 'ol',      'label' => 'ol' ),
+						array( 'value' => 'ul',      'label' => 'ul' )
 					)
 				)) ?>
 			</li>
 			<li>
 				<label for="<?php echo $this->get_field_id('posts_class') ?>"><?php _e('Class', 'kc-essentials') ?></label>
 				<?php echo kcForm::input(array(
-					'attr' => array('id' => $this->get_field_id('posts_class'), 'name' => $this->get_field_name('posts_class')),
-					'current'	=> $instance['posts_class']
+					'attr'    => array('id' => $this->get_field_id('posts_class'), 'name' => $this->get_field_name('posts_class')),
+					'current' => $instance['posts_class']
 				)) ?>
 			</li>
 		</ul>
@@ -666,20 +644,20 @@ Class kc_widget_post extends WP_Widget {
 			<li>
 				<label for="<?php echo $this->get_field_id('entry_wrapper') ?>"><?php _e('Tag', 'kc-essentials') ?></label>
 				<?php echo kcForm::select(array(
-					'attr' => array('id' => $this->get_field_id('entry_wrapper'), 'name' => $this->get_field_name('entry_wrapper')),
-					'current'	=> $instance['entry_wrapper'],
-					'options'	=> array(
-						array( 'value' => 'div',			'label' => 'div' ),
-						array( 'value' => 'article',	'label' => 'article' ),
-						array( 'value' => 'li',				'label' => 'li' )
+					'attr'    => array('id' => $this->get_field_id('entry_wrapper'), 'name' => $this->get_field_name('entry_wrapper')),
+					'current' => $instance['entry_wrapper'],
+					'options' => array(
+						array( 'value' => 'div',     'label' => 'div' ),
+						array( 'value' => 'article', 'label' => 'article' ),
+						array( 'value' => 'li',      'label' => 'li' )
 					)
 				)) ?>
 			</li>
 			<li>
 				<label for="<?php echo $this->get_field_id('entry_class') ?>"><?php _e('Class', 'kc-essentials') ?></label>
 				<?php echo kcForm::input(array(
-					'attr' => array('id' => $this->get_field_id('entry_class'), 'name' => $this->get_field_name('entry_class')),
-					'current'	=> $instance['entry_class']
+					'attr'    => array('id' => $this->get_field_id('entry_class'), 'name' => $this->get_field_name('entry_class')),
+					'current' => $instance['entry_class']
 				)) ?>
 			</li>
 		</ul>
@@ -689,35 +667,36 @@ Class kc_widget_post extends WP_Widget {
 			<li>
 				<label for="<?php echo $this->get_field_id('entry_title') ?>"><?php _e('Tag', 'kc-essentials') ?></label>
 				<?php echo kcForm::select(array(
-					'attr' => array('id' => $this->get_field_id('entry_title'), 'name' => $this->get_field_name('entry_title')),
-					'current'	=> $instance['entry_title'],
-					'options'	=> array(
-						array( 'value' => 'h2',		'label' => 'h2' ),
-						array( 'value' => 'h3',		'label' => 'h3' ),
-						array( 'value' => 'h4',		'label' => 'h4' ),
-						array( 'value' => 'h5',		'label' => 'h5' ),
-						array( 'value' => 'h6',		'label' => 'h6' ),
-						array( 'value' => 'p',		'label' => 'p' ),
-						array( 'value' => 'span',	'label' => 'span' ),
-						array( 'value' => 'div',	'label' => 'div' )
+					'attr'    => array('id' => $this->get_field_id('entry_title'), 'name' => $this->get_field_name('entry_title')),
+					'current' => $instance['entry_title'],
+					'options' => array(
+						array( 'value' => 'h2',   'label' => 'h2' ),
+						array( 'value' => 'h3',   'label' => 'h3' ),
+						array( 'value' => 'h4',   'label' => 'h4' ),
+						array( 'value' => 'h5',   'label' => 'h5' ),
+						array( 'value' => 'h6',   'label' => 'h6' ),
+						array( 'value' => 'p',    'label' => 'p' ),
+						array( 'value' => 'span', 'label' => 'span' ),
+						array( 'value' => 'div',  'label' => 'div' )
 					),
 					'none'	=> false
 				)) ?>
 			</li>
 			<li>
 				<label for="<?php echo $this->get_field_id('title_link') ?>"><?php _e('Link to post', 'kc-essentials') ?></label>
-				<?php echo kcForm::select(array(
-					'attr' => array('id' => $this->get_field_id('title_link'), 'name' => $this->get_field_name('title_link')),
-					'current'	=> $instance['title_link'],
-					'options'	=> $yesno,
-					'none'	=> false
+				<?php echo kcForm::field(array(
+					'type'    => 'select',
+					'attr'    => array('id' => $this->get_field_id('title_link'), 'name' => $this->get_field_name('title_link')),
+					'current' => $instance['title_link'],
+					'options' => kcSettings_options::$yesno,
+					'none'    => false
 				)) ?>
 			</li>
 			<li>
 				<label for="<?php echo $this->get_field_id('title_class') ?>"><?php _e('Class', 'kc-essentials') ?></label>
 				<?php echo kcForm::input(array(
-					'attr' => array('id' => $this->get_field_id('title_class'), 'name' => $this->get_field_name('title_class')),
-					'current'	=> $instance['title_class']
+					'attr'    => array('id' => $this->get_field_id('title_class'), 'name' => $this->get_field_name('title_class')),
+					'current' => $instance['title_class']
 				)) ?>
 			</li>
 		</ul>
@@ -727,36 +706,36 @@ Class kc_widget_post extends WP_Widget {
 			<li>
 				<label for="<?php echo $this->get_field_id('content_wrapper') ?>"><?php _e('Tag', 'kc-essentials') ?></label>
 				<?php echo kcForm::select(array(
-					'attr' => array('id' => $this->get_field_id('content_wrapper'), 'name' => $this->get_field_name('content_wrapper')),
-					'current'	=> $instance['content_wrapper'],
-					'options'	=> array(
-						array( 'value' => 'div',				'label' => 'div' ),
-						array( 'value' => 'article',		'label' => 'article' ),
-						array( 'value' => 'blockquote',	'label' => 'blockquote' )
+					'attr'    => array('id' => $this->get_field_id('content_wrapper'), 'name' => $this->get_field_name('content_wrapper')),
+					'current' => $instance['content_wrapper'],
+					'options' => array(
+						array( 'value' => 'div',        'label' => 'div' ),
+						array( 'value' => 'article',    'label' => 'article' ),
+						array( 'value' => 'blockquote', 'label' => 'blockquote' )
 					)
 				)) ?>
 			</li>
 			<li>
 				<label for="<?php echo $this->get_field_id('content_class') ?>"><?php _e('Class', 'kc-essentials') ?></label>
 				<?php echo kcForm::input(array(
-					'attr' => array('id' => $this->get_field_id('content_class'), 'name' => $this->get_field_name('content_class')),
-					'current'	=> $instance['content_class']
+					'attr'    => array('id' => $this->get_field_id('content_class'), 'name' => $this->get_field_name('content_class')),
+					'current' => $instance['content_class']
 				)) ?>
 			</li>
 			<li>
 				<label for="<?php echo $this->get_field_id('content_type') ?>"><?php _e('Type', 'kc-essentials') ?></label>
 				<?php echo kcForm::select(array(
-					'attr' => array(
-						'id'					=> $this->get_field_id('content_type'),
-						'name'				=> $this->get_field_name('content_type'),
-						'class'				=> 'hasdep',
-						'data-child'	=> '#p-'.$this->get_field_id('content_meta')
+					'attr'    => array(
+						'id'         => $this->get_field_id('content_type'),
+						'name'       => $this->get_field_name('content_type'),
+						'class'      => 'hasdep',
+						'data-child' => '#p-'.$this->get_field_id('content_meta')
 					),
-					'current'	=> $instance['content_type'],
-					'options'	=> array(
-						array( 'value' => 'excerpt',	'label' => __('Excerpt', 'kc-essentials') ),
-						array( 'value' => 'content',	'label' => __('Full Content', 'kc-essentials') ),
-						array( 'value' => 'meta',			'label' => __('Custom field', 'kc-essentials') )
+					'current' => $instance['content_type'],
+					'options' => array(
+						array( 'value' => 'excerpt', 'label' => __('Excerpt', 'kc-essentials') ),
+						array( 'value' => 'content', 'label' => __('Full Content', 'kc-essentials') ),
+						array( 'value' => 'meta',    'label' => __('Custom field', 'kc-essentials') )
 					),
 					'none'	=> false
 				)) ?>
@@ -764,33 +743,34 @@ Class kc_widget_post extends WP_Widget {
 			<li id="p-<?php echo $this->get_field_id('content_meta') ?>" data-dep='meta' class="hide-if-js">
 				<label for="<?php echo $this->get_field_id('content_meta') ?>" title="<?php _e("Fill this if you select 'Custom field' above", 'kc-essentials') ?>"><?php _e('Meta key', 'kc-essentials') ?> <small class="impo">(?)</small></label>
 				<?php echo kcForm::input(array(
-					'attr' => array('id' => $this->get_field_id('content_meta'), 'name' => $this->get_field_name('content_meta')),
-					'current'	=> $instance['content_meta']
+					'attr'    => array('id' => $this->get_field_id('content_meta'), 'name' => $this->get_field_name('content_meta')),
+					'current' => $instance['content_meta']
 				)) ?>
 			</li>
 			<?php if ( !empty($image_sizes) ) { ?>
 			<li>
 				<label for="<?php echo $this->get_field_id('thumb_size') ?>"><?php _e('Post thumb.', 'kc-essentials') ?></label>
-				<?php echo kcForm::select(array(
-					'attr' => array(
-						'id'					=> $this->get_field_id('thumb_size'),
-						'name'				=> $this->get_field_name('thumb_size'),
-						'class'				=> 'hasdep',
-						'data-child'	=> '#p-'.$this->get_field_id('thumb_link')
+				<?php echo kcForm::field(array(
+					'type'    => 'select',
+					'attr'    => array(
+						'id'         => $this->get_field_id('thumb_size'),
+						'name'       => $this->get_field_name('thumb_size'),
+						'class'      => 'hasdep',
+						'data-child' => '#p-'.$this->get_field_id('thumb_link')
 					),
-					'current'	=> $instance['thumb_size'],
-					'options'	=> $image_sizes
+					'current' => $instance['thumb_size'],
+					'options' => $image_sizes
 				)) ?>
 			</li>
-			<li id="p-<?php echo $this->get_field_id('thumb_link') ?>" data-dep='<?php echo json_encode($image_sizes_s) ?>' class="hide-if-js">
+			<li id="p-<?php echo $this->get_field_id('thumb_link') ?>" data-dep='<?php echo json_encode(array_keys($image_sizes)) ?>' class="hide-if-js">
 				<label for="<?php echo $this->get_field_id('thumb_link') ?>"><?php _e('Thumb. link', 'kc-essentials') ?></label>
 				<?php echo kcForm::select(array(
-					'attr' => array('id' => $this->get_field_id('thumb_link'), 'name' => $this->get_field_name('thumb_link')),
-					'current'	=> $instance['thumb_link'],
-					'options'	=> array(
-						array( 'value' => 'post',				'label'	=> __('Post page', 'kc-essentials') ),
-						array( 'value' => 'media_page',	'label'	=> __('Attachment page', 'kc-essentials') ),
-						array( 'value' => 'media_file',	'label'	=> __('Attachment file', 'kc-essentials') )
+					'attr'    => array('id' => $this->get_field_id('thumb_link'), 'name' => $this->get_field_name('thumb_link')),
+					'current' => $instance['thumb_link'],
+					'options' => array(
+						array( 'value' => 'post',       'label'	=> __('Post page', 'kc-essentials') ),
+						array( 'value' => 'media_page', 'label'	=> __('Attachment page', 'kc-essentials') ),
+						array( 'value' => 'media_file', 'label'	=> __('Attachment file', 'kc-essentials') )
 					)
 				)) ?>
 			</li>
@@ -798,8 +778,8 @@ Class kc_widget_post extends WP_Widget {
 			<li>
 				<label for="<?php echo $this->get_field_id('more_link') ?>" title="<?php _e("Fill this with some text if you want to have a 'more link' on each post", 'kc-essentials') ?>"><?php _e('More link', 'kc-essentials') ?> <small class="impo">(?)</small></label>
 				<?php echo kcForm::input(array(
-					'attr' => array('id' => $this->get_field_id('more_link'), 'name' => $this->get_field_name('more_link')),
-					'current'	=> $instance['more_link']
+					'attr'    => array('id' => $this->get_field_id('more_link'), 'name' => $this->get_field_name('more_link')),
+					'current' => $instance['more_link']
 				)) ?>
 			</li>
 		</ul>
@@ -809,24 +789,25 @@ Class kc_widget_post extends WP_Widget {
 			<li>
 				<label for="<?php echo $this->get_field_id('index_link') ?>"><?php _e('Index page', 'kc-essentials') ?></label>
 				<?php echo kcForm::input(array(
-					'attr' => array('id' => $this->get_field_id('index_link'), 'name' => $this->get_field_name('index_link')),
-					'current'	=> $instance['index_link']
+					'attr'    => array('id' => $this->get_field_id('index_link'), 'name' => $this->get_field_name('index_link')),
+					'current' => $instance['index_link']
 				)) ?>
 			</li>
 			<li>
 				<label for="<?php echo $this->get_field_id('action_id') ?>" title="<?php _e('Please refer to the documentation about this', 'kc-essentials') ?>"><?php _e('Identifier', 'kc-essentials') ?> <small class="impo">(?)</small></label>
 				<?php echo kcForm::input(array(
-					'attr' => array('id' => $this->get_field_id('action_id'), 'name' => $this->get_field_name('action_id')),
-					'current'	=> $instance['action_id']
+					'attr'    => array('id' => $this->get_field_id('action_id'), 'name' => $this->get_field_name('action_id')),
+					'current' => $instance['action_id']
 				)) ?>
 			</li>
 			<li>
 				<label for="<?php echo $this->get_field_id('debug') ?>" title="<?php _e('Select Yes to view the widget options and query parameters on the frontend') ?>"><?php _e('Debug', 'kc-essentials') ?> <small class="impo">(?)</small></label>
-				<?php echo kcForm::select(array(
-					'attr' => array('id' => $this->get_field_id('debug'), 'name' => $this->get_field_name('debug')),
-					'current'	=> $instance['debug'],
-					'options'	=> $yesno,
-					'none'		=> false
+				<?php echo kcForm::field(array(
+					'type'    => 'select',
+					'attr'    => array('id' => $this->get_field_id('debug'), 'name' => $this->get_field_name('debug')),
+					'current' => $instance['debug'],
+					'options' => kcSettings_options::$yesno,
+					'none'    => false
 				)) ?>
 			</li>
 		</ul>

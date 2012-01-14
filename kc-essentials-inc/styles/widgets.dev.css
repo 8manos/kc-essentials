@@ -26,6 +26,7 @@
 	width:61%;
 	text-align:left;
 	margin:0}
+.kcw-control-block .checks code {font-size:.85em}
 .kcw-control-block li li > label {clear:both}
 .kcw-control-block li ul select,
 .kcw-control-block li ul input[type=text] {
