@@ -7,8 +7,11 @@
 
 
 function kc_essentials_insert_custom_image_sizes( $fields, $post ) {
-	$_sizes = kc_essentials_get_additional_image_sizes();
-	if ( empty($_sizes) || !isset($fields['image-size']['html']) || substr($post->post_mime_type, 0, 5) != 'image' )
+	if ( !isset($fields['image-size']['html']) || substr($post->post_mime_type, 0, 5) != 'image' )
+		return $fields;
+
+	$_sizes = kcSettings_options::$image_sizes_custom;
+	if ( empty($_sizes) )
 		return $fields;
 
 	$items = array();
