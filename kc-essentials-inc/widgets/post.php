@@ -325,6 +325,8 @@ Class kc_widget_post extends WP_Widget {
 			'content_type'    => 'excerpt',
 			'content_meta'    => '',
 			'thumb_size'      => '',
+			'thumb_src'       => '',
+			'thumb_meta'      => '',
 			'thumb_link'      => 'post',
 			'more_link'       => '',
 			'index_link'      => '',
@@ -760,21 +762,43 @@ Class kc_widget_post extends WP_Widget {
 		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Thumbnail', 'kc-essentials') ?></h5>
 		<ul class="kcw-control-block hide-if-js">
 			<li>
-				<label for="<?php echo $this->get_field_id('thumb_size') ?>"><?php _e('Post thumb.', 'kc-essentials') ?></label>
+				<label for="<?php echo $this->get_field_id('thumb_size') ?>"><?php _e('Size', 'kc-essentials') ?></label>
 				<?php echo kcForm::field(array(
 					'type'    => 'select',
 					'attr'    => array(
 						'id'         => $this->get_field_id('thumb_size'),
 						'name'       => $this->get_field_name('thumb_size'),
 						'class'      => 'hasdep',
-						'data-child' => '#p-'.$this->get_field_id('thumb_link')
+						'data-child' => '.thumb-config',
+						'data-scope' => 'ul'
 					),
 					'current' => $instance['thumb_size'],
 					'options' => $image_sizes
 				)) ?>
 			</li>
-			<li id="p-<?php echo $this->get_field_id('thumb_link') ?>" data-dep='<?php echo json_encode(array_keys($image_sizes)) ?>' class="hide-if-js">
-				<label for="<?php echo $this->get_field_id('thumb_link') ?>"><?php _e('Thumb. link', 'kc-essentials') ?></label>
+			<li class="thumb-config" data-dep='<?php echo json_encode(array_keys($image_sizes)) ?>'>
+				<label for="<?php echo $this->get_field_id('thumb_src') ?>"><?php _e('Source', 'kc-essentials') ?></label>
+				<?php echo kcForm::field(array(
+					'type'    => 'select',
+					'attr'    => array(
+						'id'         => $this->get_field_id('thumb_src'),
+						'name'       => $this->get_field_name('thumb_src'),
+						'class'      => 'hasdep',
+						'data-child' => '#p-'.$this->get_field_id('thumb_meta')
+					),
+					'current' => $instance['thumb_src'],
+					'options' => array( '' => __('Default', 'kc-essentials'), 'meta' => __('Custom field', 'kc-settings') )
+				)) ?>
+			</li>
+			<li id='p-<?php echo $this->get_field_id('thumb_meta') ?>' class="hide-if-js" data-dep="meta">
+				<label for="<?php echo $this->get_field_id('thumb_meta') ?>" title="<?php _e("Fill this if you select 'Custom field' above", 'kc-essentials') ?>"><?php _e('Meta key', 'kc-essentials') ?> <small class="impo">(?)</small></label>
+				<?php echo kcForm::input(array(
+					'attr'    => array('id' => $this->get_field_id('thumb_meta'), 'name' => $this->get_field_name('thumb_meta')),
+					'current' => $instance['thumb_meta']
+				)) ?>
+			</li>
+			<li data-dep='<?php echo json_encode(array_keys($image_sizes)) ?>' class="hide-if-js thumb-config">
+				<label for="<?php echo $this->get_field_id('thumb_link') ?>"><?php _e('Link', 'kc-essentials') ?></label>
 				<?php echo kcForm::select(array(
 					'attr'    => array('id' => $this->get_field_id('thumb_link'), 'name' => $this->get_field_name('thumb_link')),
 					'current' => $instance['thumb_link'],
