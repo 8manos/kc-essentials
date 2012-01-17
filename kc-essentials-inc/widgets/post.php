@@ -555,9 +555,9 @@ Class kc_widget_post extends WP_Widget {
 						<div class='checks terms hide-if-js' data-dep='<?php echo $tax_name ?>'>
 						<?php  if ( !empty($terms[$tax_name]) ) {
 							echo kcForm::checkbox(array(
-									'attr'    => array('name' => "{$tq_name}[{$idx}][terms][]", 'class' => 'term'),
-									'current' => $query['terms'],
-									'options' => $tax_terms
+								'attr'    => array('name' => "{$tq_name}[{$idx}][terms][]", 'class' => 'term'),
+								'current' => $query['terms'],
+								'options' => $tax_terms
 							));
 						} else {
 							echo "\t<p>".__("This taxonomy doesn't have any term with posts.", 'kc-essentials')."</p>\n\n";
