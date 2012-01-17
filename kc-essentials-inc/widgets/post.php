@@ -747,7 +747,18 @@ Class kc_widget_post extends WP_Widget {
 					'current' => $instance['content_meta']
 				)) ?>
 			</li>
-			<?php if ( !empty($image_sizes) ) { ?>
+			<li>
+				<label for="<?php echo $this->get_field_id('more_link') ?>" title="<?php _e("Fill this with some text if you want to have a 'more link' on each post", 'kc-essentials') ?>"><?php _e('More link', 'kc-essentials') ?> <small class="impo">(?)</small></label>
+				<?php echo kcForm::input(array(
+					'attr'    => array('id' => $this->get_field_id('more_link'), 'name' => $this->get_field_name('more_link')),
+					'current' => $instance['more_link']
+				)) ?>
+			</li>
+		</ul>
+
+		<?php if ( !empty($image_sizes) ) { ?>
+		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Thumbnail', 'kc-essentials') ?></h5>
+		<ul class="kcw-control-block hide-if-js">
 			<li>
 				<label for="<?php echo $this->get_field_id('thumb_size') ?>"><?php _e('Post thumb.', 'kc-essentials') ?></label>
 				<?php echo kcForm::field(array(
@@ -774,15 +785,8 @@ Class kc_widget_post extends WP_Widget {
 					)
 				)) ?>
 			</li>
-			<?php } ?>
-			<li>
-				<label for="<?php echo $this->get_field_id('more_link') ?>" title="<?php _e("Fill this with some text if you want to have a 'more link' on each post", 'kc-essentials') ?>"><?php _e('More link', 'kc-essentials') ?> <small class="impo">(?)</small></label>
-				<?php echo kcForm::input(array(
-					'attr'    => array('id' => $this->get_field_id('more_link'), 'name' => $this->get_field_name('more_link')),
-					'current' => $instance['more_link']
-				)) ?>
-			</li>
 		</ul>
+		<?php } ?>
 
 		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Advanced', 'kc-essentials') ?></h5>
 		<ul class="kcw-control-block hide-if-js">
