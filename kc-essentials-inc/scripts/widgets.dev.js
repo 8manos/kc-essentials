@@ -60,7 +60,8 @@
 
 
 	// Find posts
-	var $findBox = $('#find-posts');
+	var $findBox = $('#find-posts'),
+			$findBoxSubmit = $('#find-posts-submit');
 
 	// Open
 	$('input.kc-find-post').dblclick(function() {
@@ -69,7 +70,7 @@
 	});
 
 	// Insert
-	$('#find-posts-submit').click(function(e) {
+	$findBoxSubmit.click(function(e) {
 		e.preventDefault();
 
 		// Be nice!
@@ -89,6 +90,11 @@
 			current.push(newID);
 			$target.val( current.join(',') );
 		}
+	});
+
+	// Double click on the radios
+	$('input[name="found_post_id"]', $findBox).live('dblclick', function() {
+		$findBoxSubmit.trigger('click');
 	});
 
 	// Close
