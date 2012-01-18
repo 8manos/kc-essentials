@@ -847,7 +847,7 @@ class kc_widget_post extends WP_Widget {
 					$output .= $this->_kc_get_title( $post_id, $instance );
 
 				# Thumbnail
-				if ( current_theme_supports('post-thumbnails') && $instance['thumb_size'] )
+				if ( $instance['thumb_size'] )
 					$output .= $this->_kc_get_thumbnail( $post_id, $instance );
 
 				# Content
@@ -915,9 +915,11 @@ class kc_widget_post extends WP_Widget {
 
 
 	function _kc_get_thumbnail( $post_id, $instance ) {
-		if ( $instance['thumb_src'] == 'meta' && $meta = get_post_meta($post_id, $instance['thumb_meta'], true) )
+		if ( get_post_type() == 'attachment' )
+			$thumb_id = $post_id;
+		elseif ( $instance['thumb_src'] == 'meta' && $meta = get_post_meta($post_id, $instance['thumb_meta'], true) )
 			$thumb_id = $meta;
-		elseif ( has_post_thumbnail() )
+		elseif ( current_theme_supports('post-thumbnails') && has_post_thumbnail() )
 			$thumb_id = get_post_thumbnail_id( $post_id );
 
 		if ( !isset($thumb_id) )
@@ -925,6 +927,8 @@ class kc_widget_post extends WP_Widget {
 
 		$thumb_size = apply_filters( 'post_thumbnail_size', $instance['thumb_size'] );
 		$thumb_img = wp_get_attachment_image($thumb_id, $thumb_size);
+		if ( !$thumb_img )
+			return;
 
 		if ( !$instance['thumb_link'] )
 			return "<span class='post-thumb'>{$thumb_img}</span>\n";
