@@ -109,72 +109,35 @@ class kc_widget_post extends WP_Widget {
 				$wp_query->the_post();
 				$post_id = get_the_ID();
 
-				# Entry wrapper (open)
+				# Wrapper (open)
 				if ( $instance['entry_wrapper'] ) {
-					if ( $instance['entry_class'] )
-						$output .= "<{$instance['entry_wrapper']} class='{$instance['entry_class']}'>\n";
-					else
-						$output .= "<{$instance['entry_wrapper']}>\n";
+					$output .= "<{$instance['entry_wrapper']}";
+					if ( isset($instance['entry_class']) && $instance['entry_class'] )
+						$output .= " class='{$instance['entry_class']}'";
+					$output .= ">\n";
 				}
 
-				# Post title
+				# Title
 				if ( $instance['entry_title'] ) {
-					$output .= "\t\t<{$instance['entry_title']}";
+					$title = get_the_title();
+					if ( isset($instance['title_link']) && $instance['title_link'] )
+						$title = "<a href='".get_permalink()."'>{$title}</a>";
+
+					$output .= "<{$instance['entry_title']}";
 					if ( $instance['title_class'] )
 						$output .= " class='{$instance['title_class']}'";
-					$output .= ">";
-					if ( $instance['title_link'] )
-						$output .= "<a href='".get_permalink()."'>";
-					$output .= get_the_title();
-					if ( $instance['title_link'] )
-						$output .= "</a>";
-					$output .= "</{$instance['entry_title']}>\n";
-				}
-
-				# Entry content wrapper (open)
-				if ( $instance['content_wrapper'] ) {
-					if ( $instance['content_class'] )
-						$output .= "<{$instance['content_wrapper']} class='{$instance['content_class']}'>\n";
-					else
-						$output .= "<{$instance['content_wrapper']}>\n";
+					$output .= ">{$title}</{$instance['entry_title']}>\n";
 				}
 
 				# Thumbnail
 				if ( current_theme_supports('post-thumbnails') && $instance['thumb_size'] )
 					$output .= $this->_kc_get_thumbnail( $post_id, $instance );
 
-				# Entry content
-				$content = '';
-				switch ( $instance['content_type'] ) {
-					case 'content' :
-						$content = get_the_content();
-					break;
-					case 'excerpt' :
-						$content = get_the_excerpt();
-					break;
-					case 'meta' :
-						if ( !empty($instance['content_meta']) )
-							$content = get_post_meta( get_the_ID(), $instance['content_meta'], true );
-					break;
-				}
-				$content = apply_filters( 'the_content', $content );
+				# Content
+				if ( $instance['content_src'] )
+					$output .= $this->_kc_get_content( $post_id, $instance );
 
-				# Blockquote (close)
-				if ( !empty($content) && $instance['content_wrapper'] == 'blockquote' )
-					$content = preg_replace(array('/^<p>/', '/<\/p>$/'), array('<p><span class="q q-open"></span>', '<span class="q q-close"></span></p>', ), $content, 1);
-
-				$content = apply_filters( "kcw_post_content-{$instance['action_id']}", $content, get_the_ID() );
-				$output .= apply_filters( 'kcw_post_content', $content, get_the_ID(), $instance['action_id'] );
-
-				# More link
-				if ( $instance['more_link'] )
-					$output .= "<a href='".get_permalink()."' class='more-link'><span>{$instance['more_link']}</span></a>\n";
-
-				# Entry content wrapper (close)
-				if ( $instance['content_wrapper'] )
-					$output .= "</{$instance['content_wrapper']}>\n";
-
-				# Entry wrapper (close)
+				# Wrapper (open)
 				if ( $instance['entry_wrapper'] )
 					$output .= "</{$instance['entry_wrapper']}>\n";
 			}
@@ -183,7 +146,7 @@ class kc_widget_post extends WP_Widget {
 			if ( $instance['posts_wrapper'] )
 				$output .= "</{$instance['posts_wrapper']}>\n";
 
-			$output .= $after_widget;
+			$output .= "{$after_widget}\n";
 		}
 		$wp_query = null;
 		wp_reset_query();
@@ -297,9 +260,9 @@ class kc_widget_post extends WP_Widget {
 			'entry_title'     => 'h4',
 			'title_link'      => true,
 			'title_class'     => 'title',
+			'content_src'     => 'excerpt',
 			'content_wrapper' => '',
 			'content_class'   => '',
-			'content_type'    => 'excerpt',
 			'content_meta'    => '',
 			'thumb_size'      => '',
 			'thumb_src'       => '',
@@ -683,9 +646,33 @@ class kc_widget_post extends WP_Widget {
 		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Entry content', 'kc-essentials') ?></h5>
 		<ul class="kcw-control-block hide-if-js">
 			<li>
+				<label for="<?php echo $this->get_field_id('content_src') ?>"><?php _e('Source', 'kc-essentials') ?></label>
+				<?php echo kcForm::select(array(
+					'attr'    => array(
+						'id'         => $this->get_field_id('content_src'),
+						'name'       => $this->get_field_name('content_src'),
+						'class'      => 'hasdep',
+						'data-child' => '.contentSrc',
+						'data-scope' => 'ul'
+					),
+					'current' => $instance['content_src'],
+					'options' => array(
+						array( 'value' => 'excerpt', 'label' => __('Excerpt', 'kc-essentials') ),
+						array( 'value' => 'content', 'label' => __('Full Content', 'kc-essentials') ),
+						array( 'value' => 'meta',    'label' => __('Custom field', 'kc-essentials') )
+					)
+				)) ?>
+			</li>
+			<li class="contentSrc" data-dep='<?php echo json_encode(array('excerpt', 'content', 'meta')) ?>'>
 				<label for="<?php echo $this->get_field_id('content_wrapper') ?>"><?php _e('Tag', 'kc-essentials') ?></label>
 				<?php echo kcForm::select(array(
-					'attr'    => array('id' => $this->get_field_id('content_wrapper'), 'name' => $this->get_field_name('content_wrapper')),
+					'attr'    => array(
+						'id'         => $this->get_field_id('content_wrapper'),
+						'name'       => $this->get_field_name('content_wrapper'),
+						'class'      => 'hasdep',
+						'data-child' => '.contentClass',
+						'data-scope' => 'ul'
+					),
 					'current' => $instance['content_wrapper'],
 					'options' => array(
 						array( 'value' => 'div',        'label' => 'div' ),
@@ -694,39 +681,21 @@ class kc_widget_post extends WP_Widget {
 					)
 				)) ?>
 			</li>
-			<li>
+			<li class="contentClass" data-dep='<?php echo json_encode(array('div', 'article', 'blockquote')) ?>'>
 				<label for="<?php echo $this->get_field_id('content_class') ?>"><?php _e('Class', 'kc-essentials') ?></label>
 				<?php echo kcForm::input(array(
 					'attr'    => array('id' => $this->get_field_id('content_class'), 'name' => $this->get_field_name('content_class')),
 					'current' => $instance['content_class']
 				)) ?>
 			</li>
-			<li>
-				<label for="<?php echo $this->get_field_id('content_type') ?>"><?php _e('Type', 'kc-essentials') ?></label>
-				<?php echo kcForm::select(array(
-					'attr'    => array(
-						'id'         => $this->get_field_id('content_type'),
-						'name'       => $this->get_field_name('content_type'),
-						'class'      => 'hasdep',
-						'data-child' => '#p-'.$this->get_field_id('content_meta')
-					),
-					'current' => $instance['content_type'],
-					'options' => array(
-						array( 'value' => 'excerpt', 'label' => __('Excerpt', 'kc-essentials') ),
-						array( 'value' => 'content', 'label' => __('Full Content', 'kc-essentials') ),
-						array( 'value' => 'meta',    'label' => __('Custom field', 'kc-essentials') )
-					),
-					'none'	=> false
-				)) ?>
-			</li>
-			<li id="p-<?php echo $this->get_field_id('content_meta') ?>" data-dep='meta' class="hide-if-js">
+			<li class="contentSrc" data-dep='meta'>
 				<label for="<?php echo $this->get_field_id('content_meta') ?>" title="<?php _e("Fill this if you select 'Custom field' above", 'kc-essentials') ?>"><?php _e('Meta key', 'kc-essentials') ?> <small class="impo">(?)</small></label>
 				<?php echo kcForm::input(array(
 					'attr'    => array('id' => $this->get_field_id('content_meta'), 'name' => $this->get_field_name('content_meta')),
 					'current' => $instance['content_meta']
 				)) ?>
 			</li>
-			<li>
+			<li class="contentSrc" data-dep='<?php echo json_encode(array('excerpt', 'content', 'meta')) ?>'>
 				<label for="<?php echo $this->get_field_id('more_link') ?>" title="<?php _e("Fill this with some text if you want to have a 'more link' on each post", 'kc-essentials') ?>"><?php _e('More link', 'kc-essentials') ?> <small class="impo">(?)</small></label>
 				<?php echo kcForm::input(array(
 					'attr'    => array('id' => $this->get_field_id('more_link'), 'name' => $this->get_field_name('more_link')),
@@ -849,6 +818,44 @@ class kc_widget_post extends WP_Widget {
 		}
 
 		return "<a href='{$thumb_link}' class='post-thumb'>{$thumb_img}</a>\n";
+	}
+
+
+	function _kc_get_content( $post_id, $instance ) {
+		switch ( $instance['content_src'] ) {
+			case 'content' :
+				$output = get_the_content();
+			break;
+			case 'excerpt' :
+				$output = get_the_excerpt();
+			break;
+			case 'meta' :
+				if ( !empty($instance['content_meta']) )
+					$output = get_post_meta( $post_id, $instance['content_meta'], true );
+			break;
+		}
+
+		$output = apply_filters( 'the_content', $output );
+		if ( $instance['action_id'] ) {
+			$output = apply_filters( "kcw_post_content-{$instance['action_id']}", $output, $post_id );
+			$output = apply_filters( 'kcw_post_content', $output, $post_id, $instance['action_id'] );
+		}
+		$output .= $output;
+
+		# More link
+		if ( isset($instance['more_link']) && $instance['more_link'] )
+			$output .= "<a href='".get_permalink()."' class='more-link'><span>{$instance['more_link']}</span></a>\n";
+
+		if ( !isset($instance['content_wrapper']) || !$instance['content_wrapper'] )
+			return $output;
+
+		$wrap_tag = $instance['content_wrapper'];
+		if ( isset($instance['content_class']) && $instance['content_class'] )
+			$wrap_tag .= " class='{$instance['content_class']}'";
+
+		$output = "<{$wrap_tag}>\n{$output}\n</{$instance['content_wrapper']}>\n";
+
+		return $output;
 	}
 }
 
