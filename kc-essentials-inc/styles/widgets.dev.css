@@ -9,6 +9,10 @@
 	margin:0;
 	padding-bottom:3px}
 .kcw-control-block.taxonomies li.relation {margin-bottom:1em}
+.kcw-control-block .terms {
+	max-height:10em;
+	overflow:auto;
+}
 .kcw-control-block li > label,
 .kcw-control-block h6 {
 	font-size:.9em;
@@ -26,7 +30,7 @@
 	width:61%;
 	text-align:left;
 	margin:0}
-.kcw-control-block .checks code {font-size:.85em}
+.kcw-control-block .checks code {font-size:.8em}
 .kcw-control-block li li > label {clear:both}
 .kcw-control-block li ul select,
 .kcw-control-block li ul input[type=text] {
