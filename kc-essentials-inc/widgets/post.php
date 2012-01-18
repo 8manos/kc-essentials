@@ -268,6 +268,7 @@ class kc_widget_post extends WP_Widget {
 			'thumb_src'       => '',
 			'thumb_meta'      => '',
 			'thumb_link'      => 'post',
+			'thumb_link_meta' => '',
 			'more_link'       => '',
 			'index_link'      => '',
 			'action_id'       => '',
@@ -347,6 +348,13 @@ class kc_widget_post extends WP_Widget {
 		$src_common = array(
 			'default' => __('Default', 'kc-essentials'),
 			'meta'    => __('Custom field', 'kc-essentials')
+		);
+		$src_thumb_link = array(
+			'post'       => __('Post page', 'kc-essentials'),
+			'media_page' => __('Attachment page', 'kc-essentials'),
+			'media_file' => __('Attachment file', 'kc-essentials'),
+			'meta-post'  => __('Post custom field', 'kc-essentials'),
+			'meta-att'   => __('Thumb. custom field', 'kc-essentials')
 		);
 		$tags_title = array(
 			'h2'   => 'h2',
@@ -762,14 +770,14 @@ class kc_widget_post extends WP_Widget {
 						'id'         => $this->get_field_id('thumb_size'),
 						'name'       => $this->get_field_name('thumb_size'),
 						'class'      => 'hasdep',
-						'data-child' => '.thumb-config',
+						'data-child' => '.chThumb',
 						'data-scope' => 'ul'
 					),
 					'current' => $instance['thumb_size'],
 					'options' => $image_sizes
 				)) ?>
 			</li>
-			<li class="thumb-config" data-dep='<?php echo json_encode(array_keys($image_sizes)) ?>'>
+			<li class="chThumb" data-dep='<?php echo json_encode(array_keys($image_sizes)) ?>'>
 				<label for="<?php echo $this->get_field_id('thumb_src') ?>"><?php _e('Source', 'kc-essentials') ?></label>
 				<?php echo kcForm::field(array(
 					'type'    => 'select',
@@ -784,23 +792,33 @@ class kc_widget_post extends WP_Widget {
 					'none'    => false
 				)) ?>
 			</li>
-			<li id='p-<?php echo $this->get_field_id('thumb_meta') ?>' class="hide-if-js" data-dep="meta">
+			<li id='p-<?php echo $this->get_field_id('thumb_meta') ?>' data-dep="meta">
 				<label for="<?php echo $this->get_field_id('thumb_meta') ?>" title="<?php _e("Fill this if you select 'Custom field' above", 'kc-essentials') ?>"><?php _e('Meta key', 'kc-essentials') ?> <small class="impo">(?)</small></label>
 				<?php echo kcForm::input(array(
 					'attr'    => array('id' => $this->get_field_id('thumb_meta'), 'name' => $this->get_field_name('thumb_meta')),
 					'current' => $instance['thumb_meta']
 				)) ?>
 			</li>
-			<li data-dep='<?php echo json_encode(array_keys($image_sizes)) ?>' class="hide-if-js thumb-config">
+			<li class="chThumb" data-dep='<?php echo json_encode(array_keys($image_sizes)) ?>'>
 				<label for="<?php echo $this->get_field_id('thumb_link') ?>"><?php _e('Link', 'kc-essentials') ?></label>
-				<?php echo kcForm::select(array(
-					'attr'    => array('id' => $this->get_field_id('thumb_link'), 'name' => $this->get_field_name('thumb_link')),
+				<?php echo kcForm::field(array(
+					'type'    => 'select',
+					'attr'    => array(
+						'id'         => $this->get_field_id('thumb_link'),
+						'name'       => $this->get_field_name('thumb_link'),
+						'class'      => 'hasdep',
+						'data-child' => '.chThumbMeta',
+						'data-scope' => 'ul'
+					),
 					'current' => $instance['thumb_link'],
-					'options' => array(
-						array( 'value' => 'post',       'label'	=> __('Post page', 'kc-essentials') ),
-						array( 'value' => 'media_page', 'label'	=> __('Attachment page', 'kc-essentials') ),
-						array( 'value' => 'media_file', 'label'	=> __('Attachment file', 'kc-essentials') )
-					)
+					'options' => $src_thumb_link,
+				)) ?>
+			</li>
+			<li class="chThumbMeta" data-dep='["meta-post", "meta-att"]'>
+				<label for="<?php echo $this->get_field_id('thumb_link_meta') ?>" title="<?php _e("Fill this if you select 'Custom field' above", 'kc-essentials') ?>"><?php _e('Meta key', 'kc-essentials') ?> <small class="impo">(?)</small></label>
+				<?php echo kcForm::input(array(
+					'attr'    => array('id' => $this->get_field_id('thumb_link_meta'), 'name' => $this->get_field_name('thumb_link_meta')),
+					'current' => $instance['thumb_link_meta']
 				)) ?>
 			</li>
 		</ul>
@@ -891,6 +909,7 @@ class kc_widget_post extends WP_Widget {
 		if ( !$instance['thumb_link'] )
 			return "<span class='post-thumb'>{$thumb_img}</span>\n";
 
+		$thumb_link = '';
 		switch ( $instance['thumb_link'] ) {
 			case 'post' :
 				$thumb_link = get_permalink();
@@ -901,9 +920,20 @@ class kc_widget_post extends WP_Widget {
 			case 'media_file' :
 				$thumb_link = wp_get_attachment_url( $thumb_id );
 			break;
+			case 'meta-post' :
+				if ( isset($instance['thumb_link_meta']) && $instance['thumb_link_meta'] && $meta = get_post_meta($post_id, $instance['thumb_link_meta'], true) )
+					$thumb_link = $meta;
+			break;
+			case 'meta-att' :
+				if ( isset($instance['thumb_link_meta']) && $instance['thumb_link_meta'] && $meta = get_post_meta($thumb_id, $instance['thumb_link_meta'], true) )
+					$thumb_link = $meta;
+			break;
 		}
 
-		return "<a href='{$thumb_link}' class='post-thumb'>{$thumb_img}</a>\n";
+		if ( $thumb_link )
+			return "<a href='{$thumb_link}' class='post-thumb'>{$thumb_img}</a>\n";
+		else
+			return "<span class='post-thumb'>{$thumb_img}</span>\n";
 	}
 
 
