@@ -183,10 +183,6 @@ class kc_widget_post extends WP_Widget {
 			if ( $instance['posts_wrapper'] )
 				$output .= "</{$instance['posts_wrapper']}>\n";
 
-			# Index page link
-			if ( $instance['index_link'] )
-				$output .= "<a href='".home_url('/'.$instance['post_type'])."' class='index-link'><span>{$instance['index_link']}</span></a>\n";
-
 			$output .= $after_widget;
 		}
 		$wp_query = null;
@@ -796,13 +792,6 @@ class kc_widget_post extends WP_Widget {
 
 		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Advanced', 'kc-essentials') ?></h5>
 		<ul class="kcw-control-block hide-if-js">
-			<li>
-				<label for="<?php echo $this->get_field_id('index_link') ?>"><?php _e('Index page', 'kc-essentials') ?></label>
-				<?php echo kcForm::input(array(
-					'attr'    => array('id' => $this->get_field_id('index_link'), 'name' => $this->get_field_name('index_link')),
-					'current' => $instance['index_link']
-				)) ?>
-			</li>
 			<li>
 				<label for="<?php echo $this->get_field_id('action_id') ?>" title="<?php _e('Please refer to the documentation about this', 'kc-essentials') ?>"><?php _e('Identifier', 'kc-essentials') ?> <small class="impo">(?)</small></label>
 				<?php echo kcForm::input(array(
