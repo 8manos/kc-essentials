@@ -15,141 +15,6 @@ class kc_widget_post extends WP_Widget {
 	}
 
 
-	function widget( $args, $instance ) {
-		if ( $instance['action_id'] ) {
-			$args['before_widget'] = apply_filters( "kc_widget-{$instance['action_id']}", $args['before_widget'], 'before_widget', 'widget_post' );
-			$args['after_widget'] = apply_filters( "kc_widget-{$instance['action_id']}", $args['after_widget'], 'after_widget', 'widget_post' );
-		}
-		extract( $args );
-
-		$debug  = "<h4>".__('KC Posts debug', 'kc-essentials')."</h4>\n";
-		$debug .= "<h5>".__('Widget options', 'kc-essentials')."</h5>\n";
-		$debug .= "<pre>".var_export($instance, true)."</pre>";
-
-		$q_args = array(
-			'post_type'      => $instance['post_type'],
-			'posts_per_page' => $instance['posts_per_page'],
-			'order'          => $instance['posts_order'],
-			'orderby'        => $instance['posts_orderby']
-		);
-
-		# post orderby
-		if ( $instance['posts_orderby'] == 'post__in' )
-			add_filter( 'posts_orderby', array(&$this, 'sort_query_by_post_in'), 10, 2 );
-
-
-		# Post status
-		$q_args['post_status'] = implode( ',', $instance['post_status'] );
-
-		# Included IDs
-		if ( $instance['include'] )
-			$q_args['post__in'] = explode( ',', str_replace(' ', '', $instance['include']) );
-
-		# Excluded IDs
-		if ( $instance['exclude'] )
-			$q_args['post__not_in'] = explode( ',', str_replace(' ', '', $instance['exclude']) );
-
-		# meta_query
-		# Apply shortcodes for the values
-		$meta_queries = array();
-		foreach ( $instance['meta_query'] as $mq ) {
-			if ( !empty($mq['key']) ) {
-				$meta_queries[] = $mq;
-			}
-		}
-		if ( !empty($meta_queries) )
-			$q_args['meta_query'] = $meta_queries;
-
-		# Taxonomies
-		$tax_query_args = $instance['tax_query'];
-		$tax_rel = $tax_query_args['relation'];
-		unset( $tax_query_args['relation'] );
-		$tax_queries = array();
-		foreach ( $tax_query_args as $tq ) {
-			if ( !empty($tq['taxonomy']) && !empty($tq['taxonomy']) ) {
-				if ( empty($tq['operator']) )
-					unset($tq['operator']);
-				$tax_queries[] = $tq;
-			}
-		}
-		if ( !empty($tax_queries) ) {
-			if ( count($tax_queries) > 2 ) {
-				if ( empty($tax_rel) )
-					$tax_rel = 'OR';
-			}
-			$tax_queries['relation'] = $tax_rel;
-			$q_args['tax_query'] = $tax_queries;
-		}
-
-		$debug .= "<h5>".__('Query parameters', 'kc-essentials')."</h5>\n";
-		$debug .= "<pre>".var_export($q_args, true)."</pre>";
-
-		$wp_query = new WP_Query($q_args);
-		$output = '';
-
-		if ( $wp_query->have_posts() ) {
-
-			# Before widget
-			$output .= $before_widget;
-
-			$title = ( empty($instance['title']) ) ? apply_filters( 'widget_title', $instance['title'] ) : $instance['title'];
-			# Widget title
-			if ( $title )
-				$output .= $before_title . $title . $after_title;
-
-			# Posts wrapper (open)
-			if ( $instance['posts_wrapper'] ) {
-				$output .= "<{$instance['posts_wrapper']}";
-				if ( isset($instance['posts_class']) && $instance['posts_class'] )
-					$output .= " class='{$instance['posts_class']}'";
-				$output .= ">\n";
-			}
-
-			while ( $wp_query->have_posts() ) {
-				$wp_query->the_post();
-				$post_id = get_the_ID();
-
-				# Wrapper (open)
-				if ( $instance['entry_wrapper'] ) {
-					$output .= "<{$instance['entry_wrapper']}";
-					if ( isset($instance['entry_class']) && $instance['entry_class'] )
-						$output .= " class='{$instance['entry_class']}'";
-					$output .= ">\n";
-				}
-
-				# Title
-				if ( $instance['title_src'] )
-					$output .= $this->_kc_get_title( $post_id, $instance );
-
-				# Thumbnail
-				if ( current_theme_supports('post-thumbnails') && $instance['thumb_size'] )
-					$output .= $this->_kc_get_thumbnail( $post_id, $instance );
-
-				# Content
-				if ( $instance['content_src'] )
-					$output .= $this->_kc_get_content( $post_id, $instance );
-
-				# Wrapper (open)
-				if ( $instance['entry_wrapper'] )
-					$output .= "</{$instance['entry_wrapper']}>\n";
-			}
-
-			# Posts wrapper (close)
-			if ( $instance['posts_wrapper'] )
-				$output .= "</{$instance['posts_wrapper']}>\n";
-
-			$output .= "{$after_widget}\n";
-		}
-		$wp_query = null;
-		wp_reset_query();
-		remove_filter( 'posts_orderby', array(&$this, 'sort_query_by_post_in') );
-
-		echo $output;
-		if ( $instance['debug'] )
-			echo $debug;
-	}
-
-
 	function update( $new, $old ) {
 		# Numberposts
 		if ( !is_numeric($new['posts_per_page']) )
@@ -872,6 +737,141 @@ class kc_widget_post extends WP_Widget {
 			$sortby = "find_in_set(ID, '" . implode( ',', $query->query['post__in'] ) . "')";
 
 		return $sortby;
+	}
+
+
+	function widget( $args, $instance ) {
+		if ( $instance['action_id'] ) {
+			$args['before_widget'] = apply_filters( "kc_widget-{$instance['action_id']}", $args['before_widget'], 'before_widget', 'widget_post' );
+			$args['after_widget'] = apply_filters( "kc_widget-{$instance['action_id']}", $args['after_widget'], 'after_widget', 'widget_post' );
+		}
+		extract( $args );
+
+		$debug  = "<h4>".__('KC Posts debug', 'kc-essentials')."</h4>\n";
+		$debug .= "<h5>".__('Widget options', 'kc-essentials')."</h5>\n";
+		$debug .= "<pre>".var_export($instance, true)."</pre>";
+
+		$q_args = array(
+			'post_type'      => $instance['post_type'],
+			'posts_per_page' => $instance['posts_per_page'],
+			'order'          => $instance['posts_order'],
+			'orderby'        => $instance['posts_orderby']
+		);
+
+		# post orderby
+		if ( $instance['posts_orderby'] == 'post__in' )
+			add_filter( 'posts_orderby', array(&$this, 'sort_query_by_post_in'), 10, 2 );
+
+
+		# Post status
+		$q_args['post_status'] = implode( ',', $instance['post_status'] );
+
+		# Included IDs
+		if ( $instance['include'] )
+			$q_args['post__in'] = explode( ',', str_replace(' ', '', $instance['include']) );
+
+		# Excluded IDs
+		if ( $instance['exclude'] )
+			$q_args['post__not_in'] = explode( ',', str_replace(' ', '', $instance['exclude']) );
+
+		# meta_query
+		# Apply shortcodes for the values
+		$meta_queries = array();
+		foreach ( $instance['meta_query'] as $mq ) {
+			if ( !empty($mq['key']) ) {
+				$meta_queries[] = $mq;
+			}
+		}
+		if ( !empty($meta_queries) )
+			$q_args['meta_query'] = $meta_queries;
+
+		# Taxonomies
+		$tax_query_args = $instance['tax_query'];
+		$tax_rel = $tax_query_args['relation'];
+		unset( $tax_query_args['relation'] );
+		$tax_queries = array();
+		foreach ( $tax_query_args as $tq ) {
+			if ( !empty($tq['taxonomy']) && !empty($tq['taxonomy']) ) {
+				if ( empty($tq['operator']) )
+					unset($tq['operator']);
+				$tax_queries[] = $tq;
+			}
+		}
+		if ( !empty($tax_queries) ) {
+			if ( count($tax_queries) > 2 ) {
+				if ( empty($tax_rel) )
+					$tax_rel = 'OR';
+			}
+			$tax_queries['relation'] = $tax_rel;
+			$q_args['tax_query'] = $tax_queries;
+		}
+
+		$debug .= "<h5>".__('Query parameters', 'kc-essentials')."</h5>\n";
+		$debug .= "<pre>".var_export($q_args, true)."</pre>";
+
+		$wp_query = new WP_Query($q_args);
+		$output = '';
+
+		if ( $wp_query->have_posts() ) {
+
+			# Before widget
+			$output .= $before_widget;
+
+			$title = ( empty($instance['title']) ) ? apply_filters( 'widget_title', $instance['title'] ) : $instance['title'];
+			# Widget title
+			if ( $title )
+				$output .= $before_title . $title . $after_title;
+
+			# Posts wrapper (open)
+			if ( $instance['posts_wrapper'] ) {
+				$output .= "<{$instance['posts_wrapper']}";
+				if ( isset($instance['posts_class']) && $instance['posts_class'] )
+					$output .= " class='{$instance['posts_class']}'";
+				$output .= ">\n";
+			}
+
+			while ( $wp_query->have_posts() ) {
+				$wp_query->the_post();
+				$post_id = get_the_ID();
+
+				# Wrapper (open)
+				if ( $instance['entry_wrapper'] ) {
+					$output .= "<{$instance['entry_wrapper']}";
+					if ( isset($instance['entry_class']) && $instance['entry_class'] )
+						$output .= " class='{$instance['entry_class']}'";
+					$output .= ">\n";
+				}
+
+				# Title
+				if ( $instance['title_src'] )
+					$output .= $this->_kc_get_title( $post_id, $instance );
+
+				# Thumbnail
+				if ( current_theme_supports('post-thumbnails') && $instance['thumb_size'] )
+					$output .= $this->_kc_get_thumbnail( $post_id, $instance );
+
+				# Content
+				if ( $instance['content_src'] )
+					$output .= $this->_kc_get_content( $post_id, $instance );
+
+				# Wrapper (open)
+				if ( $instance['entry_wrapper'] )
+					$output .= "</{$instance['entry_wrapper']}>\n";
+			}
+
+			# Posts wrapper (close)
+			if ( $instance['posts_wrapper'] )
+				$output .= "</{$instance['posts_wrapper']}>\n";
+
+			$output .= "{$after_widget}\n";
+		}
+		$wp_query = null;
+		wp_reset_query();
+		remove_filter( 'posts_orderby', array(&$this, 'sort_query_by_post_in') );
+
+		echo $output;
+		if ( $instance['debug'] )
+			echo $debug;
 	}
 
 
