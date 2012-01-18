@@ -118,16 +118,8 @@ class kc_widget_post extends WP_Widget {
 				}
 
 				# Title
-				if ( $instance['entry_title'] ) {
-					$title = get_the_title();
-					if ( isset($instance['title_link']) && $instance['title_link'] )
-						$title = "<a href='".get_permalink()."'>{$title}</a>";
-
-					$output .= "<{$instance['entry_title']}";
-					if ( $instance['title_class'] )
-						$output .= " class='{$instance['title_class']}'";
-					$output .= ">{$title}</{$instance['entry_title']}>\n";
-				}
+				if ( $instance['title_src'] )
+					$output .= $this->_kc_get_title( $post_id, $instance );
 
 				# Thumbnail
 				if ( current_theme_supports('post-thumbnails') && $instance['thumb_size'] )
@@ -262,8 +254,11 @@ class kc_widget_post extends WP_Widget {
 			'posts_class'     => '',
 			'entry_wrapper'   => 'div',
 			'entry_class'     => '',
-			'entry_title'     => 'h4',
-			'title_link'      => true,
+			'title_src'       => 'default',
+			'title_meta'      => '',
+			'title_tag'       => 'h4',
+			'title_link'      => 'default',
+			'title_link_meta' => '',
 			'title_class'     => 'title',
 			'content_src'     => 'excerpt',
 			'content_wrapper' => '',
@@ -348,7 +343,22 @@ class kc_widget_post extends WP_Widget {
 			array( 'value' => 'TIME',     'label'=> 'Time' )
 		);
 
-		$image_sizes = kcSettings_options::$image_sizes; ?>
+		$image_sizes = kcSettings_options::$image_sizes;
+		$src_common = array(
+			'default' => __('Default', 'kc-essentials'),
+			'meta'    => __('Custom field', 'kc-essentials')
+		);
+		$tags_title = array(
+			'h2'   => 'h2',
+			'h3'   => 'h3',
+			'h4'   => 'h4',
+			'h5'   => 'h5',
+			'h6'   => 'h6',
+			'p'    => 'p',
+			'span' => 'span',
+			'div'  => 'div'
+		);
+		?>
 
 		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget title', 'kc-essentials') ?></label></h5>
 		<ul class="kcw-control-block">
@@ -612,38 +622,70 @@ class kc_widget_post extends WP_Widget {
 		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Entry title', 'kc-essentials') ?></h5>
 		<ul class="kcw-control-block hide-if-js">
 			<li>
-				<label for="<?php echo $this->get_field_id('entry_title') ?>"><?php _e('Tag', 'kc-essentials') ?></label>
-				<?php echo kcForm::select(array(
-					'attr'    => array('id' => $this->get_field_id('entry_title'), 'name' => $this->get_field_name('entry_title')),
-					'current' => $instance['entry_title'],
-					'options' => array(
-						array( 'value' => 'h2',   'label' => 'h2' ),
-						array( 'value' => 'h3',   'label' => 'h3' ),
-						array( 'value' => 'h4',   'label' => 'h4' ),
-						array( 'value' => 'h5',   'label' => 'h5' ),
-						array( 'value' => 'h6',   'label' => 'h6' ),
-						array( 'value' => 'p',    'label' => 'p' ),
-						array( 'value' => 'span', 'label' => 'span' ),
-						array( 'value' => 'div',  'label' => 'div' )
-					),
-					'none'	=> false
-				)) ?>
-			</li>
-			<li>
-				<label for="<?php echo $this->get_field_id('title_link') ?>"><?php _e('Link to post', 'kc-essentials') ?></label>
+				<label for="<?php echo $this->get_field_id('title_src') ?>"><?php _e('Source', 'kc-essentials') ?></label>
 				<?php echo kcForm::field(array(
 					'type'    => 'select',
-					'attr'    => array('id' => $this->get_field_id('title_link'), 'name' => $this->get_field_name('title_link')),
-					'current' => $instance['title_link'],
-					'options' => kcSettings_options::$yesno,
-					'none'    => false
+					'attr'    => array(
+						'id'         => $this->get_field_id('title_src'),
+						'name'       => $this->get_field_name('title_src'),
+						'class'      => 'hasdep',
+						'data-child' => '.chTitle',
+						'data-scope' => 'ul'
+					),
+					'current' => $instance['title_src'],
+					'options' => $src_common
 				)) ?>
 			</li>
-			<li>
+			<li class="chTitle" data-dep='meta'>
+				<label for="<?php echo $this->get_field_id('title_meta') ?>" title="<?php _e("Fill this if you select 'Custom field' above", 'kc-essentials') ?>"><?php _e('Meta key', 'kc-essentials') ?> <small class="impo">(?)</small></label>
+				<?php echo kcForm::input(array(
+					'attr'    => array('id' => $this->get_field_id('title_meta'), 'name' => $this->get_field_name('title_meta')),
+					'current' => $instance['title_meta']
+				)) ?>
+			</li>
+			<li class="chTitle" data-dep='<?php echo json_encode(array_keys($src_common) )?>'>
+				<label for="<?php echo $this->get_field_id('title_tag') ?>"><?php _e('Tag', 'kc-essentials') ?></label>
+				<?php echo kcForm::field(array(
+					'type'    => 'select',
+					'attr'    => array(
+						'id'         => $this->get_field_id('title_tag'),
+						'name'       => $this->get_field_name('title_tag'),
+						'class'      => 'hasdep',
+						'data-child' => '.chTitleTag',
+						'data-scope' => 'ul'
+					),
+					'current' => $instance['title_tag'],
+					'options' => $tags_title
+				)) ?>
+			</li>
+			<li class="chTitleTag" data-dep='<?php echo json_encode(array_keys($tags_title)) ?>'>
 				<label for="<?php echo $this->get_field_id('title_class') ?>"><?php _e('Class', 'kc-essentials') ?></label>
 				<?php echo kcForm::input(array(
 					'attr'    => array('id' => $this->get_field_id('title_class'), 'name' => $this->get_field_name('title_class')),
 					'current' => $instance['title_class']
+				)) ?>
+			</li>
+			<li class="chTitle" data-dep='<?php echo json_encode(array_keys($src_common) )?>'>
+				<label for="<?php echo $this->get_field_id('title_link') ?>"><?php _e('Link', 'kc-essentials') ?></label>
+				<?php echo kcForm::field(array(
+					'type'    => 'select',
+					'attr'    => array(
+						'id'         => $this->get_field_id('title_link'),
+						'name'       => $this->get_field_name('title_link'),
+						'class'      => 'hasdep',
+						'data-child' => '.chTitleLink',
+						'data-scope' => 'ul'
+					),
+					'current' => $instance['title_link'],
+					'options' => $src_common,
+					'none'    => false
+				)) ?>
+			</li>
+			<li class="chTitleLink" data-dep='meta'>
+				<label for="<?php echo $this->get_field_id('title_link_meta') ?>" title="<?php _e("Fill this if you select 'Custom field' above", 'kc-essentials') ?>"><?php _e('Meta key', 'kc-essentials') ?> <small class="impo">(?)</small></label>
+				<?php echo kcForm::input(array(
+					'attr'    => array('id' => $this->get_field_id('title_link_meta'), 'name' => $this->get_field_name('title_link_meta')),
+					'current' => $instance['title_link_meta']
 				)) ?>
 			</li>
 		</ul>
@@ -792,6 +834,45 @@ class kc_widget_post extends WP_Widget {
 			$sortby = "find_in_set(ID, '" . implode( ',', $query->query['post__in'] ) . "')";
 
 		return $sortby;
+	}
+
+
+	function _kc_get_title( $post_id, $instance ) {
+		$title = '';
+		switch ( $instance['title_src'] ) {
+			case 'meta' :
+				if ( isset($instance['title_meta']) && $instance['title_meta'] && $meta = get_post_meta($post_id, $instance['title_meta'], true) )
+					$title = $meta;
+			break;
+			default :
+				$title = get_the_title();
+			break;
+		}
+
+		# Link
+		if ( isset($instance['title_link']) && $instance['title_link'] ) {
+			switch ( $instance['title_link'] ) {
+				case 'meta' :
+					if ( isset($instance['title_link_meta']) && $instance['title_link_meta'] && $meta = get_post_meta($post_id, $instance['title_link_meta'], true) )
+						$link = $meta;
+				break;
+				default :
+					$link = get_permalink();
+				break;
+			}
+
+			$title = "<a href='{$link}'>{$title}</a>";
+		}
+
+		if ( !isset($instance['title_tag']) || !$instance['title_tag'] )
+			return $title;
+
+		$output = "<{$instance['title_tag']}";
+		if ( $instance['title_class'] )
+			$output .= " class='{$instance['title_class']}'";
+		$output .= ">{$title}</{$instance['title_tag']}>\n";
+
+		return $output;
 	}
 
 
