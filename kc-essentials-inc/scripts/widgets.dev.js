@@ -49,7 +49,8 @@
 
 			if ( $item.is(':hidden') ) {
 				$item.slideDown();
-			} else {
+			}
+			else {
 				$nu = $item.clone(true).hide();
 				$item.after( $nu );
 				$nu.slideDown().kcReorder( $el.attr('rel'), false );
@@ -57,4 +58,41 @@
 		});
 	});
 
+
+	// Find posts
+	var $findBox = $('#find-posts');
+
+	// Open
+	$('input.kc-find-post').dblclick(function() {
+		$findBox.data('kcTarget', $(this));
+		findPosts.open();
+	});
+
+	// Insert
+	$('#find-posts-submit').click(function(e) {
+		e.preventDefault();
+
+		// Be nice!
+		if ( !$findBox.data('kcTarget') )
+			return;
+
+		var $selected = $('#find-posts-response').find('input:checked');
+		if ( !$selected.length )
+			return false;
+
+		var $target = $findBox.data('kcTarget'),
+		    current = $target.val(),
+		    current = current === '' ? [] : current.split(','),
+		    newID   = $selected.val();
+
+		if ( $.inArray(newID, current) < 0 ) {
+			current.push(newID);
+			$target.val( current.join(',') );
+		}
+	});
+
+	// Close
+	$( '#find-posts-close' ).click(function() {
+		$findBox.removeData('kcTarget');
+	});
 })(jQuery);

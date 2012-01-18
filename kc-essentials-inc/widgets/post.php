@@ -296,16 +296,24 @@ class kc_widget_post extends WP_Widget {
 				)) ?>
 			</li>
 			<li>
-				<label for="<?php echo $this->get_field_id('include'); ?>" title="<?php _e('Separate post IDs with commas') ?>"><?php _e('Incl. IDs', 'kc-essentials') ?> <small class="impo">(?)</small></label>
+				<label for="<?php echo $this->get_field_id('include'); ?>" title="<?php _e('Separate post IDs with commas, double click to search.') ?>"><?php _e('Incl. IDs', 'kc-essentials') ?> <small class="impo">(?)</small></label>
 				<?php echo kcForm::input(array(
-					'attr'    => array('id' => $this->get_field_id('include'), 'name' => $this->get_field_name('include')),
+					'attr'    => array(
+						'id'    => $this->get_field_id('include'),
+						'name'  => $this->get_field_name('include'),
+						'class' => 'kc-find-post'
+					),
 					'current' => $instance['include']
 				)) ?>
 			</li>
 			<li>
-				<label for="<?php echo $this->get_field_id('exclude'); ?>" title="<?php _e('Separate post IDs with commas') ?>"><?php _e('Excl. IDs', 'kc-essentials') ?> <small class="impo">(?)</small></label>
+				<label for="<?php echo $this->get_field_id('exclude'); ?>" title="<?php _e('Separate post IDs with commas, double click to search.') ?>"><?php _e('Excl. IDs', 'kc-essentials') ?> <small class="impo">(?)</small></label>
 				<?php echo kcForm::input(array(
-					'attr'    => array('id' => $this->get_field_id('exclude'), 'name' => $this->get_field_name('exclude')),
+					'attr'    => array(
+						'id'    => $this->get_field_id('exclude'),
+						'name'  => $this->get_field_name('exclude'),
+						'class' => 'kc-find-post'
+					),
 					'current' => $instance['exclude']
 				)) ?>
 			</li>
@@ -732,7 +740,7 @@ class kc_widget_post extends WP_Widget {
 	<?php }
 
 
-	function sort_query_by_post_in( $sortby, $query ) {
+	function _sort_query_by_post_in( $sortby, $query ) {
 		if ( isset($query->query['post__in']) && !empty($query->query['post__in']) && isset($query->query['orderby']) && $query->query['orderby'] == 'post__in' )
 			$sortby = "find_in_set(ID, '" . implode( ',', $query->query['post__in'] ) . "')";
 
@@ -760,7 +768,7 @@ class kc_widget_post extends WP_Widget {
 
 		# post orderby
 		if ( $instance['posts_orderby'] == 'post__in' )
-			add_filter( 'posts_orderby', array(&$this, 'sort_query_by_post_in'), 10, 2 );
+			add_filter( 'posts_orderby', array(&$this, '_sort_query_by_post_in'), 10, 2 );
 
 
 		# Post status
@@ -867,7 +875,7 @@ class kc_widget_post extends WP_Widget {
 		}
 		$wp_query = null;
 		wp_reset_query();
-		remove_filter( 'posts_orderby', array(&$this, 'sort_query_by_post_in') );
+		remove_filter( 'posts_orderby', array(&$this, '_sort_query_by_post_in') );
 
 		echo $output;
 		if ( $instance['debug'] )

@@ -49,7 +49,7 @@ class kcEssentials {
 
 
 	private static function _sns() {
-		wp_register_script( 'kc-widgets-admin', self::$pdata['paths']['scripts'].'/widgets.js', array('kc-settings-base'), self::$pdata['version'], true );
+		wp_register_script( 'kc-widgets-admin', self::$pdata['paths']['scripts'].'/widgets.js', array('kc-settings-base', 'media', 'wp-ajax-response'), self::$pdata['version'], true );
 		wp_register_style(  'kc-widgets-admin', self::$pdata['paths']['styles'].'/widgets.css', false, self::$pdata['version'] );
 	}
 

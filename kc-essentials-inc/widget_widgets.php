@@ -25,16 +25,20 @@ class kcEssentials_widgets {
 			register_widget( "kc_widget_{$widget}" );
 		}
 
-		add_action( 'load-widgets.php', array(__CLASS__, '_sns') );
+		add_action( 'load-widgets.php', array(__CLASS__, '_actions') );
 	}
 
 
 	/**
-	 * Scripts n styles for the widget configuration forms
+	 * Actions for the widgets admin page
 	 */
-	public static function _sns() {
+	public static function _actions() {
+		# Scripts n styles for the widget configuration forms
 		wp_enqueue_script( 'kc-widgets-admin' );
 		wp_enqueue_style( 'kc-widgets-admin' );
+
+		# Add the post finder box
+		add_action( 'admin_footer', 'find_posts_div', 99 );
 	}
 
 
