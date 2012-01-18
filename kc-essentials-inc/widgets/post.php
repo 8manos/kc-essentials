@@ -221,6 +221,11 @@ class kc_widget_post extends WP_Widget {
 				)
 			);
 
+		# Fix class names
+		foreach ( array('posts', 'entry', 'title', 'content') as $el )
+			if ( isset($new["{$el}_class"]) && !empty($new["{$el}_class"]) )
+				$new["{$el}_class"] = kc_essentials_sanitize_html_classes( $new["{$el}_class"] );
+
 		return $new;
 	}
 
