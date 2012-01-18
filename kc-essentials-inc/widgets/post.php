@@ -99,10 +99,10 @@ class kc_widget_post extends WP_Widget {
 
 			# Posts wrapper (open)
 			if ( $instance['posts_wrapper'] ) {
-				if ( $instance['posts_class'] )
-					$output .= "<{$instance['posts_wrapper']} class='{$instance['posts_class']}'>\n";
-				else
-					$output .= "<{$instance['posts_wrapper']}>\n";
+				$output .= "<{$instance['posts_wrapper']}";
+				if ( isset($instance['posts_class']) && $instance['posts_class'] )
+					$output .= " class='{$instance['posts_class']}'";
+				$output .= ">\n";
 			}
 
 			while ( $wp_query->have_posts() ) {
@@ -349,12 +349,23 @@ class kc_widget_post extends WP_Widget {
 			'default' => __('Default', 'kc-essentials'),
 			'meta'    => __('Custom field', 'kc-essentials')
 		);
+		$src_content = array(
+			'excerpt' => __('Excerpt', 'kc-essentials'),
+			'content' => __('Full Content', 'kc-essentials'),
+			'meta'    => __('Custom field', 'kc-essentials')
+		);
 		$src_thumb_link = array(
 			'post'       => __('Post page', 'kc-essentials'),
 			'media_page' => __('Attachment page', 'kc-essentials'),
 			'media_file' => __('Attachment file', 'kc-essentials'),
 			'meta-post'  => __('Post custom field', 'kc-essentials'),
 			'meta-att'   => __('Thumb. custom field', 'kc-essentials')
+		);
+		$tags_posts = array(
+			'div'     => 'div',
+			'section' => 'section',
+			'ol'      => 'ol',
+			'ul'      => 'ul'
 		);
 		$tags_title = array(
 			'h2'   => 'h2',
@@ -365,6 +376,16 @@ class kc_widget_post extends WP_Widget {
 			'p'    => 'p',
 			'span' => 'span',
 			'div'  => 'div'
+		);
+		$tags_content = array(
+			'div'        => 'div',
+			'article'    => 'article',
+			'blockquote' => 'blockquote'
+		);
+		$tags_entry = array(
+			'div'     => 'div',
+			'article' => 'article',
+			'li'      => 'li'
 		);
 		?>
 
@@ -584,18 +605,20 @@ class kc_widget_post extends WP_Widget {
 		<ul class="kcw-control-block hide-if-js">
 			<li>
 				<label for="<?php echo $this->get_field_id('posts_wrapper') ?>"><?php _e('Tag', 'kc-essentials') ?></label>
-				<?php echo kcForm::select(array(
-					'attr'    => array('id' => $this->get_field_id('posts_wrapper'), 'name' => $this->get_field_name('posts_wrapper')),
+				<?php echo kcForm::field(array(
+					'type'    => 'select',
+					'attr'    => array(
+						'id'         => $this->get_field_id('posts_wrapper'),
+						'name'       => $this->get_field_name('posts_wrapper'),
+						'class'      => 'hasdep',
+						'data-child' => '.chPosts',
+						'data-scope' => 'ul'
+					),
 					'current' => $instance['posts_wrapper'],
-					'options' => array(
-						array( 'value' => 'div',     'label' => 'div' ),
-						array( 'value' => 'section', 'label' => 'section' ),
-						array( 'value' => 'ol',      'label' => 'ol' ),
-						array( 'value' => 'ul',      'label' => 'ul' )
-					)
+					'options' => $tags_posts
 				)) ?>
 			</li>
-			<li>
+			<li class="chPosts" data-dep='<?php echo json_encode(array_keys($tags_posts)) ?>'>
 				<label for="<?php echo $this->get_field_id('posts_class') ?>"><?php _e('Class', 'kc-essentials') ?></label>
 				<?php echo kcForm::input(array(
 					'attr'    => array('id' => $this->get_field_id('posts_class'), 'name' => $this->get_field_name('posts_class')),
@@ -608,17 +631,20 @@ class kc_widget_post extends WP_Widget {
 		<ul class="kcw-control-block hide-if-js">
 			<li>
 				<label for="<?php echo $this->get_field_id('entry_wrapper') ?>"><?php _e('Tag', 'kc-essentials') ?></label>
-				<?php echo kcForm::select(array(
-					'attr'    => array('id' => $this->get_field_id('entry_wrapper'), 'name' => $this->get_field_name('entry_wrapper')),
+				<?php echo kcForm::field(array(
+					'type'    => 'select',
+					'attr'    => array(
+						'id'         => $this->get_field_id('entry_wrapper'),
+						'name'       => $this->get_field_name('entry_wrapper'),
+						'class'      => 'hasdep',
+						'data-child' => '.chEntry',
+						'data-scope' => 'ul'
+					),
 					'current' => $instance['entry_wrapper'],
-					'options' => array(
-						array( 'value' => 'div',     'label' => 'div' ),
-						array( 'value' => 'article', 'label' => 'article' ),
-						array( 'value' => 'li',      'label' => 'li' )
-					)
+					'options' => $tags_entry
 				)) ?>
 			</li>
-			<li>
+			<li class="chEntry" data-dep='<?php echo json_encode(array_keys($tags_entry)) ?>'>
 				<label for="<?php echo $this->get_field_id('entry_class') ?>"><?php _e('Class', 'kc-essentials') ?></label>
 				<?php echo kcForm::input(array(
 					'attr'    => array('id' => $this->get_field_id('entry_class'), 'name' => $this->get_field_name('entry_class')),
@@ -702,7 +728,8 @@ class kc_widget_post extends WP_Widget {
 		<ul class="kcw-control-block hide-if-js">
 			<li>
 				<label for="<?php echo $this->get_field_id('content_src') ?>"><?php _e('Source', 'kc-essentials') ?></label>
-				<?php echo kcForm::select(array(
+				<?php echo kcForm::field(array(
+					'type'    => 'select',
 					'attr'    => array(
 						'id'         => $this->get_field_id('content_src'),
 						'name'       => $this->get_field_name('content_src'),
@@ -711,16 +738,13 @@ class kc_widget_post extends WP_Widget {
 						'data-scope' => 'ul'
 					),
 					'current' => $instance['content_src'],
-					'options' => array(
-						array( 'value' => 'excerpt', 'label' => __('Excerpt', 'kc-essentials') ),
-						array( 'value' => 'content', 'label' => __('Full Content', 'kc-essentials') ),
-						array( 'value' => 'meta',    'label' => __('Custom field', 'kc-essentials') )
-					)
+					'options' => $src_content
 				)) ?>
 			</li>
 			<li class="contentSrc" data-dep='<?php echo json_encode(array('excerpt', 'content', 'meta')) ?>'>
 				<label for="<?php echo $this->get_field_id('content_wrapper') ?>"><?php _e('Tag', 'kc-essentials') ?></label>
-				<?php echo kcForm::select(array(
+				<?php echo kcForm::field(array(
+					'type'    => 'select',
 					'attr'    => array(
 						'id'         => $this->get_field_id('content_wrapper'),
 						'name'       => $this->get_field_name('content_wrapper'),
@@ -729,11 +753,7 @@ class kc_widget_post extends WP_Widget {
 						'data-scope' => 'ul'
 					),
 					'current' => $instance['content_wrapper'],
-					'options' => array(
-						array( 'value' => 'div',        'label' => 'div' ),
-						array( 'value' => 'article',    'label' => 'article' ),
-						array( 'value' => 'blockquote', 'label' => 'blockquote' )
-					)
+					'options' => $tags_content
 				)) ?>
 			</li>
 			<li class="contentClass" data-dep='<?php echo json_encode(array('div', 'article', 'blockquote')) ?>'>
