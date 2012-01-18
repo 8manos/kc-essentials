@@ -6,7 +6,7 @@
  */
 
 
-Class kc_widget_post extends WP_Widget {
+class kc_widget_post extends WP_Widget {
 
 	function __construct() {
 		$widget_ops = array( 'classname' => 'kcw_post', 'description' => __('Query posts as you wish', 'kc-essentials') );
@@ -21,6 +21,10 @@ Class kc_widget_post extends WP_Widget {
 			$args['after_widget'] = apply_filters( "kc_widget-{$instance['action_id']}", $args['after_widget'], 'after_widget', 'widget_post' );
 		}
 		extract( $args );
+
+		$debug  = "<h4>".__('KC Posts debug', 'kc-essentials')."</h4>\n";
+		$debug .= "<h5>".__('Widget options', 'kc-essentials')."</h5>\n";
+		$debug .= "<pre>".var_export($instance, true)."</pre>";
 
 		$q_args = array(
 			'post_type'      => $instance['post_type'],
@@ -77,15 +81,8 @@ Class kc_widget_post extends WP_Widget {
 			$q_args['tax_query'] = $tax_queries;
 		}
 
-
-		if ( $instance['debug'] ) {
-			echo "<h4>".__('KC Posts debug', 'kc-essentials')."</h4>\n";
-			echo "<h5>".__('Widget options', 'kc-essentials')."</h5>\n";
-			echo "<pre>".print_r($instance, true)."</pre>";
-			echo "<h5>".__('Query parameters', 'kc-essentials')."</h5>\n";
-			echo "<pre>".print_r($q_args, true)."</pre>";
-			echo '</pre>';
-		}
+		$debug .= "<h5>".__('Query parameters', 'kc-essentials')."</h5>\n";
+		$debug .= "<pre>".var_export($q_args, true)."</pre>";
 
 		$wp_query = new WP_Query($q_args);
 		$output = '';
@@ -110,6 +107,7 @@ Class kc_widget_post extends WP_Widget {
 
 			while ( $wp_query->have_posts() ) {
 				$wp_query->the_post();
+				$post_id = get_the_ID();
 
 				# Entry wrapper (open)
 				if ( $instance['entry_wrapper'] ) {
@@ -142,27 +140,8 @@ Class kc_widget_post extends WP_Widget {
 				}
 
 				# Thumbnail
-				if ( current_theme_supports('post-thumbnails') && $instance['thumb_size'] && has_post_thumbnail() ) {
-					$thumb_img = get_the_post_thumbnail( get_the_ID(), $instance['thumb_size'] );
-					if ( $instance['thumb_link'] ) {
-						$thumb_id = get_post_thumbnail_id();
-						switch ( $instance['thumb_link'] ) {
-							case 'post' :
-								$thumb_link = get_permalink();
-							break;
-							case 'media_page' :
-								$thumb_link = get_permalink( $thumb_id );
-							break;
-							case 'media_file' :
-								$thumb_link = wp_get_attachment_url( $thumb_id );
-							break;
-						}
-						$output .= "<a href='{$thumb_link}' class='post-thumb'>{$thumb_img}</a>\n";
-					}
-					else {
-						$output .= "<span class='post-thumb'>{$thumb_img}</span>\n";
-					}
-				}
+				if ( current_theme_supports('post-thumbnails') && $instance['thumb_size'] )
+					$output .= $this->_kc_get_thumbnail( $post_id, $instance );
 
 				# Entry content
 				$content = '';
@@ -215,6 +194,8 @@ Class kc_widget_post extends WP_Widget {
 		remove_filter( 'posts_orderby', array(&$this, 'sort_query_by_post_in') );
 
 		echo $output;
+		if ( $instance['debug'] )
+			echo $debug;
 	}
 
 
@@ -787,7 +768,8 @@ Class kc_widget_post extends WP_Widget {
 						'data-child' => '#p-'.$this->get_field_id('thumb_meta')
 					),
 					'current' => $instance['thumb_src'],
-					'options' => array( '' => __('Default', 'kc-essentials'), 'meta' => __('Custom field', 'kc-settings') )
+					'options' => array( '' => __('Default', 'kc-essentials'), 'meta' => __('Custom field', 'kc-settings') ),
+					'none'    => false
 				)) ?>
 			</li>
 			<li id='p-<?php echo $this->get_field_id('thumb_meta') ?>' class="hide-if-js" data-dep="meta">
@@ -849,7 +831,36 @@ Class kc_widget_post extends WP_Widget {
 		return $sortby;
 	}
 
-}
 
+	function _kc_get_thumbnail( $post_id, $instance ) {
+		if ( $instance['thumb_src'] == 'meta' && $meta = get_post_meta($post_id, $instance['thumb_meta'], true) )
+			$thumb_id = $meta;
+		elseif ( has_post_thumbnail() )
+			$thumb_id = get_post_thumbnail_id( $post_id );
+
+		if ( !isset($thumb_id) )
+			return;
+
+		$thumb_size = apply_filters( 'post_thumbnail_size', $instance['thumb_size'] );
+		$thumb_img = wp_get_attachment_image($thumb_id, $thumb_size);
+
+		if ( !$instance['thumb_link'] )
+			return "<span class='post-thumb'>{$thumb_img}</span>\n";
+
+		switch ( $instance['thumb_link'] ) {
+			case 'post' :
+				$thumb_link = get_permalink();
+			break;
+			case 'media_page' :
+				$thumb_link = get_permalink( $thumb_id );
+			break;
+			case 'media_file' :
+				$thumb_link = wp_get_attachment_url( $thumb_id );
+			break;
+		}
+
+		return "<a href='{$thumb_link}' class='post-thumb'>{$thumb_img}</a>\n";
+	}
+}
 
 ?>
