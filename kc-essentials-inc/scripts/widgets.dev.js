@@ -1,18 +1,15 @@
 (function($) {
 
 	$(document).ready(function($) {
-		var $widgets = $('#widgets-right'),
-		    $fields  = $widgets.find('.kcw-control-block, .kcwe'),
-		    $heads   = $widgets.find('h5');
-
-		$('.hasdep', $widgets).kcFormDep();
-
-		$('.widgets-sortables', $widgets).ajaxSuccess(function() {
+		// Deps
+		$('.widgets-sortables .hasdep').kcFormDep();
+		$('.widgets-sortables').ajaxSuccess(function() {
 			$('.hasdep', this).kcFormDep();
 		});
 
 
-		$heads.live('click', function() {
+		// Toggler
+		$('h5.kcw-head').live('click', function() {
 			$(this).next('.kcw-control-block').slideToggle('slow');
 		});
 
@@ -53,7 +50,9 @@
 			else {
 				$nu = $item.clone(true).hide();
 				$item.after( $nu );
-				$nu.slideDown().kcReorder( $el.attr('rel'), false );
+				$nu.slideDown()
+					.kcReorder( $el.attr('rel'), false )
+					.find('.hasdep').kcFormDep();
 			}
 		});
 	});
@@ -61,10 +60,11 @@
 
 	// Find posts
 	var $findBox = $('#find-posts'),
-			$findBoxSubmit = $('#find-posts-submit');
+      $found   = $('#find-posts-response'),
+	    $findBoxSubmit = $('#find-posts-submit');
 
 	// Open
-	$('input.kc-find-post').dblclick(function() {
+	$('input.kc-find-post').live('dblclick', function() {
 		$findBox.data('kcTarget', $(this));
 		findPosts.open();
 	});
@@ -77,7 +77,7 @@
 		if ( !$findBox.data('kcTarget') )
 			return;
 
-		var $selected = $('#find-posts-response').find('input:checked');
+		var $selected = $found.find('input:checked');
 		if ( !$selected.length )
 			return false;
 
