@@ -55,8 +55,7 @@ function kc_essentials_options( $settings ) {
 					'title'   => __('Enhancements', 'kc-essentials'),
 					'type'    => 'checkbox',
 					'options' => array(
-						'enhc_history_js'    => sprintf( __('Ajaxify the whole site using <a href="%s">history.js</a> and jQuery, <em>(experimental)</em>', 'kc-essentials'), 'https://github.com/balupton/History.js/' ),
-						'enhc_help_lightbox' => __('Contextual help lightbox', 'kc-essentials')
+						'enhc_history_js'    => sprintf( __('Ajaxify the whole site using <a href="%s">history.js</a> and jQuery, <em>(experimental)</em>', 'kc-essentials'), 'https://github.com/balupton/History.js/' )
 					)
 				),
 				array(
