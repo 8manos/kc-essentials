@@ -988,7 +988,6 @@ class kc_widget_post extends WP_Widget {
 			$output = apply_filters( "kcw_post_content-{$instance['action_id']}", $output, $post_id );
 			$output = apply_filters( 'kcw_post_content', $output, $post_id, $instance['action_id'] );
 		}
-		$output .= $output;
 
 		# More link
 		if ( isset($instance['more_link']) && $instance['more_link'] )
