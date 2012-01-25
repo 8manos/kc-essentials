@@ -845,8 +845,8 @@ class kc_widget_post extends WP_Widget {
 				# Wrapper (open)
 				if ( $instance['entry_wrapper'] ) {
 					$output .= "<{$instance['entry_wrapper']}";
-					if ( isset($instance['entry_class']) && $instance['entry_class'] )
-						$output .= " class='{$instance['entry_class']}'";
+					$entry_class = ( isset($instance['entry_class']) ) ? $instance['entry_class'] : '';
+					$output .= " class='".join( ' ', get_post_class( $entry_class, $post_id ) )."'";
 					$output .= ">\n";
 				}
 
@@ -970,6 +970,7 @@ class kc_widget_post extends WP_Widget {
 
 
 	function _kc_get_content( $post_id, $instance ) {
+		$output = '';
 		switch ( $instance['content_src'] ) {
 			case 'content' :
 				$output = get_the_content();
@@ -982,6 +983,9 @@ class kc_widget_post extends WP_Widget {
 					$output = get_post_meta( $post_id, $instance['content_meta'], true );
 			break;
 		}
+
+		if ( !$output )
+			return;
 
 		$output = apply_filters( 'the_content', $output );
 		if ( $instance['action_id'] ) {
