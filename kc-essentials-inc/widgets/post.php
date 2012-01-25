@@ -749,13 +749,20 @@ class kc_widget_post extends WP_Widget {
 
 
 	function widget( $args, $instance ) {
-		if ( $instance['action_id'] ) {
-			$args['before_widget'] = apply_filters( "kc_widget-{$instance['action_id']}", $args['before_widget'], 'before_widget', 'widget_post' );
-			$args['after_widget'] = apply_filters( "kc_widget-{$instance['action_id']}", $args['after_widget'], 'after_widget', 'widget_post' );
+		$af_IDs = array( '', "-{$this->id}" );
+		if ( $instance['action_id'] )
+			$af_IDs[] = "-{$instance['action_id']}";
+		$instance['af_IDs'] = $af_IDs;
+
+		foreach ( $af_IDs as $af_id ) {
+			$args['before_widget'] = apply_filters( "kc_widget-{$af_id}", $args['before_widget'], 'before_widget', 'widget_post' );
+			$args['after_widget'] = apply_filters( "kc_widget-{$af_id}", $args['after_widget'], 'after_widget', 'widget_post' );
 		}
 		extract( $args );
 
 		$debug  = "<h4>".__('KC Posts debug', 'kc-essentials')."</h4>\n";
+		$debug .= "<h5>".__('Widget object', 'kc-essentials')."</h5>\n";
+		$debug .= "<pre>".var_export($this, true)."</pre>";
 		$debug .= "<h5>".__('Widget options', 'kc-essentials')."</h5>\n";
 		$debug .= "<pre>".var_export($instance, true)."</pre>";
 
@@ -814,6 +821,10 @@ class kc_widget_post extends WP_Widget {
 			$q_args['tax_query'] = $tax_queries;
 		}
 
+		$q_args = apply_filters( 'kc_widget_post-query_args', $q_args, $instance, $this );
+		foreach ( $af_IDs as $af_id )
+			$q_args = apply_filters( "kc_widget_post-query_args-{$af_id}", $q_args, $instance, $this );
+
 		$debug .= "<h5>".__('Query parameters', 'kc-essentials')."</h5>\n";
 		$debug .= "<pre>".var_export($q_args, true)."</pre>";
 
@@ -825,10 +836,17 @@ class kc_widget_post extends WP_Widget {
 			# Before widget
 			$output .= $before_widget;
 
-			$title = ( empty($instance['title']) ) ? apply_filters( 'widget_title', $instance['title'] ) : $instance['title'];
+			$title = apply_filters( 'widget_title', $instance['title'] );
+			foreach ( $af_IDs as $af_id )
+				$title = apply_filters( "kc_widget_post-widget_title{$af_id}", $title, $instance, $this );
+
 			# Widget title
 			if ( $title )
 				$output .= $before_title . $title . $after_title;
+
+			# Action: Before loop
+			foreach ( $af_IDs as $af_id )
+				do_action( "kc_widget_post-before_loop{$af_id}", $instance, $this );
 
 			# Posts wrapper (open)
 			if ( $instance['posts_wrapper'] ) {
@@ -842,6 +860,10 @@ class kc_widget_post extends WP_Widget {
 				$wp_query->the_post();
 				$post_id = get_the_ID();
 
+				# Action: Before entry
+				foreach ( $af_IDs as $af_id )
+					do_action( "kc_widget_post-before_entry{$af_id}", $post_id, $instance, $this );
+
 				# Wrapper (open)
 				if ( $instance['entry_wrapper'] ) {
 					$output .= "<{$instance['entry_wrapper']}";
@@ -851,25 +873,39 @@ class kc_widget_post extends WP_Widget {
 				}
 
 				# Title
-				if ( $instance['title_src'] )
-					$output .= $this->_kc_get_title( $post_id, $instance );
+				$entry_title = ( $instance['title_src'] ) ? $this->_kc_get_title( $post_id, $instance ) : '';
+				foreach ( $af_IDs as $af_id )
+					$entry_title = apply_filters( "kc_widget_post-entry_title{$af_id}", $entry_title, $post_id, $instance, $this );
+				$output .= $entry_title;
 
 				# Thumbnail
-				if ( $instance['thumb_size'] )
-					$output .= $this->_kc_get_thumbnail( $post_id, $instance );
+				$entry_thumbnail = ( $instance['thumb_size'] ) ? $this->_kc_get_thumbnail( $post_id, $instance ) : '';
+				foreach ( $af_IDs as $af_id )
+					$entry_thumbnail = apply_filters( "kc_widget_post-entry_thumbnail{$af_id}", $entry_thumbnail, $post_id, $instance, $this );
+				$output .= $entry_thumbnail;
 
 				# Content
-				if ( $instance['content_src'] )
-					$output .= $this->_kc_get_content( $post_id, $instance );
+				$entry_content = ( $instance['content_src'] ) ? $this->_kc_get_content( $post_id, $instance ) : '';
+				foreach ( $af_IDs as $af_id )
+					$entry_content = apply_filters( "kc_widget_post-entry_content{$af_id}", $entry_content, $post_id, $instance, $this );
+				$output .= $entry_content;
 
 				# Wrapper (open)
 				if ( $instance['entry_wrapper'] )
 					$output .= "</{$instance['entry_wrapper']}>\n";
+
+				# Action: After entry
+				foreach ( $af_IDs as $af_id )
+					do_action( "kc_widget_post-after_entry{$af_id}", $post_id, $instance, $this );
 			}
 
 			# Posts wrapper (close)
 			if ( $instance['posts_wrapper'] )
 				$output .= "</{$instance['posts_wrapper']}>\n";
+
+			# Action: After loop
+			foreach ( $af_IDs as $af_id )
+				do_action( "kc_widget_post-after_loop{$af_id}", $instance, $this );
 
 			$output .= "{$after_widget}\n";
 		}
@@ -878,6 +914,8 @@ class kc_widget_post extends WP_Widget {
 		remove_filter( 'posts_orderby', array(&$this, '_sort_query_by_post_in') );
 
 		echo $output;
+
+		# Debug info
 		if ( $instance['debug'] )
 			echo $debug;
 	}
@@ -988,10 +1026,6 @@ class kc_widget_post extends WP_Widget {
 			return;
 
 		$output = apply_filters( 'the_content', $output );
-		if ( $instance['action_id'] ) {
-			$output = apply_filters( "kcw_post_content-{$instance['action_id']}", $output, $post_id );
-			$output = apply_filters( 'kcw_post_content', $output, $post_id, $instance['action_id'] );
-		}
 
 		# More link
 		if ( isset($instance['more_link']) && $instance['more_link'] )
