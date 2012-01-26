@@ -137,7 +137,10 @@ class kc_widget_post extends WP_Widget {
 			'more_link'       => '',
 			'index_link'      => '',
 			'action_id'       => '',
-			'debug'           => false
+			'debug'           => false,
+			'txt_before_loop' => '',
+			'txt_after_loop'  => '',
+			'txt_autop'       => 0
 		);
 		$instance = wp_parse_args( (array) $instance, $defaults );
 		$title = strip_tags( $instance['title'] );
@@ -717,6 +720,34 @@ class kc_widget_post extends WP_Widget {
 		</ul>
 		<?php } ?>
 
+		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Additional texts', 'kc-essentials') ?></h5>
+		<div class="kcw-control-block hide-if-js">
+			<li>
+				<label for="<?php echo $this->get_field_id('txt_before_loop') ?>"><?php _e('Before loop', 'kc-essentials') ?></label>
+				<?php echo kcForm::textarea(array(
+					'attr'    => array('id' => $this->get_field_id('txt_before_loop'), 'name' => $this->get_field_name('txt_before_loop'), 'class' => 'widefat'),
+					'current' => $instance['txt_before_loop']
+				)) ?>
+			</li>
+			<li>
+				<label for="<?php echo $this->get_field_id('txt_after_loop') ?>"><?php _e('After loop', 'kc-essentials') ?></label>
+				<?php echo kcForm::textarea(array(
+					'attr'    => array('id' => $this->get_field_id('txt_after_loop'), 'name' => $this->get_field_name('txt_after_loop'), 'class' => 'widefat'),
+					'current' => $instance['txt_after_loop']
+				)) ?>
+			</li>
+			<li>
+				<label for="<?php echo $this->get_field_id('txt_autop') ?>" title="<?php _e('Use wpautop() to automatically add paragraphs and new lines', 'kc-essentials') ?>"><?php _e('Format', 'kc-essentials') ?> <small class="impo">(?)</small></label>
+				<?php echo kcForm::field(array(
+					'type'    => 'select',
+					'attr'    => array('id' => $this->get_field_id('txt_autop'), 'name' => $this->get_field_name('txt_autop')),
+					'current' => $instance['txt_autop'],
+					'options' => kcSettings_options::$yesno,
+					'none'    => false
+				)) ?>
+			</li>
+		</div>
+
 		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Advanced', 'kc-essentials') ?></h5>
 		<ul class="kcw-control-block hide-if-js">
 			<li>
@@ -848,6 +879,14 @@ class kc_widget_post extends WP_Widget {
 			foreach ( $af_IDs as $af_id )
 				do_action( "kc_widget_post-before_loop{$af_id}", $instance, $this );
 
+			# Text before loop
+			if ( isset($instance['txt_before_loop']) && !empty($instance['txt_before_loop']) ) {
+				if ( isset($instance['txt_autop']) && $instance['txt_autop'] )
+					$output .= wpautop( $instance['txt_before_loop'] );
+				else
+					$output .= $instance['txt_before_loop'];
+			}
+
 			# Posts wrapper (open)
 			if ( $instance['posts_wrapper'] ) {
 				$output .= "<{$instance['posts_wrapper']}";
@@ -902,6 +941,14 @@ class kc_widget_post extends WP_Widget {
 			# Posts wrapper (close)
 			if ( $instance['posts_wrapper'] )
 				$output .= "</{$instance['posts_wrapper']}>\n";
+
+			# Text before loop
+			if ( isset($instance['txt_before_loop']) && !empty($instance['txt_before_loop']) ) {
+				if ( isset($instance['txt_autop']) && $instance['txt_autop'] )
+					$output .= wpautop( $instance['txt_after_loop'] );
+				else
+					$output .= $instance['txt_after_loop'];
+			}
 
 			# Action: After loop
 			foreach ( $af_IDs as $af_id )
