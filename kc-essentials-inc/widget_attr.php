@@ -6,7 +6,7 @@
  */
 
 
-class kcEssentials_widget_custom_id_class {
+class kcEssentials_widget_attr {
 
 	public static function init() {
 		# Custom widget ID & classes
@@ -134,6 +134,6 @@ class kcEssentials_widget_custom_id_class {
 	}
 }
 
-kcEssentials_widget_custom_id_class::init();
+kcEssentials_widget_attr::init();
 
 ?>
