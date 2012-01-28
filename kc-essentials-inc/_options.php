@@ -348,7 +348,7 @@ class kcEssentials_options {
 				'hidden'        => true,
 				'id'            => '',
 				'name'          => '',
-				'desc'          => '',
+				'description'   => '',
 				'before_widget' => '<div id="%1$s" class="widget %2$s">',
 				'after_widget'  => '</div>',
 				'before_title'  => '<h3 class="widget-title">',
@@ -362,7 +362,7 @@ class kcEssentials_options {
 		$fields = array(
 			'id'            => __( 'ID', 'kc-essentials'),
 			'name'          => __( 'Name', 'kc-essentials'),
-			'desc'          => __( 'Description', 'kc-essentials'),
+			'description'   => __( 'Description', 'kc-essentials'),
 			'before_widget' => __( 'Before widget', 'kc-essentials'),
 			'after_widget'  => __( 'After widget', 'kc-essentials'),
 			'before_title'  => __( 'Before title', 'kc-essentials'),
@@ -381,14 +381,14 @@ class kcEssentials_options {
 			foreach ( $fields as $field_id => $field_label ) {
 				$out .= "\t\t\t<li><label>{$field_label}</label>";
 				$out .= kcForm::field(array(
-					'type'    => ( $field_id == 'desc' ) ? 'textarea' : 'text',
+					'type'    => ( $field_id == 'description' ) ? 'textarea' : 'text',
 					'attr'    => array(
 						//'id'             => "{$args['field_id']}-$idx-{$field_id}",
 						'name'           => "{$args['field_name']}[{$idx}][$field_id]",
 						'class'          => in_array($field_id, array('id', 'name')) ? 'check widefat' : 'widefat',
-						'data-nocleanup' => !in_array($field_id, array('id', 'name', 'desc')) ? 'true' : 'false'
+						'data-nocleanup' => !in_array($field_id, array('id', 'name', 'description')) ? 'true' : 'false'
 					),
-					'current' => $sb[$field_id]
+					'current' => isset($sb[$field_id]) ? $sb[$field_id] : ''
 				)) . "</li>\n";
 			}
 			$out .= "\t</ul>\t\t<p class='actions'><a class='add'>".__('Add', 'kc-essentials')."</a> <a class='del'>Remove</a></p>\n</li>\n";

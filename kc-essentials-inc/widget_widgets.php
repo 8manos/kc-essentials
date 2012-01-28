@@ -7,25 +7,51 @@
 
 
 class kcEssentials_widgets {
+	public static $sidebars;
 
 	public function init() {
 		$options = get_option( 'kc_essentials_settings' );
 		if ( !$options
 		     || !isset($options['components']['widget'])
-		     || !in_array( 'widget_widgets', $options['components']['widget'] )
-		     || !isset($options['widget_widgets']['widgets']) )
+		     || empty($options['components']['widget']) )
 			return false;
 
-		foreach ( $options['widget_widgets']['widgets'] as $widget ) {
-			$file = dirname(__FILE__) . "/widgets/{$widget}.php";
-			if ( !file_exists($file) || !is_readable($file) )
-				continue;
+		# Register sidebars
+		if ( in_array('widget_areas', $options['components']['widget'])
+		     && isset($options['widget_areas'])
+		     && !empty($options['widget_areas']) ) {
 
-			require_once $file;
-			register_widget( "kc_widget_{$widget}" );
+			self::$sidebars = $options['widget_areas'];
+			add_action( 'widgets_init', array(__CLASS__, 'register_sidebars'), 99 );
 		}
 
-		add_action( 'load-widgets.php', array(__CLASS__, '_actions') );
+		# Register widgets
+		if ( in_array('widget_widgets', $options['components']['widget'])
+		     && isset($options['widget_widgets']['widgets'])
+		     && !empty($options['widget_widgets']['widgets']) ) {
+			foreach ( $options['widget_widgets']['widgets'] as $widget ) {
+				$file = dirname(__FILE__) . "/widgets/{$widget}.php";
+				if ( !file_exists($file) || !is_readable($file) )
+					continue;
+
+				require_once $file;
+				register_widget( "kc_widget_{$widget}" );
+			}
+
+			add_action( 'load-widgets.php', array(__CLASS__, '_actions') );
+		}
+	}
+
+
+	/**
+	 * Register custom sidebars
+	 *
+	 * This has a low priority to make sidebars from the active
+	 * theme got registered first
+	 */
+	public static function register_sidebars() {
+		foreach ( self::$sidebars as $sb )
+			register_sidebar( $sb );
 	}
 
 
