@@ -379,11 +379,11 @@ class kcEssentials_options {
 			}
 			$out .=">\n";
 			foreach ( $fields as $field_id => $field_label ) {
-				$out .= "\t\t\t<li><label>{$field_label}</label>";
+				$out .= "\t\t\t<li><label for='{$args['field_id']}-$idx-{$field_id}'>{$field_label}</label>";
 				$out .= kcForm::field(array(
 					'type'    => ( $field_id == 'description' ) ? 'textarea' : 'text',
 					'attr'    => array(
-						//'id'             => "{$args['field_id']}-$idx-{$field_id}",
+						'id'             => "{$args['field_id']}-$idx-{$field_id}",
 						'name'           => "{$args['field_name']}[{$idx}][$field_id]",
 						'class'          => in_array($field_id, array('id', 'name')) ? 'check widefat' : 'widefat',
 						'data-nocleanup' => !in_array($field_id, array('id', 'name', 'description')) ? 'true' : 'false'
