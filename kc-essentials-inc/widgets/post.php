@@ -115,32 +115,33 @@ class kc_widget_post extends WP_Widget {
 					'compare' => '='
 				)
 			),
-			'posts_wrapper'   => '',
-			'posts_class'     => '',
-			'entry_wrapper'   => 'div',
-			'entry_class'     => '',
-			'title_src'       => 'default',
-			'title_meta'      => '',
-			'title_tag'       => 'h4',
-			'title_link'      => 'default',
-			'title_link_meta' => '',
-			'title_class'     => 'title',
-			'content_src'     => 'excerpt',
-			'content_wrapper' => '',
-			'content_class'   => '',
-			'content_meta'    => '',
-			'thumb_size'      => '',
-			'thumb_src'       => '',
-			'thumb_meta'      => '',
-			'thumb_link'      => 'post',
-			'thumb_link_meta' => '',
-			'more_link'       => '',
-			'index_link'      => '',
-			'action_id'       => '',
-			'debug'           => false,
-			'txt_before_loop' => '',
-			'txt_after_loop'  => '',
-			'txt_autop'       => 0
+			'posts_wrapper'     => '',
+			'posts_class'       => '',
+			'entry_wrapper'     => 'div',
+			'entry_class'       => '',
+			'title_src'         => 'default',
+			'title_meta'        => '',
+			'title_tag'         => 'h4',
+			'title_link'        => 'default',
+			'title_link_meta'   => '',
+			'title_class'       => 'title',
+			'content_src'       => 'excerpt',
+			'content_wrapper'   => '',
+			'content_class'     => '',
+			'content_meta'      => '',
+			'thumb_size'        => '',
+			'thumb_src'         => '',
+			'thumb_meta'        => '',
+			'thumb_link'        => 'post',
+			'thumb_link_meta'   => '',
+			'thumb_link_custom' => '',
+			'more_link'         => '',
+			'index_link'        => '',
+			'action_id'         => '',
+			'debug'             => false,
+			'txt_before_loop'   => '',
+			'txt_after_loop'    => '',
+			'txt_autop'         => 0
 		);
 		$instance = wp_parse_args( (array) $instance, $defaults );
 		$title = strip_tags( $instance['title'] );
@@ -227,7 +228,8 @@ class kc_widget_post extends WP_Widget {
 			'media_page' => __('Attachment page', 'kc-essentials'),
 			'media_file' => __('Attachment file', 'kc-essentials'),
 			'meta-post'  => __('Post custom field', 'kc-essentials'),
-			'meta-att'   => __('Thumb. custom field', 'kc-essentials')
+			'meta-att'   => __('Thumb. custom field', 'kc-essentials'),
+			'custom'     => __('Custom URL', 'kc-essentials')
 		);
 		$tags_posts = array(
 			'div'     => 'div',
@@ -703,18 +705,25 @@ class kc_widget_post extends WP_Widget {
 						'id'         => $this->get_field_id('thumb_link'),
 						'name'       => $this->get_field_name('thumb_link'),
 						'class'      => 'hasdep',
-						'data-child' => '.chThumbMeta',
+						'data-child' => '.chThumbLink',
 						'data-scope' => 'ul'
 					),
 					'current' => $instance['thumb_link'],
 					'options' => $src_thumb_link,
 				)) ?>
 			</li>
-			<li class="chThumbMeta" data-dep='["meta-post", "meta-att"]'>
+			<li class="chThumbLink" data-dep='["meta-post", "meta-att"]'>
 				<label for="<?php echo $this->get_field_id('thumb_link_meta') ?>" title="<?php _e("Fill this if you select 'Custom field' above", 'kc-essentials') ?>"><?php _e('Meta key', 'kc-essentials') ?> <small class="impo">(?)</small></label>
 				<?php echo kcForm::input(array(
 					'attr'    => array('id' => $this->get_field_id('thumb_link_meta'), 'name' => $this->get_field_name('thumb_link_meta')),
 					'current' => $instance['thumb_link_meta']
+				)) ?>
+			</li>
+			<li class="chThumbLink" data-dep='custom'>
+				<label for="<?php echo $this->get_field_id('thumb_link_custom') ?>" title="<?php _e("Fill this if you select 'Custom URL' above. ALL thumbnails will link to this URL.", 'kc-essentials') ?>"><?php _e('URL', 'kc-essentials') ?> <small class="impo">(?)</small></label>
+				<?php echo kcForm::input(array(
+					'attr'    => array('id' => $this->get_field_id('thumb_link_custom'), 'name' => $this->get_field_name('thumb_link_custom')),
+					'current' => $instance['thumb_link_custom']
 				)) ?>
 			</li>
 		</ul>
@@ -1044,6 +1053,10 @@ class kc_widget_post extends WP_Widget {
 			case 'meta-att' :
 				if ( isset($instance['thumb_link_meta']) && $instance['thumb_link_meta'] && $meta = get_post_meta($thumb_id, $instance['thumb_link_meta'], true) )
 					$thumb_link = $meta;
+			break;
+			case 'custom' :
+				if ( isset($instance['thumb_link_custom']) && $instance['thumb_link_custom'] )
+					$thumb_link = $instance['thumb_link_custom'];
 			break;
 		}
 
