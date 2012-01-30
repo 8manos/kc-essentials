@@ -589,8 +589,7 @@ class kc_widget_post extends WP_Widget {
 						'data-scope' => 'ul'
 					),
 					'current' => $instance['title_link'],
-					'options' => $src_common,
-					'none'    => false
+					'options' => $src_common
 				)) ?>
 			</li>
 			<li class="chTitleLink" data-dep='meta'>
