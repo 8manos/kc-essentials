@@ -1017,14 +1017,20 @@ class kc_widget_post extends WP_Widget {
 
 
 	function _kc_get_thumbnail( $post_id, $instance ) {
-		if ( get_post_type() == 'attachment' )
-			$thumb_id = $post_id;
-		elseif ( $instance['thumb_src'] == 'meta' && $meta = get_post_meta($post_id, $instance['thumb_meta'], true) )
-			$thumb_id = $meta;
-		elseif ( current_theme_supports('post-thumbnails') && has_post_thumbnail() )
-			$thumb_id = get_post_thumbnail_id( $post_id );
+		$thumb_id = ( get_post_type() == 'attachment' ) ? $post_id : '';
 
-		if ( !isset($thumb_id) )
+		switch ( $instance['thumb_src'] ) {
+			case 'meta' :
+				if ( $meta = get_post_meta($post_id, $instance['thumb_meta'], true) )
+					$thumb_id = $meta;
+			break;
+			default :
+				if ( current_theme_supports('post-thumbnails') && has_post_thumbnail() )
+					$thumb_id = get_post_thumbnail_id( $post_id );
+			break;
+		}
+
+		if ( !$thumb_id )
 			return;
 
 		$thumb_size = apply_filters( 'post_thumbnail_size', $instance['thumb_size'] );
