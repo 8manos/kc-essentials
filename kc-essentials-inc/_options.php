@@ -65,14 +65,6 @@ class kcEssentials_options {
 						)
 					),
 					array(
-						'id'      => 'editor',
-						'title'   => __('Editor', 'kc-essentials'),
-						'type'    => 'checkbox',
-						'options' => array(
-							'editor_tinymce_styles' => sprintf( __('Custom styles for tinyMCE', 'kc-essentials'), 'https://github.com/balupton/History.js/' )
-						)
-					),
-					array(
 						'id'      => 'enhancement',
 						'title'   => __('Enhancements', 'kc-essentials'),
 						'type'    => 'checkbox',
@@ -300,13 +292,6 @@ class kcEssentials_options {
 			)
 		);
 
-		# tinyMCE classes
-		$sections[] = array(
-			'id'    => 'editor_tinymce_styles',
-			'title' => __('Custom styles for tinyMCE', 'kc-essentials'),
-			'cb'    => array(__CLASS__, 'cb_section_tinymce_styles')
-		);
-
 
 
 		# The entry for KC Settings
@@ -351,7 +336,7 @@ class kcEssentials_options {
 
 
 	public static function load_actions() {
-		self::$db_value = kcEssentials::get_data('settings');
+		self::$db_value = kc_get_option( 'kc_essentials' );
 		wp_enqueue_style( 'kc-essentials' );
 		wp_enqueue_script( 'kc-essentials' );
 	}
@@ -412,50 +397,6 @@ class kcEssentials_options {
 
 		echo $out;
 	}
-
-
-	public static function cb_section_tinymce_styles( $args ) {
-		if ( !isset(self::$db_value['editor_tinymce_styles']['entries']) || empty(self::$db_value['editor_tinymce_styles']['entries']) )
-			$styles = array( array( 'id' => '', 'title' => '' ) );
-		else
-			$styles = self::$db_value['editor_tinymce_styles']['entries'];
-
-		$css = isset(self::$db_value['editor_tinymce_styles']['css']) ? self::$db_value['editor_tinymce_styles']['css'] : '';
-			//echo '<pre>'.print_r( $styles, true).'</pre>';
-
-
-		?>
-<table class="kcsse">
-	<thead>
-	  <tr>
-	    <th><?php _e('CSS class', 'kc-essentials') ?></th>
-	    <th><?php _e('Dropdown title', 'kc-essentials') ?></th>
-	    <th></th>
-	  </tr>
-	</thead>
-	<tfoot>
-	  <tr class="break">
-			<td colspan="3"><label for="kcsse-editor_tinymce_css"><?php _e('If you haven&#39;t add the style declaration in your theme&#39;s <code>editor-style.css</code> file, you can add them here.', 'kc-essentials') ?></label></td>
-		</tr>
-	  <tr>
-			<td colspan="3"><textarea id="kcsse-editor_tinymce_css" name="<?php echo "{$args['field_name']}[css]" ?>" class="widefat" rows="7"><?php echo $css ?></textarea></td>
-		</tr>
-	</tfoot>
-	<tbody class="kc-rows">
-<?php foreach ( $styles as $idx => $style ) { ?>
-		<tr class="row" data-mode="entries">
-		  <td><input class="widefat" name="<?php echo "{$args['field_name']}[entries][{$idx}][id]" ?>" type="text" value="<?php echo $style['id'] ?>" /></td>
-		  <td><input class="widefat" name="<?php echo "{$args['field_name']}[entries][{$idx}][title]" ?>" type="text" value="<?php echo $style['title'] ?>" /></td>
-		  <td class="actions"><a class="add">Add</a> <a class="del">Remove</a></td>
-		</tr>
-<?php } ?>
-	</tbody>
-</table>
-<?php
-
-
-
-}
 
 
 	public static function sanitize_widget_areas( $sidebars ) {

@@ -990,6 +990,7 @@ class kc_widget_post extends WP_Widget {
 
 		# Link
 		if ( isset($instance['title_link']) && $instance['title_link'] ) {
+			$link = '';
 			switch ( $instance['title_link'] ) {
 				case 'meta' :
 					if ( isset($instance['title_link_meta']) && $instance['title_link_meta'] && $meta = get_post_meta($post_id, $instance['title_link_meta'], true) )
@@ -1000,7 +1001,8 @@ class kc_widget_post extends WP_Widget {
 				break;
 			}
 
-			$title = "<a href='{$link}'>{$title}</a>";
+			if ( $link )
+				$title = "<a href='{$link}'>{$title}</a>";
 		}
 
 		if ( !isset($instance['title_tag']) || !$instance['title_tag'] )

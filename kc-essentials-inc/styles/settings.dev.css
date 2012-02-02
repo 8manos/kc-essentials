@@ -10,18 +10,3 @@
 }
 .kcsse-cwa input, .kcsse-cwa textarea {display:block}
 .kcsse-cwa .actions { padding-left:0; }
-
-table.kcsse {
-	width:99%;
-	margin:0 auto;
-}
-table.kcsse th {
-	font-weight:normal;
-	text-align:left;
-}
-table.kcsse .actions {
-	width:100px;
-	text-align:center;
-}
-table.kcsse .break td {padding-top:1em;}
-
