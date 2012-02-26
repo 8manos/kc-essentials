@@ -368,7 +368,8 @@ class kc_widget_post extends WP_Widget {
 		</ul>
 
 		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Post types', 'kc-essentials') ?></h5>
-		<div class="checks kcw-control-block post-types<?php if ( !$instance['post_type'] ) echo ' hide-if-js' ?>">
+		<?php $hide_class = ( !$instance['post_type'] ) ? ' hide-if-js': ''; ?>
+		<div class="checks kcw-control-block post-types<?php echo $hide_class ?>">
 			<?php echo kcForm::field(array(
 				'type'    => 'checkbox',
 				'attr'    => array('id' => $this->get_field_id('post_type'), 'name' => $this->get_field_name('post_type').'[]'),
@@ -378,7 +379,8 @@ class kc_widget_post extends WP_Widget {
 		</div>
 
 		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Post status', 'kc-essentials') ?></h5>
-		<div class="checks kcw-control-block post-status<?php if ( count($instance['post_status'] === 1) && $instance['post_status'][0] == 'publish' ) echo ' hide-if-js' ?>">
+		<?php $hide_class = ( count($instance['post_status'] === 1) && $instance['post_status'][0] == 'publish' ) ? ' hide-if-js': ''; ?>
+		<div class="checks kcw-control-block post-status<?php echo $hide_class ?>">
 			<?php echo kcForm::field(array(
 				'type'    => 'checkbox',
 				'attr'    => array('id' => $this->get_field_id('post_status'), 'name' => $this->get_field_name('post_status').'[]'),
@@ -396,7 +398,8 @@ class kc_widget_post extends WP_Widget {
 			unset( $tq_values['relation'] );
 		?>
 		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Taxonomies', 'kc-essentials') ?></h5>
-		<ul class="kcw-control-block taxonomies<?php if ( count($tq_values) == 1 && empty($tq_values[0]['taxonomy']) ) echo ' hide-if-js' ?>">
+		<?php $hide_class = ( count($tq_values) == 1 && empty($tq_values[0]['taxonomy']) ) ? ' hide-if-js': ''; ?>
+		<ul class="kcw-control-block taxonomies<?php echo $hide_class ?>">
 			<li class="relation">
 				<label for="<?php echo "{$tq_id}-relation" ?>"><?php _e('Relation', 'kc-essentials') ?></label>
 				<?php echo kcForm::select(array(
@@ -459,7 +462,8 @@ class kc_widget_post extends WP_Widget {
 			$mq_id = $this->get_field_id('meta_query');
 		?>
 		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Metadata', 'kc-essentials') ?></h5>
-		<ul class="kcw-control-block metadata<?php if ( count($instance['meta_query']) == 1 && empty($instance['meta_query'][0]['key']) ) echo ' hide-if-js' ?>">
+		<?php $hide_class = ( count($instance['meta_query']) == 1 && empty($instance['meta_query'][0]['key']) ) ? ' hide-if-js': ''; ?>
+		<ul class="kcw-control-block metadata<?php echo $hide_class ?>">
 			<li>
 				<ul class="meta-queries">
 					<?php foreach ( $instance['meta_query'] as $mq_idx => $mq ) { ?>
@@ -497,7 +501,8 @@ class kc_widget_post extends WP_Widget {
 		</ul>
 
 		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Posts wrapper', 'kc-essentials') ?></h5>
-		<ul class="kcw-control-block hide-if-js">
+		<?php $hide_class = ( $instance['posts_wrapper'] == '' ) ? ' hide-if-js': ''; ?>
+		<ul class="kcw-control-block<?php echo $hide_class ?>">
 			<li>
 				<label for="<?php echo $this->get_field_id('posts_wrapper') ?>"><?php _e('Tag', 'kc-essentials') ?></label>
 				<?php echo kcForm::field(array(
@@ -523,7 +528,8 @@ class kc_widget_post extends WP_Widget {
 		</ul>
 
 		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Entry wrapper', 'kc-essentials') ?></h5>
-		<ul class="kcw-control-block hide-if-js">
+		<?php $hide_class = ( $instance['entry_wrapper'] == 'div' && $instance['entry_class'] == '' ) ? ' hide-if-js': ''; ?>
+		<ul class="kcw-control-block<?php echo $hide_class ?>">
 			<li>
 				<label for="<?php echo $this->get_field_id('entry_wrapper') ?>"><?php _e('Tag', 'kc-essentials') ?></label>
 				<?php echo kcForm::field(array(
@@ -549,7 +555,15 @@ class kc_widget_post extends WP_Widget {
 		</ul>
 
 		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Entry title', 'kc-essentials') ?></h5>
-		<ul class="kcw-control-block hide-if-js">
+		<?php
+			$hide_class = (
+				$instance['title_src'] == 'default'
+				&& $instance['title_tag'] == 'h4'
+				&& $instance['title_class'] == 'title'
+				&& $instance['title_link'] == 'default'
+			) ? ' hide-if-js': '';
+		?>
+		<ul class="kcw-control-block<?php echo $hide_class ?>">
 			<li>
 				<label for="<?php echo $this->get_field_id('title_src') ?>"><?php _e('Source', 'kc-essentials') ?></label>
 				<?php echo kcForm::field(array(
@@ -619,7 +633,14 @@ class kc_widget_post extends WP_Widget {
 		</ul>
 
 		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Entry content', 'kc-essentials') ?></h5>
-		<ul class="kcw-control-block hide-if-js">
+		<?php
+			$hide_class = (
+				$instance['content_src'] == 'excerpt'
+				&& $instance['content_wrapper'] == ''
+				&& $instance['more_link'] == ''
+			) ? ' hide-if-js': '';
+		?>
+		<ul class="kcw-control-block<?php echo $hide_class ?>">
 			<li>
 				<label for="<?php echo $this->get_field_id('content_src') ?>"><?php _e('Source', 'kc-essentials') ?></label>
 				<?php echo kcForm::field(array(
@@ -675,7 +696,8 @@ class kc_widget_post extends WP_Widget {
 
 		<?php if ( !empty($image_sizes) ) { ?>
 		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Thumbnail', 'kc-essentials') ?></h5>
-		<ul class="kcw-control-block hide-if-js">
+		<?php $hide_class = ( $instance['thumb_size'] == '' ) ? ' hide-if-js': ''; ?>
+		<ul class="kcw-control-block<?php echo $hide_class ?>">
 			<li>
 				<label for="<?php echo $this->get_field_id('thumb_size') ?>"><?php _e('Size', 'kc-essentials') ?></label>
 				<?php echo kcForm::field(array(
@@ -746,7 +768,8 @@ class kc_widget_post extends WP_Widget {
 		<?php } ?>
 
 		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Additional texts', 'kc-essentials') ?></h5>
-		<div class="kcw-control-block hide-if-js">
+		<?php $hide_class = ( $instance['txt_before_loop'] == '' && $instance['txt_after_loop'] == '' ) ? ' hide-if-js': ''; ?>
+		<ul class="kcw-control-block<?php echo $hide_class ?>">
 			<li>
 				<label for="<?php echo $this->get_field_id('txt_before_loop') ?>"><?php _e('Before loop', 'kc-essentials') ?></label>
 				<?php echo kcForm::textarea(array(
@@ -771,10 +794,11 @@ class kc_widget_post extends WP_Widget {
 					'none'    => false
 				)) ?>
 			</li>
-		</div>
+		</ul>
 
 		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Advanced', 'kc-essentials') ?></h5>
-		<ul class="kcw-control-block<?php if ( !$instance['action_id'] && !$instance['debug']) echo ' hide-if-js' ?>">
+		<?php $hide_class = ( !$instance['action_id'] && !$instance['debug'] ) ? ' hide-if-js': ''; ?>
+		<ul class="kcw-control-block<?php echo $hide_class ?>">
 			<li>
 				<label for="<?php echo $this->get_field_id('action_id') ?>" title="<?php _e('Please refer to the documentation about this', 'kc-essentials') ?>"><?php _e('Identifier', 'kc-essentials') ?> <small class="impo">(?)</small></label>
 				<?php echo kcForm::input(array(
