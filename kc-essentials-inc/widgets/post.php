@@ -20,13 +20,20 @@ class kc_widget_post extends WP_Widget {
 		if ( !is_numeric($new['posts_per_page']) )
 			$new['posts_per_page'] = get_option('posts_per_page');
 
-		if ( empty($new['post_type']) )
-			$new['post_type'] = array('post');
+		# Post parent
+		if ( strlen($new['post_parent']) && $new['post_parent'] !== '%current%' ) {
+			$parent_id = absint( $new['post_parent'] );
+			$new['post_parent'] = $parent_id ? $parent_id : '';
+		}
+
+		if ( !isset($new['post_type']) )
+			$new['post_type'] = array();
 
 		# Post status
 		## Media/attachment needs the 'inherit' status so force it when the 'attachment' post type is checked
-		if ( in_array('attachment', $new['post_type']) && !in_array('inherit', $new['post_status']) )
+		if ( !empty($new['post_type']) && in_array('attachment', $new['post_type']) && !in_array('inherit', $new['post_status']) )
 			$new['post_status'][] = 'inherit';
+
 		if ( empty($new['post_status']) )
 			$new['post_status'] = array('publish');
 
@@ -90,9 +97,10 @@ class kc_widget_post extends WP_Widget {
 	function form( $instance ) {
 		$defaults = array(
 			'title'             => '',
-			'post_type'         => array('post'),
+			'post_type'         => array(),
 			'post_status'       => array('publish'),
 			'posts_per_page'    => get_option('posts_per_page'),
+			'post_parent'       => '',
 			'include'           => '',
 			'exclude'           => '',
 			'posts_order'       => 'DESC',
@@ -272,32 +280,21 @@ class kc_widget_post extends WP_Widget {
 		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Basic', 'kc-essentials') ?></h5>
 		<ul class="kcw-control-block">
 			<li>
-				<label><?php _e('Post type', 'kc-essentials') ?></label>
-				<div class="checks">
-					<?php echo kcForm::field(array(
-						'type'    => 'checkbox',
-						'attr'    => array('id' => $this->get_field_id('post_type'), 'name' => $this->get_field_name('post_type').'[]'),
-						'current' => $instance['post_type'],
-						'options' => $post_types
-					)) ?>
-				</div>
-			</li>
-			<li>
-				<label><?php _e('Post status', 'kc-essentials') ?></label>
-				<div class="checks">
-					<?php echo kcForm::field(array(
-						'type'    => 'checkbox',
-						'attr'    => array('id' => $this->get_field_id('post_status'), 'name' => $this->get_field_name('post_status').'[]'),
-						'current' => $instance['post_status'],
-						'options' => $post_statuses
-					)) ?>
-				</div>
-			</li>
-			<li>
 				<label for="<?php echo $this->get_field_id('posts_per_page'); ?>" title="<?php _e("Use -1 to show all posts") ?>"><?php _e('Count', 'kc-essentials') ?> <small class="impo">(?)</small></label>
 				<?php echo kcForm::input(array(
 					'attr'    => array('id' => $this->get_field_id('posts_per_page'), 'name' => $this->get_field_name('posts_per_page')),
 					'current' => $instance['posts_per_page']
+				)) ?>
+			</li>
+			<li>
+				<label for="<?php echo $this->get_field_id('post_parent'); ?>" title="<?php _e("Parent post, use %current% to get currently viewed post ID, or double click to search.") ?>"><?php _e('Parent', 'kc-essentials') ?> <small class="impo">(?)</small></label>
+				<?php echo kcForm::input(array(
+					'attr'    => array(
+						'id'    => $this->get_field_id('post_parent'),
+						'name'  => $this->get_field_name('post_parent'),
+						'class' => 'kc-find-post unique'
+					),
+					'current' => $instance['post_parent']
 				)) ?>
 			</li>
 			<li>
@@ -369,6 +366,26 @@ class kc_widget_post extends WP_Widget {
 				)) ?>
 			</li>
 		</ul>
+
+		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Post types', 'kc-essentials') ?></h5>
+		<div class="checks kcw-control-block post-types<?php if ( !$instance['post_type'] ) echo ' hide-if-js' ?>">
+			<?php echo kcForm::field(array(
+				'type'    => 'checkbox',
+				'attr'    => array('id' => $this->get_field_id('post_type'), 'name' => $this->get_field_name('post_type').'[]'),
+				'current' => $instance['post_type'],
+				'options' => $post_types
+			)) ?>
+		</div>
+
+		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Post status', 'kc-essentials') ?></h5>
+		<div class="checks kcw-control-block post-status<?php if ( count($instance['post_status'] === 1) && $instance['post_status'][0] == 'publish' ) echo ' hide-if-js' ?>">
+			<?php echo kcForm::field(array(
+				'type'    => 'checkbox',
+				'attr'    => array('id' => $this->get_field_id('post_status'), 'name' => $this->get_field_name('post_status').'[]'),
+				'current' => $instance['post_status'],
+				'options' => $post_statuses
+			)) ?>
+		</div>
 
 		<?php
 			$tq_id = $this->get_field_id('tax_query');
@@ -757,7 +774,7 @@ class kc_widget_post extends WP_Widget {
 		</div>
 
 		<h5 class="kcw-head" title="<?php _e('Show/hide', 'kc-essentials') ?>"><?php _e('Advanced', 'kc-essentials') ?></h5>
-		<ul class="kcw-control-block hide-if-js">
+		<ul class="kcw-control-block<?php if ( !$instance['action_id'] && !$instance['debug']) echo ' hide-if-js' ?>">
 			<li>
 				<label for="<?php echo $this->get_field_id('action_id') ?>" title="<?php _e('Please refer to the documentation about this', 'kc-essentials') ?>"><?php _e('Identifier', 'kc-essentials') ?> <small class="impo">(?)</small></label>
 				<?php echo kcForm::input(array(
@@ -804,18 +821,46 @@ class kc_widget_post extends WP_Widget {
 		$debug .= "<pre>".var_export($this, true)."</pre>";
 		$debug .= "<h5>".__('Widget options', 'kc-essentials')."</h5>\n";
 		$debug .= "<pre>".var_export($instance, true)."</pre>";
+		$debug .= "<h5>".__('Query parameters', 'kc-essentials')."</h5>\n";
 
 		$q_args = array(
-			'post_type'      => $instance['post_type'],
 			'posts_per_page' => $instance['posts_per_page'],
 			'order'          => $instance['posts_order'],
 			'orderby'        => $instance['posts_orderby']
 		);
 
+		# post parent
+		if ( $instance['post_parent'] ) {
+			if ( $instance['post_parent'] === '%current%' && is_singular() )
+				$parent_id = get_queried_object_id();
+			else
+				$parent_id = absint($instance['post_parent']);
+
+			$parent_type = get_post_type( $parent_id );
+			if ( $parent_id && isset(kcSettings_options::$post_types[$parent_type]) ) {
+				$instance['post_parent'] = $parent_id;
+				$instance['post_type'] = array( $parent_type );
+			}
+			else {
+				# Invalid post parent, abort.
+				if ( $instance['debug'] ) {
+					$debug .= "<pre>".var_export($q_args, true)."</pre>";
+					$debug .= '<p><strong>'.__('Invalid post parent, aborted.').'</strong></p>';
+					echo $debug;
+				}
+
+				return;
+			}
+		}
+			$q_args['post_parent'] = $instance['post_parent'];
+
 		# post orderby
 		if ( $instance['posts_orderby'] == 'post__in' )
 			add_filter( 'posts_orderby', array(&$this, '_sort_query_by_post_in'), 10, 2 );
 
+		# Post type
+		if ( $instance['post_type'] )
+			$q_args['post_type'] = $instance['post_type'];
 
 		# Post status
 		$q_args['post_status'] = implode( ',', $instance['post_status'] );
@@ -864,7 +909,6 @@ class kc_widget_post extends WP_Widget {
 		foreach ( $af_IDs as $af_id )
 			$q_args = apply_filters( "kc_widget_post-query_args-{$af_id}", $q_args, $instance, $this );
 
-		$debug .= "<h5>".__('Query parameters', 'kc-essentials')."</h5>\n";
 		$debug .= "<pre>".var_export($q_args, true)."</pre>";
 
 		$wp_query = new WP_Query($q_args);

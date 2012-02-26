@@ -86,7 +86,10 @@
 		    current = current === '' ? [] : current.split(','),
 		    newID   = $selected.val();
 
-		if ( $.inArray(newID, current) < 0 ) {
+		if ( $target.is('.unique') ) {
+			$target.val( newID );
+		}
+		else if ( $.inArray(newID, current) < 0 ) {
 			current.push(newID);
 			$target.val( current.join(',') );
 		}
