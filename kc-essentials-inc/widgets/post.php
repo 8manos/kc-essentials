@@ -26,8 +26,15 @@ class kc_widget_post extends WP_Widget {
 			$new['post_parent'] = $parent_id ? $parent_id : '';
 		}
 
+		# Post type
 		if ( !isset($new['post_type']) )
 			$new['post_type'] = array();
+
+		# Offset
+		if ( !isset($new['offset']) ) {
+			$offset = absint( $new['offset'] );
+			$new['offset'] = $offset ? $offset : '';
+		}
 
 		# Post status
 		## Media/attachment needs the 'inherit' status so force it when the 'attachment' post type is checked
@@ -103,6 +110,7 @@ class kc_widget_post extends WP_Widget {
 			'post_parent'       => '',
 			'include'           => '',
 			'exclude'           => '',
+			'offset'            => '',
 			'posts_order'       => 'DESC',
 			'posts_orderby'     => 'date',
 			'meta_key'          => '',
@@ -317,6 +325,13 @@ class kc_widget_post extends WP_Widget {
 						'class' => 'kc-find-post'
 					),
 					'current' => $instance['exclude']
+				)) ?>
+			</li>
+			<li>
+				<label for="<?php echo $this->get_field_id('offset'); ?>"><?php _e('Offset', 'kc-essentials') ?></label>
+				<?php echo kcForm::input(array(
+					'attr'    => array('id' => $this->get_field_id('offset'), 'name' => $this->get_field_name('offset')),
+					'current' => $instance['offset']
 				)) ?>
 			</li>
 			<li>
@@ -877,6 +892,10 @@ class kc_widget_post extends WP_Widget {
 			}
 		}
 			$q_args['post_parent'] = $instance['post_parent'];
+
+		# Offset
+		if ( isset($instance['offset']) && $instance['offset'] )
+			$q_args['offset'] = $instance['offset'];
 
 		# post orderby
 		if ( $instance['posts_orderby'] == 'post__in' )
