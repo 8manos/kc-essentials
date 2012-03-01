@@ -38,6 +38,7 @@ class kcEssentials_widgets {
 				register_widget( "kc_widget_{$widget}" );
 			}
 
+			kcSettings::$data['pages'][] = 'widgets.php';
 			add_action( 'load-widgets.php', array(__CLASS__, '_actions') );
 		}
 	}

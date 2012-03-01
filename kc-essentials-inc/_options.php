@@ -156,8 +156,9 @@ class kcEssentials_options {
 					'title'   => __('Widgets', 'kc-essentials'),
 					'type'    => 'checkbox',
 					'options' => array(
-						'post' => __('KC Posts', 'kc-essentials'),
-						'menu' => __('KC Custom Menu', 'kc-essentials')
+						'post'    => __('KC Posts', 'kc-essentials'),
+						'menu'    => __('KC Custom Menu', 'kc-essentials'),
+						'sbanner' => __('KC Simple Banner', 'kc-essentials')
 					)
 				)
 			),
