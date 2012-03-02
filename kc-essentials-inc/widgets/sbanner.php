@@ -167,7 +167,7 @@ class kc_widget_sbanner extends WP_Widget {
 
 		$output  = $args['before_widget'];
 		if ( $title = apply_filters( 'widget_title', $instance['title'] ) )
-			$output .= $before_title . $title . $after_title;
+			$output .= $args['before_title'] . $title . $args['after_title'];
 		$output .= $banner;
 		$output .= $args['after_widget'];
 
