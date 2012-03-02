@@ -100,7 +100,7 @@ class kc_widget_sbanner extends WP_Widget {
 						'id'         => $this->get_field_id('is_flash'),
 						'name'       => $this->get_field_name('is_flash'),
 						'class'      => 'hasdep',
-						'data-child' => '.sbanner-flashdim',
+						'data-child' => '.sbanner-prop',
 						'data-scope' => 'ul'
 					),
 					'options' => kcSettings_options::$yesno,
@@ -108,21 +108,21 @@ class kc_widget_sbanner extends WP_Widget {
 					'current' => $instance['is_flash']
 				) ); ?>
 			</li>
-			<li class="sbanner-flashdim" data-dep='1'>
+			<li class="sbanner-prop" data-dep='1'>
 				<label for="<?php echo $this->get_field_id('width') ?>"><?php _e('Width', 'kc-essentials') ?></label>
 				<?php echo kcForm::input(array(
 					'attr'    => array('id' => $this->get_field_id('width'), 'name' => $this->get_field_name('width')),
 					'current' => $instance['width']
 				)) ?>
 			</li>
-			<li class="sbanner-flashdim" data-dep='1'>
+			<li class="sbanner-prop" data-dep='1'>
 				<label for="<?php echo $this->get_field_id('height') ?>"><?php _e('Height', 'kc-essentials') ?></label>
 				<?php echo kcForm::input(array(
 					'attr'    => array('id' => $this->get_field_id('height'), 'name' => $this->get_field_name('height')),
 					'current' => $instance['height']
 				)) ?>
 			</li>
-			<li>
+			<li class="sbanner-prop" data-dep='0'>
 				<label for="<?php echo $this->get_field_id('link') ?>"><?php _e('Link URL', 'kc-essentials') ?></label>
 				<?php echo kcForm::input(array(
 					'attr'    => array(
@@ -160,9 +160,9 @@ class kc_widget_sbanner extends WP_Widget {
 		}
 		else {
 			$banner = "<img src='{$url}' alt='' />";
+		}
 			if ( $instance['link'] )
 				$banner = "<a href='{$instance['link']}'>{$banner}</a>";
-		}
 		$banner = "<div class='kcw-sbanner-wrap'>{$banner}</div>\n";
 
 		$output  = $args['before_widget'];
