@@ -25,6 +25,7 @@
 .kcw-control-block select,
 .kcw-control-block input[type=text],
 .kcw-control-block .help,
+.kcw-control-block .kcs-file-single,
 .kcw-control-block .checks {
 	float:right;
 	width:61%;
@@ -61,7 +62,10 @@
 	padding-top:.5em}
 .kcw-control-block .info {
 	padding-top:.65em !important;
-	line-height:1.2}
+	line-height:1.2;
+}
+.kcw-control-block .kcs-file-single {padding-top:5px;}
+.kcw-control-block .kcs-file-single span {margin:0}
 
 .kcw-control-normal input,
 .kcw-control-normal select,

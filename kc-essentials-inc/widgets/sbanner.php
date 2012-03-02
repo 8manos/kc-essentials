@@ -18,8 +18,8 @@ class kc_widget_sbanner extends WP_Widget {
 			'source'      => 'post',
 			'post_id'     => '',
 			'is_flash'    => 0,
-			'height'      => '200',
-			'width'       => '100',
+			'width'       => '250',
+			'height'      => '100',
 			'url'         => '',
 			'link'        => '',
 			'text_before' => '',
@@ -48,90 +48,91 @@ class kc_widget_sbanner extends WP_Widget {
 			</li>
 		</ul>
 
-		<h5><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Source', 'kc-essentials') ?></label></h5>
-		<p>
-			<?php echo kcForm::field(array(
-				'type'    => 'select',
-				'attr'    => array(
-					'id'    => $this->get_field_id('source'),
-					'name'  => $this->get_field_name('source'),
-					'class'      => 'widefat hasdep',
-					'data-child' => '.sbanner-src',
-					'data-scope' => 'div'
-				),
-				'options' => array(
-					'post' => __('Post', 'kc-essentials'),
-					'url'  => __('Custom URL', 'kc-essentials')
-				),
-				'none'    => false,
-				'current' => $instance['source']
-			)) ?>
-		</p>
-		<p class="sbanner-src" data-dep="url">
-			<label for="<?php echo $this->get_field_id('url') ?>"><?php _e('Custom image/flash URL', 'kc-essentials') ?></label>
-			<?php echo kcForm::input(array(
-				'attr'    => array(
-					'id'   => $this->get_field_id('url'),
-					'name' => $this->get_field_name('url'),
-					'class' => 'widefat'
-				),
-				'current' => $instance['url']
-			)) ?>
-		</p>
-		<div class="sbanner-src" data-dep="post">
-			<label for="<?php echo $this->get_field_id('post_id') ?>"><?php _e('Attachment', 'kc-essentials') ?></label>
-			<?php echo _kc_field_file_single( array(
-				'field' => array (
-					'mode'  => 'single',
-					'size'  => 'full'
-				),
-				'id'       => 'icon',
-				'name'     => $this->get_field_name('post_id'),
-				'db_value' => $instance['post_id'],
-				'up_url'   => 'media-upload.php?kcsfs=true&post_id=0&tab=library&TB_iframe=1',
-			)); ?>
-		</div>
-		<p>
-			<label for="<?php echo $this->get_field_id('is_flash') ?>"><?php _e('Flash?', 'kc-essentials') ?></label>
-			<?php echo kcForm::field(array(
-				'type'    => 'select',
-				'attr'    => array(
-					'id'    => $this->get_field_id('is_flash'),
-					'name'  => $this->get_field_name('is_flash'),
-					'class'      => 'widefat',
-				),
-				'options' => kcSettings_options::$yesno,
-				'none'    => false,
-				'current' => $instance['is_flash']
-			) ); ?>
-		</p>
-		<ul class="kcw-control-block" data-dep="1">
+		<h5 class="kcw-head"><?php _e('Basic', 'kc-essentials') ?></h5>
+		<ul class="kcw-control-block">
 			<li>
+				<label for="<?php echo $this->get_field_id('source'); ?>"><?php _e('Source', 'kc-essentials') ?></label>
+				<?php echo kcForm::field(array(
+					'type'    => 'select',
+					'attr'    => array(
+						'id'    => $this->get_field_id('source'),
+						'name'  => $this->get_field_name('source'),
+						'class'      => 'hasdep',
+						'data-child' => '.sbanner-src',
+						'data-scope' => 'div'
+					),
+					'options' => array(
+						'post' => __('Post', 'kc-essentials'),
+						'url'  => __('Custom URL', 'kc-essentials')
+					),
+					'none'    => false,
+					'current' => $instance['source']
+				)) ?>
+			</li>
+			<li class="sbanner-src" data-dep="url">
+				<label for="<?php echo $this->get_field_id('url') ?>"><?php _e('File URL', 'kc-essentials') ?></label>
+				<?php echo kcForm::input(array(
+					'attr'    => array(
+						'id'   => $this->get_field_id('url'),
+						'name' => $this->get_field_name('url')
+					),
+					'current' => $instance['url']
+				)) ?>
+			</li>
+			<li class="sbanner-src" data-dep="post">
+				<label for="<?php echo $this->get_field_id('post_id') ?>"><?php _e('Attachment', 'kc-essentials') ?></label>
+				<?php echo _kc_field_file_single( array(
+					'field' => array (
+						'mode'  => 'single',
+						'size'  => 'thumbnail'
+					),
+					'id'       => $this->get_field_id('post_id'),
+					'name'     => $this->get_field_name('post_id'),
+					'db_value' => $instance['post_id'],
+					'up_url'   => 'media-upload.php?kcsfs=true&post_id=0&tab=library&TB_iframe=1',
+				)); ?>
+			</li>
+			<li>
+				<label for="<?php echo $this->get_field_id('is_flash') ?>"><?php _e('Flash?', 'kc-essentials') ?></label>
+				<?php echo kcForm::field(array(
+					'type'    => 'select',
+					'attr'         => array(
+						'id'         => $this->get_field_id('is_flash'),
+						'name'       => $this->get_field_name('is_flash'),
+						'class'      => 'hasdep',
+						'data-child' => '.sbanner-flashdim',
+						'data-scope' => 'ul'
+					),
+					'options' => kcSettings_options::$yesno,
+					'none'    => false,
+					'current' => $instance['is_flash']
+				) ); ?>
+			</li>
+			<li class="sbanner-flashdim" data-dep='1'>
 				<label for="<?php echo $this->get_field_id('width') ?>"><?php _e('Width', 'kc-essentials') ?></label>
 				<?php echo kcForm::input(array(
 					'attr'    => array('id' => $this->get_field_id('width'), 'name' => $this->get_field_name('width')),
 					'current' => $instance['width']
 				)) ?>
 			</li>
-			<li>
+			<li class="sbanner-flashdim" data-dep='1'>
 				<label for="<?php echo $this->get_field_id('height') ?>"><?php _e('Height', 'kc-essentials') ?></label>
 				<?php echo kcForm::input(array(
 					'attr'    => array('id' => $this->get_field_id('height'), 'name' => $this->get_field_name('height')),
 					'current' => $instance['height']
 				)) ?>
 			</li>
+			<li>
+				<label for="<?php echo $this->get_field_id('link') ?>"><?php _e('Link URL', 'kc-essentials') ?></label>
+				<?php echo kcForm::input(array(
+					'attr'    => array(
+						'id'   => $this->get_field_id('link'),
+						'name' => $this->get_field_name('link')
+					),
+					'current' => $instance['link']
+				)) ?>
+			</li>
 		</ul>
-		<p>
-			<label for="<?php echo $this->get_field_id('link') ?>"><?php _e('Link URL', 'kc-essentials') ?></label>
-			<?php echo kcForm::input(array(
-				'attr'    => array(
-					'id'   => $this->get_field_id('link'),
-					'name' => $this->get_field_name('link'),
-					'class' => 'widefat'
-				),
-				'current' => $instance['link']
-			)) ?>
-		</p>
 	<?php }
 
 
