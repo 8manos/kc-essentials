@@ -1090,7 +1090,7 @@ class kc_widget_post extends WP_Widget {
 			}
 
 			if ( $link )
-				$title = "<a href='{$link}'>{$title}</a>";
+				$title = "<a href='{$link}' title='".the_title_attribute( array('echo' => false) )."'>{$title}</a>";
 		}
 
 		if ( !isset($instance['title_tag']) || !$instance['title_tag'] )
