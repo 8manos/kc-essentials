@@ -869,7 +869,7 @@ class kc_widget_post extends WP_Widget {
 		);
 
 		# post parent
-		if ( $instance['post_parent'] ) {
+		if ( isset($instance['post_parent']) && $instance['post_parent'] ) {
 			if ( $instance['post_parent'] === '%current%' && is_singular() )
 				$parent_id = get_queried_object_id();
 			else
@@ -890,8 +890,9 @@ class kc_widget_post extends WP_Widget {
 
 				return;
 			}
-		}
+
 			$q_args['post_parent'] = $instance['post_parent'];
+		}
 
 		# Offset
 		if ( isset($instance['offset']) && $instance['offset'] )
