@@ -97,12 +97,22 @@ class kc_widget_term extends WP_Widget {
 
 
 	function widget( $args, $instance ) {
-		$misc = $instance['misc'];
-		unset( $instance['misc'] );
-		foreach ( $misc as $m )
-			$instance[$m] = true;
-		$instance['echo'] = false;
-		$instance['title_li'] = '';
+		$misc = array(
+			'hierarchical'       => false,
+			'hide_empty'         => false,
+			'show_count'         => false,
+			'use_desc_for_title' => false,
+			'echo'               => false,
+			'title_li'           => ''
+		);
+		if ( isset($instance['misc']) && !empty($instance['misc']) ) {
+			$_misc = $instance['misc'];
+			unset( $instance['misc'] );
+
+			foreach ( $_misc as $m )
+				$misc[$m] = true;
+		}
+		$instance += $misc;
 
 		$list = wp_list_categories( $instance );
 		if ( !$list )
