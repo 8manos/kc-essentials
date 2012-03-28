@@ -1039,7 +1039,7 @@ class kc_widget_post extends WP_Widget {
 				$output .= "</{$instance['posts_wrapper']}>\n";
 
 			# Text before loop
-			if ( isset($instance['txt_before_loop']) && !empty($instance['txt_before_loop']) ) {
+			if ( isset($instance['txt_after_loop']) && !empty($instance['txt_after_loop']) ) {
 				if ( isset($instance['txt_autop']) && $instance['txt_autop'] )
 					$output .= wpautop( $instance['txt_after_loop'] );
 				else
