@@ -95,16 +95,15 @@ class kc_widget_twitter extends WP_Widget {
 		if ( !$instance['username'] )
 			return;
 
-		$list = get_transient( "kc_twitter-{$instance['username']}" );
+		$list = get_transient( "kc_twitter_{$instance['username']}" );
 		if ( !$list ) {
-			$json = wp_remote_get('http://api.twitter.com/1/statuses/user_timeline.json?screen_name=kucrut&count=10');
+			$json = wp_remote_get("http://api.twitter.com/1/statuses/user_timeline.json?screen_name={$instance['username']}&count={$instance['count']}");
 			if ( is_wp_error($json) ) {
-				echo 'Ouch!';
 				return;
 			}
 			else {
 				$list = json_decode( $json['body'], true );
-				set_transient( "kc_twitter-{$instance['username']}", $list, $instance['expiration'] );
+				set_transient( "kc_twitter_{$instance['username']}", $list, $instance['expiration'] );
 			}
 		}
 
