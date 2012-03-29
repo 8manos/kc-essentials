@@ -160,6 +160,7 @@ class kcEssentials_options {
 						'term'    => __('KC Terms', 'kc-essentials'),
 						'menu'    => __('KC Custom Menu', 'kc-essentials'),
 						'sbanner' => __('KC Simple Banner', 'kc-essentials'),
+						'twitter' => __('KC Twitter Timeline', 'kc-essentials')
 					)
 				)
 			),
