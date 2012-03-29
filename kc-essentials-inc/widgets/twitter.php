@@ -19,15 +19,11 @@ class kc_widget_twitter extends WP_Widget {
 			'expiration'  => 60,
 			'count'       => 5,
 			'follow_text' => __('Follow me', 'kc-essentials'),
+			'show_date'   => true,
+			'date_format' => 'relative',
+			'date_custom' => get_option('date_format'),
 			'debug'       => 0
 		);
-	}
-
-
-	function update( $new, $old ) {
-		$new['expiration'] = ( isset($new['expiration']) && absint($new['expiration']) >= 5 ) ? $new['expiration'] : $this->defaults['expiration'];
-		$new['count'] = ( isset($new['count']) && absint($new['count']) >= 1 ) ? $new['count'] : $this->defaults['count'];
-		return $new;
 	}
 
 
@@ -78,7 +74,51 @@ class kc_widget_twitter extends WP_Widget {
 				)) ?>
 			</li>
 			<li>
-				<label for="<?php echo $this->get_field_id('follow_text') ?>" title="<?php _e('Leave empty to not show it', 'kc-essentials') ?>"><?php _e('Follow text', 'kc-essentials') ?> <small class="impo">(?)</small></label>
+				<label for="<?php echo $this->get_field_id('show_date') ?>"><?php _e('Show date', 'kc-essentials') ?></label>
+				<?php echo kcForm::field(array(
+					'type'    => 'select',
+					'attr'    => array(
+						'id'         => $this->get_field_id('show_date'),
+						'name'       => $this->get_field_name('show_date'),
+						'class'      => 'hasdep',
+						'data-child' => '#p-'.$this->get_field_id('date_format')
+					),
+					'options' => kcSettings_options::$yesno,
+					'none'    => false,
+					'current' => $instance['show_date']
+				)) ?>
+			</li>
+			<li id="<?php echo 'p-'.$this->get_field_id('date_format') ?>" data-dep="1">
+				<label for="<?php echo $this->get_field_id('date_format') ?>"><?php _e('Date format', 'kc-essentials') ?></label>
+				<?php echo kcForm::field(array(
+					'type'    => 'select',
+					'attr'    => array(
+						'id'         => $this->get_field_id('date_format'),
+						'name'       => $this->get_field_name('date_format'),
+						'class'      => 'hasdep',
+						'data-child' => '#p-'.$this->get_field_id('date_custom')
+					),
+					'options' => array(
+						'relative' => __('Relative', 'kc-essentials'),
+						'global'   => __('Use global setting', 'kc-essentials'),
+						'custom'   => __('Custom', 'kc-essentials')
+					),
+					'none'    => false,
+					'current' => $instance['date_format']
+				)) ?>
+			</li>
+			<li id="<?php echo 'p-'.$this->get_field_id('date_custom') ?>" data-dep="custom">
+				<label for="<?php echo $this->get_field_id('date_custom') ?>" title="<?php _e('Use PHP date format', 'kc-essentials') ?>"><?php _e('Custom format', 'kc-essentials') ?> <small class="impo">(?)</small></label>
+				<?php echo kcForm::input(array(
+					'attr'    => array(
+						'id'   => $this->get_field_id('date_custom'),
+						'name' => $this->get_field_name('date_custom')
+					),
+					'current' => $instance['date_custom']
+				)) ?>
+			</li>
+			<li>
+				<label for="<?php echo $this->get_field_id('follow_text') ?>" title="<?php _e('Leave empty to disable', 'kc-essentials') ?>"><?php _e('Follow text', 'kc-essentials') ?> <small class="impo">(?)</small></label>
 				<?php echo kcForm::input(array(
 					'attr'    => array(
 						'id'   => $this->get_field_id('follow_text'),
@@ -91,6 +131,16 @@ class kc_widget_twitter extends WP_Widget {
 	<?php }
 
 
+	function update( $new, $old ) {
+		$new['expiration'] = ( isset($new['expiration']) && absint($new['expiration']) >= 5 ) ? $new['expiration'] : $this->defaults['expiration'];
+		$new['count'] = ( isset($new['count']) && absint($new['count']) >= 1 ) ? $new['count'] : $this->defaults['count'];
+		if ( $new['date_format'] == 'custom' && $new['date_custom'] == '' )
+			$new['date_custom'] = get_option( 'date_format' );
+
+		return $new;
+	}
+
+
 	function widget( $args, $instance ) {
 		if ( !$instance['username'] )
 			return;
@@ -98,12 +148,12 @@ class kc_widget_twitter extends WP_Widget {
 		$list = get_transient( "kc_twitter_{$instance['username']}" );
 		if ( !$list ) {
 			$json = wp_remote_get("http://api.twitter.com/1/statuses/user_timeline.json?screen_name={$instance['username']}&count={$instance['count']}");
-			if ( is_wp_error($json) ) {
+			if ( is_wp_error($json) || $json['response']['code'] == '400' ) {
 				return;
 			}
 			else {
 				$list = json_decode( $json['body'], true );
-				set_transient( "kc_twitter_{$instance['username']}", $list, $instance['expiration'] );
+				set_transient( "kc_twitter_{$instance['username']}", $list, $instance['expiration'] * 60 );
 			}
 		}
 
@@ -117,11 +167,23 @@ class kc_widget_twitter extends WP_Widget {
 					array('\1#<a href="http://search.twitter.com/search?q=%23\2">\2</a>',
 					'<a href="http://twitter.com/\2">@\2</a>'),
 					$text
-				)."</p>\n",
+				)."</p>",
 				$text,
 				$item
 			);
-			$out .= "<li class='item'>{$text}</li>\n";
+			$out .= "<li class='item'>";
+			$out .= $text;
+			if ( $instance['show_date'] ) {
+				$date = strtotime( $item['created_at'] );
+				if ( $instance['date_format'] == 'relative' )
+					$date = sprintf( __('%s ago', 'kc-essentials'), human_time_diff($date) );
+				elseif ( $instance['date_format'] == 'global' )
+					$date = sprintf( __('%1$s at %2$s', 'kc-essentials'), date(get_option('date_format'), $date), date(get_option('time_format'), $date) );
+				else
+					$date = date( $instance['date_custom'], $date );
+				$out .= apply_filters( 'kc_twitter_date', "<span class='datetime'>{$date}</span>", $date, $item['created_at'] );
+			}
+			$out .= "</li>\n";
 		}
 		$out .= "</ul>\n";
 
