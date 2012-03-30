@@ -99,9 +99,10 @@ class kc_widget_twitter extends WP_Widget {
 						'data-child' => '#p-'.$this->get_field_id('date_custom')
 					),
 					'options' => array(
-						'relative' => __('Relative', 'kc-essentials'),
-						'global'   => __('Use global setting', 'kc-essentials'),
-						'custom'   => __('Custom', 'kc-essentials')
+						'relative'   => __('Relative', 'kc-essentials'),
+						'relative_m' => __('Relative if &lt; 30 days', 'kc-essentials'),
+						'global'     => __('Use global setting', 'kc-essentials'),
+						'custom'     => __('Custom', 'kc-essentials')
 					),
 					'none'    => false,
 					'current' => $instance['date_format']
@@ -158,7 +159,8 @@ class kc_widget_twitter extends WP_Widget {
 		}
 
 		$out = "<ul>\n";
-		foreach ( $list as $item ) {
+		$now = time();
+		foreach ( $list as $idx => $item ) {
 			$text = $item['text'];
 			$text = apply_filters(
 				'kc_twitter_status_text',
@@ -175,9 +177,10 @@ class kc_widget_twitter extends WP_Widget {
 			$out .= $text;
 			if ( $instance['show_date'] ) {
 				$date = strtotime( $item['created_at'] );
-				if ( $instance['date_format'] == 'relative' )
+				$diff = (int) abs( $now - $date );
+				if ( $instance['date_format'] == 'relative' || ($instance['date_format'] == 'relative_m' && $diff <= 2592000) )
 					$date = sprintf( __('%s ago', 'kc-essentials'), human_time_diff($date) );
-				elseif ( $instance['date_format'] == 'global' )
+				elseif ( $instance['date_format'] == 'global' || ($instance['date_format'] == 'relative_m' && $diff >= 2592000) )
 					$date = sprintf( __('%1$s at %2$s', 'kc-essentials'), date(get_option('date_format'), $date), date(get_option('time_format'), $date) );
 				else
 					$date = date( $instance['date_custom'], $date );
