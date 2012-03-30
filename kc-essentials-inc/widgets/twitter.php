@@ -146,7 +146,7 @@ class kc_widget_twitter extends WP_Widget {
 		if ( !$instance['username'] )
 			return;
 
-		$list = get_transient( "kc_twitter_{$instance['username']}" );
+		$list = get_transient( "kcw_twitter_{$instance['username']}" );
 		if ( !$list || count($list) < $instance['count'] ) {
 			$json = wp_remote_get("http://api.twitter.com/1/statuses/user_timeline.json?screen_name={$instance['username']}&count={$instance['count']}");
 			if ( is_wp_error($json) || $json['response']['code'] == '400' ) {
@@ -154,7 +154,7 @@ class kc_widget_twitter extends WP_Widget {
 			}
 			else {
 				$list = json_decode( $json['body'], true );
-				set_transient( "kc_twitter_{$instance['username']}", $list, $instance['expiration'] * 60 );
+				set_transient( "kcw_twitter_{$instance['username']}", $list, $instance['expiration'] * 60 );
 			}
 		}
 
@@ -166,7 +166,7 @@ class kc_widget_twitter extends WP_Widget {
 		foreach ( $list as $idx => $item ) {
 			$text = $item['text'];
 			$text = apply_filters(
-				'kc_twitter_status_text',
+				'kcw_twitter_status_text',
 				"<p>".preg_replace(
 					array('/(^|\s)#(\w*[a-zA-Z_]+\w*)/', '/(^|\s)@(\w*[a-zA-Z_]+\w*)/'),
 					array('\1#<a href="http://search.twitter.com/search?q=%23\2">\2</a>',
@@ -189,25 +189,22 @@ class kc_widget_twitter extends WP_Widget {
 					$date = sprintf( __('%1$s at %2$s', 'kc-essentials'), date(get_option('date_format'), $date), date(get_option('time_format'), $date) );
 				else
 					$date = date( $instance['date_custom'], $date );
-				$out .= apply_filters( 'kc_twitter_date', "<abbr class='datetime' title='{$item['created_at']}'>{$date}</abbr>", $date, $item['created_at'], $this, $instance );
+				$out .= apply_filters( 'kcw_twitter_date', "<abbr class='datetime' title='{$item['created_at']}'>{$date}</abbr>", $date, $item['created_at'], $this, $instance );
 			}
 			$out .= "</li>\n";
 		}
 		$out .= "</ul>\n";
 
 		if ( $instance['follow_text'] ) {
-			$out .= apply_filters( 'kc_twitter_follow_text', "<a href='http://twitter.com/{$instance['username']}' class='follow'><span>{$instance['follow_text']}</span></a>", $this, $instance );
-		}
+			$out .= apply_filters( 'kcw_twitter_follow_text', "<a href='http://twitter.com/{$instance['username']}' class='follow'><span>{$instance['follow_text']}</span></a>", $this, $instance );
+		} ?>
 
-		$output  = $args['before_widget'];
-		if ( $title = apply_filters( 'widget_title', $instance['title'], $this, $instance ) )
-			$output .= $args['before_title'] . $title . $args['after_title'];
-		do_action( 'kc_twitter_before_list', $this, $instance );
-		$output .= $out;
-		do_action( 'kc_twitter_after_list', $this, $instance );
-		$output .= $args['after_widget'];
-
-		echo $output;
-	}
+<?php echo $args['before_widget'] ?>
+<?php if ( $title = apply_filters( 'widget_title', $instance['title'], $this, $instance ) ) echo $args['before_title'] . $title . $args['after_title']; ?>
+<?php	do_action( 'kcw_twitter_before_list', $this, $instance ); ?>
+<?php echo $out; ?>
+<?php do_action( 'kcw_twitter_after_list', $this, $instance ); ?>
+<?php echo $args['after_widget']; ?>
+	<?php }
 }
 ?>
