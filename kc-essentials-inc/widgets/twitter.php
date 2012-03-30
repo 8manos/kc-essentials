@@ -171,7 +171,9 @@ class kc_widget_twitter extends WP_Widget {
 					$text
 				)."</p>",
 				$text,
-				$item
+				$item,
+				$this,
+				$instance
 			);
 			$out .= "<li class='item'>";
 			$out .= $text;
@@ -184,7 +186,7 @@ class kc_widget_twitter extends WP_Widget {
 					$date = sprintf( __('%1$s at %2$s', 'kc-essentials'), date(get_option('date_format'), $date), date(get_option('time_format'), $date) );
 				else
 					$date = date( $instance['date_custom'], $date );
-				$out .= apply_filters( 'kc_twitter_date', "<span class='datetime'>{$date}</span>", $date, $item['created_at'] );
+				$out .= apply_filters( 'kc_twitter_date', "<span class='datetime'>{$date}</span>", $date, $item['created_at'], $this, $instance );
 			}
 			$out .= "</li>\n";
 		}
@@ -195,7 +197,7 @@ class kc_widget_twitter extends WP_Widget {
 		}
 
 		$output  = $args['before_widget'];
-		if ( $title = apply_filters( 'widget_title', $instance['title'] ) )
+		if ( $title = apply_filters( 'widget_title', $instance['title'], $this, $instance ) )
 			$output .= $args['before_title'] . $title . $args['after_title'];
 		do_action( 'kc_twitter_before_list', $this, $instance );
 		$output .= $out;
