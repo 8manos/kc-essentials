@@ -197,7 +197,9 @@ class kc_widget_twitter extends WP_Widget {
 		$output  = $args['before_widget'];
 		if ( $title = apply_filters( 'widget_title', $instance['title'] ) )
 			$output .= $args['before_title'] . $title . $args['after_title'];
+		do_action( 'kc_twitter_before_list', $this, $instance );
 		$output .= $out;
+		do_action( 'kc_twitter_after_list', $this, $instance );
 		$output .= $args['after_widget'];
 
 		echo $output;
