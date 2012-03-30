@@ -167,7 +167,7 @@ class kc_widget_post extends WP_Widget {
 		$post_statuses = kcSettings_options::$post_statuses;
 
 		$taxonomies = $terms = array();
-		foreach ( get_taxonomies( array('public' => true), 'objects' ) as $t ) {
+		foreach ( get_taxonomies( array('show_ui' => true), 'objects' ) as $t ) {
 			$taxonomies[$t->name] = array( 'value' => $t->name, 'label' => $t->label );
 
 			$terms[$t->name] = array();
