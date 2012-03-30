@@ -196,7 +196,7 @@ class kc_widget_twitter extends WP_Widget {
 		$out .= "</ul>\n";
 
 		if ( $instance['follow_text'] ) {
-			$out .= apply_filters( 'kc_twitter_follow_text', "<a href='http://twitter.com/{$instance['username']}'><span>{$instance['follow_text']}</span></a>", $this, $instance );
+			$out .= apply_filters( 'kc_twitter_follow_text', "<a href='http://twitter.com/{$instance['username']}' class='follow'><span>{$instance['follow_text']}</span></a>", $this, $instance );
 		}
 
 		$output  = $args['before_widget'];
