@@ -147,7 +147,7 @@ class kc_widget_twitter extends WP_Widget {
 			return;
 
 		$list = get_transient( "kc_twitter_{$instance['username']}" );
-		if ( !$list ) {
+		if ( !$list || count($list) < $instance['count'] ) {
 			$json = wp_remote_get("http://api.twitter.com/1/statuses/user_timeline.json?screen_name={$instance['username']}&count={$instance['count']}");
 			if ( is_wp_error($json) || $json['response']['code'] == '400' ) {
 				return;
@@ -160,6 +160,9 @@ class kc_widget_twitter extends WP_Widget {
 
 		$out = "<ul>\n";
 		$now = time();
+		if ( $instance['count'] < count($list) )
+			$list = array_slice( $list, 0, $instance['count'] );
+
 		foreach ( $list as $idx => $item ) {
 			$text = $item['text'];
 			$text = apply_filters(
