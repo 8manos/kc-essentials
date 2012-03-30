@@ -186,7 +186,7 @@ class kc_widget_twitter extends WP_Widget {
 					$date = sprintf( __('%1$s at %2$s', 'kc-essentials'), date(get_option('date_format'), $date), date(get_option('time_format'), $date) );
 				else
 					$date = date( $instance['date_custom'], $date );
-				$out .= apply_filters( 'kc_twitter_date', "<span class='datetime'>{$date}</span>", $date, $item['created_at'], $this, $instance );
+				$out .= apply_filters( 'kc_twitter_date', "<abbr class='datetime' title='{$item['created_at']}'>{$date}</abbr>", $date, $item['created_at'], $this, $instance );
 			}
 			$out .= "</li>\n";
 		}
