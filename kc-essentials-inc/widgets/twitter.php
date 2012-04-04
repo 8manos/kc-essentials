@@ -170,7 +170,7 @@ class kc_widget_twitter extends WP_Widget {
 				"<p>".preg_replace(
 					array('/(^|\s)#(\w*[a-zA-Z_]+\w*)/', '/(^|\s)@(\w*[a-zA-Z_]+\w*)/'),
 					array('\1#<a href="http://search.twitter.com/search?q=%23\2">\2</a>',
-					'<a href="http://twitter.com/\2">@\2</a>'),
+					'\1<a href="http://twitter.com/\2">@\2</a>'),
 					$text
 				)."</p>",
 				$text,
