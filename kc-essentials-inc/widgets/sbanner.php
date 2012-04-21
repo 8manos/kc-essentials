@@ -24,6 +24,7 @@ class kc_widget_sbanner extends WP_Widget {
 			'link'        => '',
 			'text_before' => '',
 			'text_after'  => '',
+			'filter_text' => false,
 			'debug'       => 0
 		);
 	}
@@ -133,6 +134,15 @@ class kc_widget_sbanner extends WP_Widget {
 				)) ?>
 			</li>
 		</ul>
+		<p>
+			<label for="<?php echo $this->get_field_id('text_before') ?>"><?php _e('Text before banner', 'kc-essentials') ?></label>
+			<textarea class="widefat" rows="4" cols="10" id="<?php echo $this->get_field_id('text_before') ?>" name="<?php echo $this->get_field_name('text_before') ?>"><?php echo esc_textarea($instance['text_before']) ?></textarea>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id('text_after') ?>"><?php _e('Text after banner', 'kc-essentials') ?></label>
+			<textarea class="widefat" rows="4" cols="10" id="<?php echo $this->get_field_id('text_after') ?>" name="<?php echo $this->get_field_name('text_after') ?>"><?php echo esc_textarea($instance['text_after']) ?></textarea>
+		</p>
+		<p><input id="<?php echo $this->get_field_id('filter_text'); ?>" name="<?php echo $this->get_field_name('filter_text'); ?>" type="checkbox" <?php checked(isset($instance['filter_text']) ? $instance['filter_text'] : false); ?> value="1" />&nbsp;<label for="<?php echo $this->get_field_id('filter_text'); ?>"><?php _e('Automatically add paragraphs'); ?></label></p>
 	<?php }
 
 
@@ -165,10 +175,22 @@ class kc_widget_sbanner extends WP_Widget {
 				$banner = "<a href='{$instance['link']}'>{$banner}</a>";
 		$banner = "<div class='kcw-sbanner-wrap'>{$banner}</div>\n";
 
+		$format = isset($instance['filter_text']) ? $instance['filter_text'] : false;
+
 		$output  = $args['before_widget'];
 		if ( $title = apply_filters( 'widget_title', $instance['title'] ) )
 			$output .= $args['before_title'] . $title . $args['after_title'];
+		if ( $text_before = trim($instance['text_before']) ) {
+			$output .= "<div class='text text-before'>\n";
+			$output .= $format ? wpautop($text_before) : $text_before;
+			$output .= "</div>\n";
+		}
 		$output .= $banner;
+		if ( $text_after = trim($instance['text_after']) ) {
+			$output .= "<div class='text text-after'>\n";
+			$output .= $format ? wpautop($text_after) : $text_after;
+			$output .= "</div>\n";
+		}
 		$output .= $args['after_widget'];
 
 		echo $output;

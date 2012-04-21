@@ -70,19 +70,9 @@ class kcEssentials_menu_cpt_archive {
 			return $item_output;
 
 		$post_type_object = get_post_type_object( self::$pdata['items'][$item->ID]['post_type'] );
+		$url = get_post_type_archive_link(self::$pdata['items'][$item->ID]['post_type']);
 
-		if ( get_option( 'permalink_structure' ) ) {
-			global $wp_rewrite;
-			$url = $post_type_object->has_archive === true ? $post_type_object->rewrite['slug'] : $post_type_object->has_archive;
-			$url = ( $post_type_object->rewrite['with_front'] ) ? substr( $wp_rewrite->front, 1 ) . $url : $wp_rewrite->root . $url;
-			$url = "/{$url}";
-		}
-		else {
-			$url = $post_type_object->has_archive === true ? $post_type_object->query_var : $post_type_object->has_archive;
-			$url = "?post_type={$url}";
-		}
-
-		$item_output = preg_replace('/href=".*?"/', 'href="'.home_url( $url ).'"', $item_output );
+		$item_output = preg_replace('/href=".*?"/', 'href="'.$url.'"', $item_output );
 		self::$pdata['items'][$item->ID]['path'] = $url;
 		return $item_output;
 	}
