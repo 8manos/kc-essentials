@@ -43,6 +43,9 @@ class kcEssentials {
 				if ( file_exists("{$paths['inc']}/{$component}.php") )
 					require_once "{$paths['inc']}/{$component}.php";
 
+		# Auto update
+		//self::check_update();
+
 		# Scripts n styles
 		self::_sns();
 	}
@@ -90,9 +93,14 @@ class kcEssentials {
 		unset( $kcs['kids']['kc_essentials'] );
 		update_option( 'kc_settings', $kcs );
 	}
+
+
+	public static function check_update() {
+		if ( !class_exists('kcUpdate') )
+			require_once self::$pdata['paths']['inc'] . '/_update.php';
+		new kcUpdate( '0.1', 'http://repo.kucrut.org/api.php', self::$pdata['paths']['p_file'] );
+	}
 }
-
-
 require_once dirname(__FILE__) . '/kc-essentials-inc/_options.php';
 add_action( 'init', array('kcEssentials', 'init'), 100 );
 
