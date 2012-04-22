@@ -180,13 +180,13 @@ class kc_widget_sbanner extends WP_Widget {
 		$output  = $args['before_widget'];
 		if ( $title = apply_filters( 'widget_title', $instance['title'] ) )
 			$output .= $args['before_title'] . $title . $args['after_title'];
-		if ( $text_before = trim($instance['text_before']) ) {
+		if ( isset($instance['text_before']) && $text_before = trim($instance['text_before']) ) {
 			$output .= "<div class='text text-before'>\n";
 			$output .= $format ? wpautop($text_before) : $text_before;
 			$output .= "</div>\n";
 		}
 		$output .= $banner;
-		if ( $text_after = trim($instance['text_after']) ) {
+		if ( isset($instance['text_after']) && $text_after = trim($instance['text_after']) ) {
 			$output .= "<div class='text text-after'>\n";
 			$output .= $format ? wpautop($text_after) : $text_after;
 			$output .= "</div>\n";
