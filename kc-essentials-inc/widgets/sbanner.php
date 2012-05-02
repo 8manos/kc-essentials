@@ -63,7 +63,7 @@ class kc_widget_sbanner extends WP_Widget {
 						'data-scope' => 'div'
 					),
 					'options' => array(
-						'post' => __('Post', 'kc-essentials'),
+						'post' => __('Attachment', 'kc-essentials'),
 						'url'  => __('Custom URL', 'kc-essentials')
 					),
 					'none'    => false,
