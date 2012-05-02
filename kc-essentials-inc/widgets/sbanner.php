@@ -124,11 +124,12 @@ class kc_widget_sbanner extends WP_Widget {
 				)) ?>
 			</li>
 			<li class="sbanner-prop" data-dep='0'>
-				<label for="<?php echo $this->get_field_id('link') ?>"><?php _e('Link URL', 'kc-essentials') ?></label>
+				<label for="<?php echo $this->get_field_id('link') ?>" title="<?php _e('You can enter a post ID here to use its permalink, &#xA;double-click the input field to find posts.') ?>"><?php _e('Link URL', 'kc-essentials') ?> <span class="impo">(?)</span></label>
 				<?php echo kcForm::input(array(
 					'attr'    => array(
-						'id'   => $this->get_field_id('link'),
-						'name' => $this->get_field_name('link')
+						'id'    => $this->get_field_id('link'),
+						'name'  => $this->get_field_name('link'),
+						'class' => 'kc-find-post'
 					),
 					'current' => $instance['link']
 				)) ?>
@@ -171,8 +172,10 @@ class kc_widget_sbanner extends WP_Widget {
 		else {
 			$banner = "<img src='{$url}' alt='' />";
 		}
-			if ( $instance['link'] )
-				$banner = "<a href='{$instance['link']}'>{$banner}</a>";
+		if ( $instance['link'] ) {
+			$_link = ( is_numeric($instance['link']) ) ? get_permalink($instance['link']) : $instance['link'];
+			$banner = "<a href='{$_link}'>{$banner}</a>";
+		}
 		$banner = "<div class='kcw-sbanner-wrap'>{$banner}</div>\n";
 
 		$format = isset($instance['filter_text']) ? $instance['filter_text'] : false;
