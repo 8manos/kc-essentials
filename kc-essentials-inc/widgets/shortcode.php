@@ -39,7 +39,7 @@ class kc_widget_shortcode extends WP_Widget {
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id('shortcode'); ?>"><?php _e('Shortcode', 'kc-essentials') ?></label>
-			<?php echo kcForm::input(array(
+			<?php echo kcForm::textarea(array(
 				'attr'    => array('id' => $this->get_field_id('shortcode'), 'name' => $this->get_field_name('shortcode'), 'class' => 'widefat'),
 				'current' => $instance['shortcode']
 			)) ?>
