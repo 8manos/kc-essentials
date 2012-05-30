@@ -1197,6 +1197,30 @@ class kc_widget_post extends WP_Widget {
 
 		return $output;
 	}
+
+
+	public static function kcml_fields( $widgets ) {
+		$widgets['widget_kcw_post'] = array(
+			array(
+				'id'    => 'title',
+				'type'  => 'text',
+				'label' => __('Title')
+			),
+			array(
+				'id'    => 'txt_before_loop',
+				'type'  => 'textarea',
+				'label' => __('Before loop', 'kc-essentials')
+			),
+			array(
+				'id'    => 'txt_after_loop',
+				'type'  => 'textarea',
+				'label' => __('After loop', 'kc-essentials')
+			)
+		);
+
+		return $widgets;
+	}
 }
+add_filter( 'kcml_widget_fields', array('kc_widget_post', 'kcml_fields') );
 
 ?>

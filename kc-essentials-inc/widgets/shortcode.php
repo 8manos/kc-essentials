@@ -59,5 +59,25 @@ class kc_widget_shortcode extends WP_Widget {
 
 		echo $output;
 	}
+
+
+	public static function kcml_fields( $widgets ) {
+		$widgets['widget_kcw_shortcode'] = array(
+			array(
+				'id'    => 'title',
+				'type'  => 'text',
+				'label' => __('Title')
+			),
+			array(
+				'id'    => 'shortcode',
+				'type'  => 'textarea',
+				'label' => __('Shortcode', 'kc-essentials')
+			)
+		);
+
+		return $widgets;
+	}
 }
+add_filter( 'kcml_widget_fields' , array('kc_widget_shortcode', 'kcml_fields') );
+
 ?>

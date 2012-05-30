@@ -206,5 +206,30 @@ class kc_widget_twitter extends WP_Widget {
 <?php do_action( 'kcw_twitter_after_list', $this, $instance ); ?>
 <?php echo $args['after_widget']; ?>
 	<?php }
+
+
+	public static function kcml_fields( $widgets ) {
+		$widgets['widget_kcw_twitter'] = array(
+			array(
+				'id'    => 'title',
+				'type'  => 'text',
+				'label' => __('Title')
+			),
+			array(
+				'id'    => 'username',
+				'type'  => 'text',
+				'label' => __('Username', 'kc-essentials')
+			),
+			array(
+				'id'    => 'follow_text',
+				'type'  => 'text',
+				'label' => __('Follow text', 'kc-essentials')
+			)
+		);
+
+		return $widgets;
+	}
 }
+add_filter( 'kcml_widget_fields', array('kc_widget_twitter', 'kcml_fields') );
+
 ?>

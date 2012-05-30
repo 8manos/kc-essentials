@@ -126,5 +126,20 @@ class kc_widget_term extends WP_Widget {
 
 		echo $output;
 	}
+
+
+	public static function kcml_fields( $widgets ) {
+		$widgets['widget_kcw_term'] = array(
+			array(
+				'id'    => 'title',
+				'type'  => 'text',
+				'label' => __('Title')
+			)
+		);
+
+		return $widgets;
+	}
 }
+add_filter( 'kcml_widget_fields', array('kc_widget_term', 'kcml_fields') );
+
 ?>

@@ -198,5 +198,37 @@ class kc_widget_sbanner extends WP_Widget {
 
 		echo $output;
 	}
+
+
+	public static function kcml_fields( $widgets ) {
+		$widgets['widget_kcw_sbanner'] = array(
+			array(
+				'id'    => 'title',
+				'type'  => 'text',
+				'label' => __('Title')
+			),
+			array(
+				'id'    => 'link',
+				'type'  => 'text',
+				'label' => __('Link URL', 'kc-essentials')
+			),
+			array(
+				'id'    => 'text_before',
+				'type'  => 'textarea',
+				'label' => __('Text before banner', 'kc-essentials'),
+				'attr'  => array('cols' => 10, 'rows' => 4)
+			),
+			array(
+				'id'    => 'text_after',
+				'type'  => 'textarea',
+				'label' => __('Text after banner', 'kc-essentials'),
+				'attr'  => array('cols' => 10, 'rows' => 4)
+			)
+		);
+
+		return $widgets;
+	}
 }
+add_filter( 'kcml_widget_fields', array('kc_widget_sbanner', 'kcml_fields') );
+
 ?>

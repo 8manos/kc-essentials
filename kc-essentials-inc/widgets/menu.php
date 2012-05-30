@@ -150,6 +150,40 @@ Class kc_widget_menu extends WP_Widget {
 
 		echo kcEssentials_widgets::form( $this, $options, $instance );
 	}
+
+
+	public static function kcml_fields( $widgets ) {
+		$widgets['widget_kcw_menu'] = array(
+			array(
+				'id'    => 'title',
+				'type'  => 'text',
+				'label' => __('Title')
+			),
+			array(
+				'id'    => 'before',
+				'type'  => 'text',
+				'label' => __('Before link text', 'kc-essentials')
+			),
+			array(
+				'id'    => 'after',
+				'type'  => 'text',
+				'label' => __('After link text', 'kc-essentials')
+			),
+			array(
+				'id'    => 'link_before',
+				'type'  => 'text',
+				'label' => __('Before link', 'kc-essentials')
+			),
+			array(
+				'id'    => 'link_after',
+				'type'  => 'text',
+				'label' => __('After link', 'kc-essentials')
+			)
+		);
+
+		return $widgets;
+	}
 }
+add_filter( 'kcml_widget_fields', array('kc_widget_menu', 'kcml_fields') );
 
 ?>
