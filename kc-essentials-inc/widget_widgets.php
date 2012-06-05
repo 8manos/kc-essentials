@@ -10,26 +10,26 @@ class kcEssentials_widgets {
 	public static $sidebars;
 
 	public function init() {
-		$options = get_option( 'kc_essentials_settings' );
-		if ( !$options
-		     || !isset($options['components']['widget'])
-		     || empty($options['components']['widget']) )
+		$settings = kcEssentials::get_data( 'settings', 'components', 'widget' );
+		if ( !$settings
+		     || !isset($settings['components']['widget'])
+		     || empty($settings['components']['widget']) )
 			return false;
 
 		# Register sidebars
-		if ( in_array('widget_areas', $options['components']['widget'])
-		     && isset($options['widget_areas'])
-		     && !empty($options['widget_areas']) ) {
+		if ( in_array('widget_areas', $settings['components']['widget'])
+		     && isset($settings['widget_areas'])
+		     && !empty($settings['widget_areas']) ) {
 
-			self::$sidebars = $options['widget_areas'];
+			self::$sidebars = $settings['widget_areas'];
 			add_action( 'widgets_init', array(__CLASS__, 'register_sidebars'), 99 );
 		}
 
 		# Register widgets
-		if ( in_array('widget_widgets', $options['components']['widget'])
-		     && isset($options['widget_widgets']['widgets'])
-		     && !empty($options['widget_widgets']['widgets']) ) {
-			foreach ( $options['widget_widgets']['widgets'] as $widget ) {
+		if ( in_array('widget_widgets', $settings['components']['widget'])
+		     && isset($settings['widget_widgets']['widgets'])
+		     && !empty($settings['widget_widgets']['widgets']) ) {
+			foreach ( $settings['widget_widgets']['widgets'] as $widget ) {
 				$file = dirname(__FILE__) . "/widgets/{$widget}.php";
 				if ( !file_exists($file) || !is_readable($file) )
 					continue;

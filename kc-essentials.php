@@ -32,7 +32,21 @@ class kcEssentials {
 		$settings = kc_get_option( 'kc_essentials' );
 		self::$pdata['settings'] = $settings;
 
+		# Settings
+		require_once "{$paths['inc']}/_options.php";
+
 		require_once "{$paths['inc']}/_helpers.php";
+
+		# Auto update
+		//self::check_update();
+
+		# Scripts n styles
+		add_action( 'init', array(__CLASS__, '_sns_register') );
+
+		require_once "{$paths['inc']}/widget_widgets.php";
+		add_action( 'widgets_init', array('kcEssentials_widgets', 'init') );
+
+		register_deactivation_hook( $paths['p_file'], array(__CLASS__, '_deactivate') );
 
 		# Components
 		if ( !isset($settings['components']) || empty($settings['components']) )
@@ -42,16 +56,10 @@ class kcEssentials {
 			foreach ( $group as $component )
 				if ( file_exists("{$paths['inc']}/{$component}.php") )
 					require_once "{$paths['inc']}/{$component}.php";
-
-		# Auto update
-		//self::check_update();
-
-		# Scripts n styles
-		self::_sns();
 	}
 
 
-	private static function _sns() {
+	public static function _sns_register() {
 		wp_register_script( 'kc-essentials', self::$pdata['paths']['scripts'].'/settings.js', array('kc-settings-base'), self::$pdata['version'], true );
 		wp_register_script( 'kc-widgets-admin', self::$pdata['paths']['scripts'].'/widgets.js', array('kc-settings-base', 'media', 'wp-ajax-response'), self::$pdata['version'], true );
 
@@ -77,7 +85,7 @@ class kcEssentials {
 		if ( !class_exists('kcSettings') )
 			wp_die( 'Please install and activate <a href="http://wordpress.org/extend/plugins/kc-settings/">KC Settings</a> before activating this plugin.<br /> <a href="'.wp_get_referer().'">&laquo; Go back</a> to plugins page.' );
 
-		$kcs = get_option('kc_settings');
+		$kcs = kcSettings::get_data('status');
 		$kcs['kids']['kc_essentials'] = array(
 			'name' => 'KC Essentials',
 			'type' => 'plugin',
@@ -89,7 +97,7 @@ class kcEssentials {
 
 	# Unregister from KC Settings
 	public static function _deactivate() {
-		$kcs = get_option('kc_settings');
+		$kcs = kcSettings::get_data('status');
 		unset( $kcs['kids']['kc_essentials'] );
 		update_option( 'kc_settings', $kcs );
 	}
@@ -101,8 +109,7 @@ class kcEssentials {
 		new kcUpdate( '0.1', 'http://repo.kucrut.org/api.php', self::$pdata['paths']['p_file'] );
 	}
 }
-require_once dirname(__FILE__) . '/kc-essentials-inc/_options.php';
-add_action( 'init', array('kcEssentials', 'init'), 100 );
+add_action( 'plugins_loaded', array('kcEssentials', 'init') );
 
 
 # A hack for symlinks
@@ -120,11 +127,6 @@ if ( !function_exists('kc_plugin_file') ) {
 	}
 }
 
-$plugin_file = kc_plugin_file( __FILE__ );
-register_activation_hook( $plugin_file, array('kcEssentials', '_activate') );
-register_deactivation_hook( $plugin_file, array('kcEssentials', '_deactivate') );
-
-require_once dirname(__FILE__) . '/kc-essentials-inc/widget_widgets.php';
-add_action( 'widgets_init', array('kcEssentials_widgets', 'init') );
+register_activation_hook( kc_plugin_file( __FILE__ ), array('kcEssentials', '_activate') );
 
 ?>
