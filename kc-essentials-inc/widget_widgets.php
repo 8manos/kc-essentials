@@ -10,7 +10,7 @@ class kcEssentials_widgets {
 	public static $sidebars;
 
 	public function init() {
-		$settings = kcEssentials::get_data( 'settings', 'components', 'widget' );
+		$settings = kcEssentials::get_data('settings');
 		if ( !$settings
 		     || !isset($settings['components']['widget'])
 		     || empty($settings['components']['widget']) )
@@ -24,6 +24,7 @@ class kcEssentials_widgets {
 			self::$sidebars = $settings['widget_areas'];
 			add_action( 'widgets_init', array(__CLASS__, 'register_sidebars'), 99 );
 		}
+
 
 		# Register widgets
 		if ( in_array('widget_widgets', $settings['components']['widget'])
