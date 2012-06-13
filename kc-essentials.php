@@ -41,7 +41,7 @@ class kcEssentials {
 		//self::check_update();
 
 		# Scripts n styles
-		add_action( 'init', array(__CLASS__, '_sns_register') );
+		add_action( 'init', array(__CLASS__, '_sns_register'), 100 );
 
 		require_once "{$paths['inc']}/widget_widgets.php";
 		add_action( 'widgets_init', array('kcEssentials_widgets', 'init') );
@@ -52,10 +52,7 @@ class kcEssentials {
 		if ( !isset($settings['components']) || empty($settings['components']) )
 			return false;
 
-		foreach ( $settings['components'] as $group )
-			foreach ( $group as $component )
-				if ( file_exists("{$paths['inc']}/{$component}.php") )
-					require_once "{$paths['inc']}/{$component}.php";
+		add_action( 'init', array(__CLASS__, '_component_activation'), 100 );
 	}
 
 
@@ -65,6 +62,14 @@ class kcEssentials {
 
 		wp_register_style(  'kc-widgets-admin', self::$pdata['paths']['styles'].'/widgets.css', false, self::$pdata['version'] );
 		wp_register_style(  'kc-essentials', self::$pdata['paths']['styles'].'/settings.css', false, self::$pdata['version'] );
+	}
+
+
+	public static function _component_activation() {
+		foreach ( self::$pdata['settings']['components'] as $group )
+			foreach ( $group as $component )
+				if ( file_exists( self::$pdata['paths']['inc'] . "/{$component}.php") )
+					require_once self::$pdata['paths']['inc'] . "/{$component}.php";
 	}
 
 
