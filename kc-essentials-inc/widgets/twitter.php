@@ -167,10 +167,10 @@ class kc_widget_twitter extends WP_Widget {
 
 		$out = "<ul>\n";
 		$now = time();
-		if ( $instance['count'] < count($list) )
-			$list = array_slice( $list, 0, $instance['count'] );
-
 		foreach ( $list as $idx => $item ) {
+			if ( $idx == $instance['count'] )
+				break;
+
 			$out .= "<li class='item'>";
 			$out .= $this->process_tweet( $item );
 			if ( $instance['show_date'] ) {
