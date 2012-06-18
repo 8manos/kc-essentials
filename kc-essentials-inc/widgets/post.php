@@ -278,17 +278,10 @@ class kc_widget_post extends WP_Widget {
 		);
 		?>
 
-		<details open="true">
-			<summary><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget title', 'kc-essentials') ?></label></summary>
-			<ul class="kcw-control-block">
-				<li>
-					<?php echo kcForm::input(array(
-						'attr'    => array('id' => $this->get_field_id('title'), 'name' => $this->get_field_name('title'), 'class' => 'widefat'),
-						'current' => $title
-					)) ?>
-				</li>
-			</ul>
-		</details>
+		<p>
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget title', 'kc-essentials') ?></label>
+			<input type="text" class="widefat" id="<?php echo $this->get_field_id('title') ?>" name="<?php echo $this->get_field_name('title') ?>" value="<?php echo $title ?>" />
+		</p>
 
 		<details open="true">
 			<summary><?php _e('Basic', 'kc-essentials') ?></summary>
