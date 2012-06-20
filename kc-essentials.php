@@ -32,6 +32,11 @@ class kcEssentials {
 		$settings = kc_get_option( 'kc_essentials' );
 		self::$data['settings'] = $settings;
 
+		# i18n
+		$mo_file = $paths['inc'].'/languages/kc-essentials-'.get_locale().'.mo';
+		if ( is_readable($mo_file) )
+			load_textdomain( 'kc-essentials', $mo_file );
+
 		# Settings
 		require_once "{$paths['inc']}/_options.php";
 
