@@ -53,7 +53,8 @@ class kcEssentials_options {
 						'type'    => 'checkbox',
 						'options' => array(
 							'image_adaptive' => __('Adaptive images', 'kc-essentials'),
-							'image_insert'   => __('Insert images with custom sizes into post editor', 'kc-essentials')
+							'image_insert'   => __('Insert images with custom sizes into post editor', 'kc-essentials'),
+							'image_caption'  => __('Quicktags for image captions editor', 'kc-essentials')
 						)
 					),
 					array(
