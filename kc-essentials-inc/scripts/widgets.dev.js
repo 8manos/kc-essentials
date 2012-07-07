@@ -5,7 +5,6 @@
 		$('.widgets-sortables .hasdep').kcFormDep();
 		$('.widgets-sortables').ajaxSuccess(function() {
 			$('.hasdep', this).kcFormDep();
-			$('details', this).details();
 		});
 
 		// Delete tax/meta query row
