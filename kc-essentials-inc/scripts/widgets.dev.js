@@ -1,3 +1,4 @@
+/* Post Finder dialog */
 (function($, document) {
 	var
 	func = 'kcPostFinder',
@@ -102,8 +103,104 @@
 }(jQuery, document));
 
 
+
+/* Form row cloner */
+(function($, document) {
+	var
+	func = 'kcRowCloner',
+	active = false,
+	$_doc = $(document),
+	callbacks = [],
+
+	activate = function() {
+		bind();
+		active = true;
+	},
+
+	deactivate = function() {
+		unbind();
+		active = false;
+		callbacks = [];
+	},
+
+	action = function(e) {
+		var $anchor = $(e.target), func;
+
+		if ( $anchor.is('a.add') )
+			func = add;
+		else if ( $anchor.is('a.del') )
+			func = del;
+		else
+			return;
+
+		e.preventDefault();
+		var $item  = $(e.currentTarget);
+		    $block = $item.parent();
+
+		func.call( e, {
+			'anchor': $anchor,
+			'item': $item,
+			'block': $block
+		} );
+	},
+
+	add = function( args ) {
+		console.log ( args );
+	},
+
+	del = function( args ) {
+		var e = this;
+		args.action = 'del';
+		args.isLast = !args.item.next('li.row').length;
+		args.removed = true;
+
+		args.item.slideUp(function() {
+			if ( !args.item.siblings('.row').length ) {
+				args.item.find('input[type="text"]').val('');
+				args.item.find('input[type="checkbox"]').prop('checked', false);
+				args.item.find('.hasdep').trigger('change');
+				args.removed = false;
+			}
+			else {
+				args.item.remove();
+			}
+
+			for ( var i=0; i < callbacks.length; i++ ) {
+				callbacks[i].call( e, args );
+			}
+		});
+	},
+
+	bind = function() {
+		$_doc.on( 'click.kcRowCloner', 'li.row', action );
+	},
+
+	unbind = function() {
+		$_doc.off( 'click.kcRowCloner', 'li.row', action );
+	},
+
+	publicMethod = $[func] = function( callback ) {
+		var $this = this;
+
+		if ( callback && $.isFunction(callback) )
+			callbacks.push( callback );
+
+		if ( active )
+			return;
+
+		activate();
+		return $this;
+	};
+
+	publicMethod.destroy = function() {
+		deactivate();
+	};
+})(jQuery, document);
+
+
+
 (function($) {
-	var $doc = $(document);
+	var $_doc = $(document);
 
 	// Deps
 	$('.widgets-sortables .hasdep').kcFormDep();
@@ -111,31 +208,8 @@
 		$('.hasdep', this).kcFormDep();
 	});
 
-	// Delete tax/meta query row
-	$('.kcw-control-block .rm').live('click', function(e) {
-		e.preventDefault();
-
-		var $el    = $(this),
-		    $item  = $el.parent(),
-		    $block = $item.parent(),
-		    $next  = $item.next('.row');
-
-		$item.slideUp(function() {
-			if ( !$item.siblings('.row').length ) {
-				$item.find('input[type="text"]').val('');
-				$item.find('input[type="checkbox"]').prop('checked', false);
-				$item.find('.hasdep').trigger('change');
-			} else {
-				$item.remove();
-				if ( $next.length )
-					$block.kcReorder( $el.attr('rel'), true );
-			}
-		});
-	});
-
-
 	// Add tax/meta query row
-	$('.kcw-control-block .add').live('click', function(e) {
+	$_doc.on( 'click', '.kcw-control-block a.add', function(e) {
 		e.preventDefault();
 
 		var $el   = $(this),
@@ -152,6 +226,14 @@
 				.find('.hasdep').kcFormDep();
 		}
 	});
+
+
+	// Remove tax/meta query row
+	$.kcRowCloner( function( args ) {
+		if ( args.action == 'del' && args.removed && !args.isLast )
+			args.block.kcReorder( args.anchor.attr('rel'), true );
+	});
+
 
 	$.kcPostFinder();
 })(jQuery);

@@ -465,7 +465,7 @@ class kc_widget_post extends WP_Widget {
 							} ?>
 							</div>
 							<?php } } ?>
-							<a class="hide-if-no-js rm action" rel="tax_query" title="<?php _e('Remove this taxonomy query', 'kc-essentials') ?>"><?php _e('Remove', 'kc-essentials') ?></a>
+							<a class="hide-if-no-js del action" rel="tax_query" title="<?php _e('Remove this taxonomy query', 'kc-essentials') ?>"><?php _e('Remove', 'kc-essentials') ?></a>
 							<input type='hidden' name="<?php echo "{$tq_name}[{$idx}][field]" ?>" value="slug"/>
 						</li>
 						<?php } ?>
@@ -510,7 +510,7 @@ class kc_widget_post extends WP_Widget {
 								'options' => $meta_type,
 								'none'    => false
 							)) ?>
-						<a class="hide-if-no-js rm action" rel="meta_query" title="<?php _e('Remove this taxonomy query', 'kc-essentials') ?>"><?php _e('Remove', 'kc-essentials') ?></a>
+						<a class="hide-if-no-js del action" rel="meta_query" title="<?php _e('Remove this taxonomy query', 'kc-essentials') ?>"><?php _e('Remove', 'kc-essentials') ?></a>
 						</li>
 						<?php } ?>
 						<li><a class="hide-if-no-js add action" rel="meta_query" title="<?php _e('Add new meta query', 'kc-essentials') ?>"><?php _e('Add', 'kc-essentials') ?></a></li>
