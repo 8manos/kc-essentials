@@ -110,7 +110,10 @@
 	func = 'kcRowCloner',
 	active = false,
 	$_doc = $(document),
-	callbacks = [],
+	callbacks = {
+		add: [],
+		del: []
+	},
 
 	activate = function() {
 		bind();
@@ -120,7 +123,10 @@
 	deactivate = function() {
 		unbind();
 		active = false;
-		callbacks = [];
+		callbacks = {
+			add: [],
+			del: []
+		};
 	},
 
 	action = function(e) {
@@ -150,7 +156,6 @@
 
 	del = function( args ) {
 		var e = this;
-		args.action = 'del';
 		args.isLast = !args.item.next('li.row').length;
 		args.removed = true;
 
@@ -165,8 +170,8 @@
 				args.item.remove();
 			}
 
-			for ( var i=0; i < callbacks.length; i++ ) {
-				callbacks[i].call( e, args );
+			for ( var i=0; i < callbacks.del.length; i++ ) {
+				callbacks.del[i].call( e, args );
 			}
 		});
 	},
@@ -179,11 +184,8 @@
 		$_doc.off( 'click.kcRowCloner', 'li.row', action );
 	},
 
-	publicMethod = $[func] = function( callback ) {
+	publicMethod = $[func] = function( ) {
 		var $this = this;
-
-		if ( callback && $.isFunction(callback) )
-			callbacks.push( callback );
 
 		if ( active )
 			return;
@@ -194,6 +196,11 @@
 
 	publicMethod.destroy = function() {
 		deactivate();
+	};
+
+	publicMethod.addCallback = function( mode, callback ) {
+		if ( callbacks.hasOwnProperty(mode) && $.isFunction(callback) )
+			callbacks[mode].push( callback );
 	};
 })(jQuery, document);
 
@@ -229,10 +236,14 @@
 
 
 	// Remove tax/meta query row
-	$.kcRowCloner( function( args ) {
-		if ( args.action == 'del' && args.removed && !args.isLast )
-			args.block.kcReorder( args.anchor.attr('rel'), true );
-	});
+	$.kcRowCloner();
+	$.kcRowCloner.addCallback(
+		'del',
+		function( args ) {
+			if ( args.removed && !args.isLast )
+				args.block.kcReorder( args.anchor.attr('rel'), true );
+		}
+	);
 
 
 	$.kcPostFinder();
