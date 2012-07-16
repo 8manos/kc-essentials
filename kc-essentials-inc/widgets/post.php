@@ -472,7 +472,6 @@ class kc_widget_post extends WP_Widget {
 							<input type='hidden' name="<?php echo "{$tq_name}[{$idx}][field]" ?>" value="slug"/>
 						</li>
 						<?php } ?>
-						<li><a class="hide-if-no-js add action" rel="tax_query" title="<?php _e('Add new taxonomy query', 'kc-essentials') ?>"><?php _e('Add', 'kc-essentials') ?></a></li>
 					</ul>
 				</li>
 			</ul>
@@ -519,7 +518,6 @@ class kc_widget_post extends WP_Widget {
 							</p>
 						</li>
 						<?php } ?>
-						<li><a class="hide-if-no-js add action" rel="meta_query" title="<?php _e('Add new meta query', 'kc-essentials') ?>"><?php _e('Add', 'kc-essentials') ?></a></li>
 					</ul>
 				</li>
 			</ul>

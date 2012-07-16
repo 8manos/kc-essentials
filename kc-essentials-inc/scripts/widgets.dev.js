@@ -154,8 +154,19 @@
 	},
 
 	add = function( args ) {
-		var e = this;
+		var e = this,
+		    nu = clear( args.item.clone(true).addClass('adding').hide() );
+
+		$('[data-dep]', nu).removeData('kcfdInit');
+		$('.hasdep', nu).kcFormDep();
+		args.item.after( nu );
+		args.nuItem = nu;
+		args.block = args.block.kcReorder( args.mode, true );
 		doCallbacks( 'add', e, args );
+
+		args.nuItem.fadeIn('slow', function() {
+			args.nuItem.removeClass('adding');
+		});
 	},
 
 	del = function( args ) {
@@ -180,8 +191,16 @@
 	},
 
 	clear = function( item ) {
-		$('input[type="checkbox"]', item).prop('checked', false),
-		$('input[type="text"]').val('');
+		item.find(':input').each(function() {
+			var $input = $(this);
+			if ( $input.data('nocleanup') === true )
+				return;
+
+			if ( $input.is('select') || this.type == 'text' || this.type == 'textarea' )
+				$input.removeAttr('style').val('');
+			else if ( this.type == 'checkbox' || this.type == 'radio' )
+				$input.prop('checked', this.checked);
+		});
 
 		return item;
 	},
@@ -230,27 +249,9 @@
 		$('.hasdep', this).kcFormDep();
 	});
 
-	// Add tax/meta query row
-	$_doc.on( 'click', '.kcw-control-block a.add', function(e) {
-		e.preventDefault();
-
-		var $el   = $(this),
-		    $item = $el.parent().prev('.row');
-
-		if ( $item.is(':hidden') ) {
-			$item.slideDown();
-		}
-		else {
-			$nu = $item.clone(true).hide();
-			$item.after( $nu );
-			$nu.slideDown()
-				.kcReorder( $el.attr('rel'), false )
-				.find('.hasdep').kcFormDep();
-		}
-	});
-
 	// Tax/Meta query row cloner
 	$.kcRowCloner();
 
+	// Post IDs finder
 	$.kcPostFinder();
 })(jQuery);
