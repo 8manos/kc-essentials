@@ -61,12 +61,36 @@ class kcEssentials_widgets {
 	 */
 	public static function _actions() {
 		# Scripts n styles for the widget configuration forms
-		wp_enqueue_script( 'kc-widgets-admin' );
 		wp_enqueue_style( 'kc-widgets-admin' );
 
 		# Add the post finder box
 		add_action( 'admin_footer', 'find_posts_div', 99 );
+		add_action( 'admin_enqueue_scripts', array(__CLASS__, 'scripts_enq'), 99 );
+		add_action( 'admin_print_footer_scripts', array(__CLASS__, 'scripts_print'), 99 );
 	}
+
+
+	public static function scripts_enq() {
+		wp_enqueue_script( 'kc-settings-base' );
+		wp_enqueue_script( 'media' );
+		wp_enqueue_script( 'wp-ajax-response' );
+	}
+
+
+	public static function scripts_print() { ?>
+<script>
+(function($) {
+	// Form deps
+	var $widgets = $('.widgets-sortables');
+	$('.hasdep', $widgets).kcFormDep();
+	$widgets.ajaxSuccess(function() { $('.hasdep', this).kcFormDep(); });
+	// Tax/Meta query row cloner
+	$.kcRowCloner();
+	// Post IDs finder
+	$.kcPostFinder();
+})(jQuery);
+</script>
+	<?php }
 
 
 	/**
