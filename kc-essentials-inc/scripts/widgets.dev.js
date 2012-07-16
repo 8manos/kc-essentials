@@ -159,24 +159,24 @@
 
 	del = function( args ) {
 		var e = this;
-		args.removed = true;
 
-		args.item.slideUp(function() {
-			if ( !args.item.siblings('.row').length ) {
-				args.item = clear( args.item );
-				args.item.find('.hasdep').trigger('change');
-				args.removed = false;
-			}
-			else {
+		if ( !args.item.siblings('.row').length ) {
+			args.item = clear( args.item );
+			args.item.find('.hasdep').trigger('change');
+			args.removed = false;
+		}
+		else {
+			args.removed = true;
+			args.item.addClass('removing').fadeOut('slow', function() {
 				args.item.remove();
 				if ( !args.isLast )
 					args.block = args.block.kcReorder( args.mode, true );
-			}
+			});
+		}
 
-			for ( var i=0; i < callbacks.del.length; i++ ) {
-				callbacks.del[i].call( e, args );
-			}
-		});
+		for ( var i=0; i < callbacks.del.length; i++ ) {
+			callbacks.del[i].call( e, args );
+		}
 	},
 
 	clear = function( item ) {
