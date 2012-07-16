@@ -154,7 +154,8 @@
 	},
 
 	add = function( args ) {
-		console.log ( args );
+		var e = this;
+		doCallbacks( 'add', e, args );
 	},
 
 	del = function( args ) {
@@ -164,6 +165,7 @@
 			args.item = clear( args.item );
 			args.item.find('.hasdep').trigger('change');
 			args.removed = false;
+			doCallbacks( 'del', e, args, 'pret' );
 		}
 		else {
 			args.removed = true;
@@ -171,11 +173,9 @@
 				args.item.remove();
 				if ( !args.isLast )
 					args.block = args.block.kcReorder( args.mode, true );
+				delete args.item;
+				doCallbacks( 'del', e, args );
 			});
-		}
-
-		for ( var i=0; i < callbacks.del.length; i++ ) {
-			callbacks.del[i].call( e, args );
 		}
 	},
 
@@ -184,6 +184,11 @@
 		$('input[type="text"]').val('');
 
 		return item;
+	},
+
+	doCallbacks = function( mode, e, args, x ) {
+		for ( var i=0; i < callbacks[mode].length; i++ )
+			callbacks[mode][i].call( e, args );
 	},
 
 	bind = function() {
@@ -243,7 +248,6 @@
 				.find('.hasdep').kcFormDep();
 		}
 	});
-
 
 	// Tax/Meta query row cloner
 	$.kcRowCloner();
