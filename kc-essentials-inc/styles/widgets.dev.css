@@ -57,13 +57,16 @@ html {overflow-y:scroll;}
 	font-size:.75em;
 	margin:0}
 .kcw-control-block .impo {color:#d54e21}
-.kcw-control-block .action {
+.kcw-control-block .actions {
 	clear:both;
-	font-size:.85em;
-	cursor:pointer}
-.kcw-control-block .del {
-	float:right;
-	padding-top:.5em}
+	display:block;
+	font-style:normal;
+	cursor:pointer;
+	padding-top:.5em;
+	text-align:right;
+}
+.kcw-control-block .actions a:before {content:'|\00a0'}
+.kcw-control-block .actions a:first-child:before {content:''}
 .kcw-control-block .info {
 	padding-top:.65em !important;
 	line-height:1.2;
