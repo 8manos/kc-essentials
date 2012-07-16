@@ -163,8 +163,7 @@
 
 		args.item.slideUp(function() {
 			if ( !args.item.siblings('.row').length ) {
-				args.item.find('input[type="text"]').val('');
-				args.item.find('input[type="checkbox"]').prop('checked', false);
+				args.item = clear( args.item );
 				args.item.find('.hasdep').trigger('change');
 				args.removed = false;
 			}
@@ -178,6 +177,13 @@
 				callbacks.del[i].call( e, args );
 			}
 		});
+	},
+
+	clear = function( item ) {
+		$('input[type="checkbox"]', item).prop('checked', false),
+		$('input[type="text"]').val('');
+
+		return item;
 	},
 
 	bind = function() {
