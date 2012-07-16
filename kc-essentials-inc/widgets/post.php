@@ -429,7 +429,7 @@ class kc_widget_post extends WP_Widget {
 				<li>
 					<ul class="tax-queries">
 						<?php foreach ( $tq_values as $idx => $query ) { ?>
-						<li class="row">
+						<li class="row" data-mode="tax_query">
 							<label for="<?php echo "{$tq_id}-{$idx}-taxonomy" ?>"><?php _e('Taxonomy', 'kc-essentials') ?></label>
 							<?php echo kcForm::select(array(
 								'attr'    => array(
@@ -465,7 +465,7 @@ class kc_widget_post extends WP_Widget {
 							} ?>
 							</div>
 							<?php } } ?>
-							<a class="hide-if-no-js del action" rel="tax_query" title="<?php _e('Remove this taxonomy query', 'kc-essentials') ?>"><?php _e('Remove', 'kc-essentials') ?></a>
+							<a class="hide-if-no-js del action" title="<?php _e('Remove this taxonomy query', 'kc-essentials') ?>"><?php _e('Remove', 'kc-essentials') ?></a>
 							<input type='hidden' name="<?php echo "{$tq_name}[{$idx}][field]" ?>" value="slug"/>
 						</li>
 						<?php } ?>
@@ -485,7 +485,7 @@ class kc_widget_post extends WP_Widget {
 				<li>
 					<ul class="meta-queries">
 						<?php foreach ( $instance['meta_query'] as $mq_idx => $mq ) { ?>
-						<li class="row">
+						<li class="row" data-mode="meta_query">
 							<label for="<?php echo "{$mq_id}-{$mq_idx}-key" ?>"><?php _e('Key', 'kc-essentials') ?></label>
 							<?php echo kcForm::input(array(
 								'attr'    => array('id' => "{$mq_id}-{$mq_idx}-key", 'name' => "{$mq_name}[{$mq_idx}][key]"),
@@ -510,7 +510,7 @@ class kc_widget_post extends WP_Widget {
 								'options' => $meta_type,
 								'none'    => false
 							)) ?>
-						<a class="hide-if-no-js del action" rel="meta_query" title="<?php _e('Remove this taxonomy query', 'kc-essentials') ?>"><?php _e('Remove', 'kc-essentials') ?></a>
+						<a class="hide-if-no-js del action" title="<?php _e('Remove this taxonomy query', 'kc-essentials') ?>"><?php _e('Remove', 'kc-essentials') ?></a>
 						</li>
 						<?php } ?>
 						<li><a class="hide-if-no-js add action" rel="meta_query" title="<?php _e('Add new meta query', 'kc-essentials') ?>"><?php _e('Add', 'kc-essentials') ?></a></li>

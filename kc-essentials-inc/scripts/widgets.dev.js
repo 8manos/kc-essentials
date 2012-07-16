@@ -140,12 +140,15 @@
 			return;
 
 		e.preventDefault();
-		var $item  = $(e.currentTarget);
+		var $item  = $(e.currentTarget),
+		    isLast = !$item.next('.row').length,
 		    $block = $item.parent();
 
 		func.call( e, {
 			'anchor': $anchor,
 			'item': $item,
+			'mode': $item.data('mode'),
+			'isLast': isLast,
 			'block': $block
 		} );
 	},
@@ -156,7 +159,6 @@
 
 	del = function( args ) {
 		var e = this;
-		args.isLast = !args.item.next('li.row').length;
 		args.removed = true;
 
 		args.item.slideUp(function() {
@@ -168,6 +170,8 @@
 			}
 			else {
 				args.item.remove();
+				if ( !args.isLast )
+					args.block = args.block.kcReorder( args.mode, true );
 			}
 
 			for ( var i=0; i < callbacks.del.length; i++ ) {
@@ -235,16 +239,8 @@
 	});
 
 
-	// Remove tax/meta query row
+	// Tax/Meta query row cloner
 	$.kcRowCloner();
-	$.kcRowCloner.addCallback(
-		'del',
-		function( args ) {
-			if ( args.removed && !args.isLast )
-				args.block.kcReorder( args.anchor.attr('rel'), true );
-		}
-	);
-
 
 	$.kcPostFinder();
 })(jQuery);
