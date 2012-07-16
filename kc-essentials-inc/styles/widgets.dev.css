@@ -8,10 +8,15 @@ html {overflow-y:scroll;}
 	padding-bottom:1px;
 	margin-top:0;
 }
+ul.kcw-control-block,
+.kcw-control-block ul {
+	margin-bottom:0;
+}
 .kcw-control-block li {
 	overflow:hidden;
 	margin:0;
-	padding-bottom:3px}
+	padding-bottom:3px;
+}
 .kcw-control-block.taxonomies li.relation {margin-bottom:1em}
 .kcw-control-block .terms {
 	max-height:10em;
