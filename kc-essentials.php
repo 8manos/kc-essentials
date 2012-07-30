@@ -29,6 +29,9 @@ class kcEssentials {
 
 		self::$data['paths'] = $paths;
 
+		# Register to KC Settings
+		add_filter( 'kc_settings_kids', array(__CLASS__, '_register') );
+
 		$settings = kc_get_option( 'kc_essentials' );
 		self::$data['settings'] = $settings;
 
@@ -51,13 +54,22 @@ class kcEssentials {
 		require_once "{$paths['inc']}/widget_widgets.php";
 		add_action( 'widgets_init', array('kcEssentials_widgets', 'init') );
 
-		register_deactivation_hook( $paths['p_file'], array(__CLASS__, '_deactivate') );
-
 		# Components
 		if ( !isset($settings['components']) || empty($settings['components']) )
 			return false;
 
 		add_action( 'init', array(__CLASS__, '_component_activation'), 100 );
+	}
+
+
+	public static function _register( $kids ) {
+		$kids['kc_essentials'] = array(
+			'name' => 'KC Essentials',
+			'type' => 'plugin',
+			'file' => kc_plugin_file( __FILE__ )
+		);
+
+		return $kids;
 	}
 
 
@@ -98,22 +110,6 @@ class kcEssentials {
 
 		if ( !class_exists('kcSettings') )
 			wp_die( 'Please install and activate <a href="http://wordpress.org/extend/plugins/kc-settings/">KC Settings</a> before activating this plugin.<br /> <a href="'.wp_get_referer().'">&laquo; Go back</a> to plugins page.' );
-
-		$kcs = kcSettings::get_data('status');
-		$kcs['kids']['kc_essentials'] = array(
-			'name' => 'KC Essentials',
-			'type' => 'plugin',
-			'file' => kc_plugin_file( __FILE__ )
-		);
-		update_option( 'kc_settings', $kcs );
-	}
-
-
-	# Unregister from KC Settings
-	public static function _deactivate() {
-		$kcs = kcSettings::get_data('status');
-		unset( $kcs['kids']['kc_essentials'] );
-		update_option( 'kc_settings', $kcs );
 	}
 
 
