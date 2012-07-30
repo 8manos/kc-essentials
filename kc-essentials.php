@@ -66,7 +66,7 @@ class kcEssentials {
 		$kids['kc_essentials'] = array(
 			'name' => 'KC Essentials',
 			'type' => 'plugin',
-			'file' => kc_plugin_file( __FILE__ )
+			'file' => self::$data['paths']['p_file']
 		);
 
 		return $kids;
