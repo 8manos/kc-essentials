@@ -51,8 +51,13 @@ class kcEssentials {
 		# Scripts n styles
 		add_action( 'init', array(__CLASS__, '_sns_register'), 100 );
 
+		# Register sidebars and widgets
 		require_once "{$paths['inc']}/widget_widgets.php";
 		add_action( 'widgets_init', array('kcEssentials_widgets', 'init') );
+
+		# Term thumbnails
+		require_once "{$paths['inc']}/taxonomy_thumb.php";
+		kcEssentials_termthumb::init();
 
 		# Components
 		if ( !isset($settings['components']) || empty($settings['components']) )

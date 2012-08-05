@@ -33,7 +33,8 @@ class kcEssentials_options {
 						'type'    => 'checkbox',
 						'options' => array(
 							'taxonomy_unique' => __('Unique taxonomies', 'kc-essentials'),
-							'taxonomy_media'  => __('Media taxonomies', 'kc-essentials')
+							'taxonomy_media'  => __('Media taxonomies', 'kc-essentials'),
+							'taxonomy_thumb'  => __('Term thumbnail', 'kc-essentials')
 						)
 					),
 					array(
@@ -101,10 +102,34 @@ class kcEssentials_options {
 						'type'    => 'checkbox',
 						'options' => $taxonomies
 					)
-				),
-				'metabox' => array(
-					'context'  => 'side',
-					'priority' => 'default'
+				)
+			);
+
+			# Term thumbnails
+			$sections[] = array(
+				'id'     => 'taxonomy_thumb',
+				'title'  => __('Term thumbnails', 'kc-essentials'),
+				'fields' => array(
+					array(
+						'id'      => 'taxonomies',
+						'title'   => __('Taxonomies', 'kc-essentials'),
+						'type'    => 'checkbox',
+						'options' => $taxonomies
+					),
+					array(
+						'id'      => 'size',
+						'title'   => __('Default image size', 'kc-essentials'),
+						'type'    => 'select',
+						'options' => kcSettings_options::$image_sizes
+					),
+					array(
+						'id'      => 'misc',
+						'title'   => __('Misc.', 'kc-essentials'),
+						'type'    => 'checkbox',
+						'options' => array(
+							'no_display_thumb' => __("Don't display thumbnails in term table", 'kc-essentials')
+						)
+					)
 				)
 			);
 
@@ -126,10 +151,6 @@ class kcEssentials_options {
 							'type'    => 'checkbox',
 							'options' => $taxonomies
 						)
-					),
-					'metabox' => array(
-						'context'  => 'side',
-						'priority' => 'default'
 					)
 				);
 			}
@@ -140,11 +161,7 @@ class kcEssentials_options {
 		$sections[] = array(
 			'id'      => 'widget_areas',
 			'title'   => __('Additional sidebars/widget areas', 'kc-essentials'),
-			'cb'      => array(__CLASS__, 'cb_section_widget_areas'),
-			'metabox' => array(
-				'context'  => 'side',
-				'priority' => 'default'
-			)
+			'cb'      => array(__CLASS__, 'cb_section_widget_areas')
 		);
 
 		# Additional widgets
@@ -165,10 +182,6 @@ class kcEssentials_options {
 						'shortcode' => __('KC Shortcode', 'kc-essentials')
 					)
 				)
-			),
-			'metabox' => array(
-				'context'  => 'side',
-				'priority' => 'default'
 			)
 		);
 
@@ -191,10 +204,6 @@ class kcEssentials_options {
 					'attr'  => array('style' => 'width:98%' ),
 					'desc'  => __('Predefined widget classes (optional, separate with spaces)', 'kc-essentials')
 				)
-			),
-			'metabox' => array(
-				'context'  => 'side',
-				'priority' => 'default'
 			)
 		);
 
@@ -226,10 +235,6 @@ class kcEssentials_options {
 			'id'      => 'enhc_history_js',
 			'title'   => __('History.js', 'kc-essentials'),
 			'desc'    => __('Leave each field empty for default values. Separate <em>selectors</em> with commas, and <em>classes</em> with spaces.', 'kc-essentials'),
-			'metabox' => array(
-				'context'   => 'advanced',
-				'priority'  => 'default'
-			),
 			'fields'	=> array(
 				array(
 					'id'      => 'el_excludes',
