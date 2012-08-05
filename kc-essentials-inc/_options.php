@@ -116,6 +116,12 @@ class kcEssentials_options {
 						'options' => $taxonomies
 					),
 					array(
+						'id'    => 'default',
+						'title' => __('Default image', 'kc-essentials'),
+						'type'  => 'file',
+						'mode'  => 'single'
+					),
+					array(
 						'id'      => 'size',
 						'title'   => __('Default size', 'kc-essentials'),
 						'type'    => 'select',

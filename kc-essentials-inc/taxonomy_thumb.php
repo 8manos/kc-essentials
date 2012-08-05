@@ -77,11 +77,12 @@ class kcEssentials_termthumb {
 	public static function get_thumb( $term_id = '', $size = '', $attr = array() ) {
 		if ( !$term_id && ( is_tax() || is_category() || is_tag() ) )
 			$term_id = get_queried_object_id();
-
 		if ( !$term_id )
 			return false;
 
 		$thumb_id = get_metadata( 'term', $term_id, 'kcs-term-thumb', true );
+		if ( !$thumb_id && !is_admin() && self::$data['settings']['default'] && self::$data['settings']['default'] )
+			$thumb_id = self::$data['settings']['default'];
 		if ( !$thumb_id )
 			return false;
 
