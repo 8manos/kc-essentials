@@ -132,7 +132,7 @@ class kcEssentials_options {
 						'title'   => __('Misc.', 'kc-essentials'),
 						'type'    => 'checkbox',
 						'options' => array(
-							'no_display_thumb' => __("Don't display thumbnails in term table", 'kc-essentials')
+							'no_display_thumb' => __("Don&#39;t display thumbnails in term table", 'kc-essentials')
 						)
 					)
 				)
@@ -340,6 +340,22 @@ class kcEssentials_options {
 						<p>'.__('Comma separated list of jQuery selectors for active non-menu link elements, default is <code>.current, .active</code>.', 'kc-essentials').'</p>
 						<h4>'.__('Active non-menu link classes', 'kc-essentials').'</h4>
 						<p>'.__('<b>Space</b> separated list of active non-menu item classes.', 'kc-essentials').'</p>
+					'
+				),
+				array(
+					'id'      => 'taxonomy_thumb',
+					'title'   => __('Term thumbnail'),
+					'content' => '
+						<h4>'.__('Getting the thumbnail', 'kc-essentials').'</h4>
+						<p>'.sprintf( __('Use %s to get the term&#39;s thumbnail. All arguments are optional if you&#39;re calling it in a term/category/tag index page. Otherwise you need to supply the <code>$term_id</code>.', 'kc-essentials'), '<code>kc_get_term_thumbnail( $term_id, $size, $attr )</code>' ).'</p>
+						<h4>'.__('Taxonomies', 'kc-essentials').'</h4>
+						<p>'.__('Check the desired taxonomies', 'kc-essentials').'</p>
+						<h4>'.__('Default image', 'kc-essentials').'</h4>
+						<p>'.__('If you set an image here, <code>kc_get_term_thumbnail()</code> will always return this image when a term doesn&#39;t have a thumbnail set.', 'kc-essentials').'</p>
+						<h4>'.__('Default size', 'kc-essentials').'</h4>
+						<p>'.__('If you set an image size here, <code>kc_get_term_thumbnail()</code> will use it when you don&#39;t supply a size argument.', 'kc-essentials').'</p>
+						<h4>'.__("Don&#39;t display thumbnails in term table", 'kc-essentials').'</h4>
+						<p>'.__('If checked, the term thumbnails won&#39;t be displayed in the terms list table.', 'kc-essentials').'</p>
 					'
 				)
 			)
