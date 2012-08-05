@@ -117,7 +117,7 @@ class kcEssentials_options {
 					),
 					array(
 						'id'      => 'size',
-						'title'   => __('Default image size', 'kc-essentials'),
+						'title'   => __('Default size', 'kc-essentials'),
 						'type'    => 'select',
 						'options' => kcSettings_options::$image_sizes
 					),

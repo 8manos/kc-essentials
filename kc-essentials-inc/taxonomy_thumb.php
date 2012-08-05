@@ -8,7 +8,7 @@
  */
 
 class kcEssentials_termthumb {
-	private static $data = array();
+	private static $data = array( 'settings' => array() );
 
 	public static function init() {
 		$settings = kcEssentials::get_data( 'settings' );
@@ -60,11 +60,7 @@ class kcEssentials_termthumb {
 
 
 	public static function _column_thumb_display( $actions, $term ) {
-		if (
-			( $icon = get_metadata('term', $term->term_id, 'kcs-term-thumb', true) )
-			&& ( $img = wp_get_attachment_image($icon) )
-		)
-      echo '<a href="'.get_edit_post_link($icon).'" class="term-icon">'.$img.'</a>';
+		echo self::get_thumb( $term->term_id, $size = 'thumbnail', $attr = array( 'class'=> 'term-icon') );
 
 		return $actions;
 	}
@@ -76,6 +72,33 @@ class kcEssentials_termthumb {
 <style>.term-icon {float:left;width:40px;height:40px;overflow:hidden;margin-right:10px} .term-icon img {max-width:100%;height:auto}</style>
 		<?php }
 	}
+
+
+	public static function get_thumb( $term_id = '', $size = '', $attr = array() ) {
+		if ( !$term_id && ( is_tax() || is_category() || is_tag() ) )
+			$term_id = get_queried_object_id();
+
+		if ( !$term_id )
+			return false;
+
+		$thumb_id = get_metadata( 'term', $term_id, 'kcs-term-thumb', true );
+		if ( !$thumb_id )
+			return false;
+
+		if ( !$size ) {
+			if ( isset(self::$data['settings']['size']) && self::$data['settings']['size'] )
+				$size = self::$data['settings']['size'];
+			else
+				$size = 'thumbnail';
+		}
+
+		return wp_get_attachment_image( $thumb_id, $size, false, $attr );
+	}
+}
+
+
+function kc_get_term_thumbnail( $term_id = '', $size = '', $attr = array() ) {
+	return kcEssentials_termthumb::get_thumb( $term_id, $size, $attr );
 }
 
 ?>
