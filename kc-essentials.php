@@ -2,14 +2,14 @@
 
 /**
  * @package KC_Essentials
- * @version 0.1
+ * @version 0.2
  */
 
 /*
 Plugin name: KC Essentials
 Plugin URI: http://kucrut.org/
 Description: The essentials
-Version: 0.1
+Version: 0.2
 Author: Dzikri Aziz
 Author URI: http://kucrut.org/
 License: GPL v2
@@ -18,7 +18,7 @@ License: GPL v2
 
 class kcEssentials {
 	protected static $data = array(
-		'version'	=> '0.1'
+		'version'	=> '0.2'
 	);
 
 

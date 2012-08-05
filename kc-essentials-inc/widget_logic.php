@@ -1,8 +1,8 @@
 <?php
 
 /**
+ * Widget logic module
  * @package KC_Essentials
- * @version 0.1
  */
 
 

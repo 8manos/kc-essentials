@@ -1,8 +1,8 @@
 <?php
 
 /**
+ * Simple banner widget module
  * @package KC_Essentials
- * @version 0.1
  */
 
 

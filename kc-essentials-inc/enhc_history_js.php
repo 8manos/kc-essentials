@@ -1,8 +1,8 @@
 <?php
 
 /**
+ * History.js module
  * @package KC_Essentials
- * @version 0.1
  */
 
 

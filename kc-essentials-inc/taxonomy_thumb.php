@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Term thumbnail module
+ *
+ * @package KC_Essentials
+ * @since 0.2
+ */
+
 class kcEssentials_termthumb {
 	private static $data = array();
 

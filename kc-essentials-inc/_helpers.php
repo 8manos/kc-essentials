@@ -2,7 +2,6 @@
 
 /**
  * @package KC_Essentials
- * @version 0.1
  */
 
 

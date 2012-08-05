@@ -1,8 +1,8 @@
 <?php
 
 /**
+ * Media taxonomies module
  * @package KC_Essentials
- * @version 0.1
  */
 
 

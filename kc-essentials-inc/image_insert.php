@@ -1,8 +1,8 @@
 <?php
 
 /**
+ * Custom image size insert module
  * @package KC_Essentials
- * @version 0.1
  */
 
 
