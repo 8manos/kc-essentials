@@ -170,10 +170,10 @@ class kcEssentials_widget_logic {
 				foreach ( $settings[$widget]['kc-logic'] as $func ) {
 					if ( isset( $settings[$widget]['kc-logic-args'][$func] ) && !empty($settings[$widget]['kc-logic-args'][$func]) ) {
 						$args =
-							strpos($settings[$widget]['kc-logic-args'][$func], ',') === true
-							? explode(',', $settings[$widget]['kc-logic-args'][$func])
-							: $settings[$widget]['kc-logic-args'][$func];
-					$res = call_user_func( $func, $args );
+							strpos($settings[$widget]['kc-logic-args'][$func], ',') === false
+							? $settings[$widget]['kc-logic-args'][$func]
+							: explode(',', $settings[$widget]['kc-logic-args'][$func]);
+						$res = call_user_func( $func, $args );
 					}
 					else {
 						$res = call_user_func( $func );
@@ -182,7 +182,6 @@ class kcEssentials_widget_logic {
 					if ( $res === $show )
 						continue 2;
 				}
-
 				unset( $widgets[$idx] );
 			}
 			$sidebars_widgets[$sidebar] = $widgets;
