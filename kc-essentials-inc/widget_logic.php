@@ -125,12 +125,16 @@ class kcEssentials_widget_logic {
 			,'is_category', 'is_tag', 'is_tax', 'is_author', 'is_page_template'
 			,'is_post_type_archive'
 		);
+		$has_finder = array( 'is_page', 'is_single', 'is_singular', 'is_attachment' );
 		foreach ( $has_args as $cond ) {
 			$args_val = isset($setting['kc-logic-args'][$cond]) ? $setting['kc-logic-args'][$cond] : '';
+			$i_class = 'widefat';
+			if ( in_array($cond, $has_finder ) )
+				$i_class .= ' kc-find-post';
 	?>
 	<p class="<?php echo $f_id ?>-args" data-dep="<?php echo $cond ?>">
 		<label for="<?php echo "{$args_id}-{$cond}" ?>"><?php printf( __('%1$s arg. %2$s', 'kc-essentials'), "<code>{$cond}()</code>", "<small><a title='".__('Read documentation at WP Codex', 'kc-essentials')."' href='http://codex.wordpress.org/Function_Reference/{$cond}'>?</a></small>" ) ?></label>
-		<input id="<?php echo "{$args_id}-{$cond}" ?>" name="<?php echo "{$args_name}[{$cond}]" ?>" class="widefat" type="text" value="<?php esc_attr_e($args_val) ?>" />
+		<input id="<?php echo "{$args_id}-{$cond}" ?>" name="<?php echo "{$args_name}[{$cond}]" ?>" class="<?php echo $i_class ?>" type="text" value="<?php esc_attr_e($args_val) ?>" />
 	</p>
 		<?php } ?>
 </details>

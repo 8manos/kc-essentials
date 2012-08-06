@@ -44,7 +44,7 @@ class kcEssentials_options {
 						'options' => array(
 							'widget_widgets' => __('Additional widgets', 'kc-essentials'),
 							'widget_areas'   => __('Register additional sidebars/widget areas', 'kc-essentials'),
-							'widget_logic'   => __('Conditional widgets, <em>a.k.a.</em> widget logic', 'kc-essentials'),
+							'widget_logic'   => sprintf( __('Conditional widgets, <em>a.k.a.</em> widget logic %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-widget_logic" class="kc-help-trigger">?</a>' ),
 							'widget_attr'    => sprintf( __('Custom widget ID &amp; classes %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-widget_attr" class="kc-help-trigger">?</a>' )
 						)
 					),
@@ -358,6 +358,16 @@ class kcEssentials_options {
 						<img src="'.$paths['url'].'/kc-essentials-inc/assets/custom-widget-attr-1.png" alt=""/><br /><br />
 						'.__('&hellip; then you&#39;ll be able to independently style the widgets ;-)').'
 						</p>
+					'
+				),
+				array(
+					'id'      => 'widget_logic',
+					'title'   => __('Conditional widgets', 'kc-essentials'),
+					'content' => '
+						<p>'.__('This is what you&#39;ll get if you enable this:', 'kc-essentials').'<br /><br />
+						<img src="'.$paths['url'].'/kc-essentials-inc/assets/widget-logic.png" alt=""/><br /><br />
+						To pass multiple IDs, separate them with commas, it will be automatically converted to an array.<br />
+						Also, try double-clicking on some argument input fields to show the post finder dialog.</p>
 					'
 				),
 				array(
