@@ -12,7 +12,7 @@ class kcEssentials_widget_logic {
 	public static function init() {
 		# Custom widget ID & classes
 		# 0. Add fields on widget configuration form
-		add_filter( 'widget_form_callback', array(__CLASS__, '_fields'), 10, 2 );
+		add_filter( 'in_widget_form', array(__CLASS__, '_fields'), 10, 3 );
 
 		# 1. Update widget options
 		add_filter( 'widget_update_callback', array(__CLASS__, '_save'), 10, 4 );
@@ -30,7 +30,7 @@ class kcEssentials_widget_logic {
 	 * Add logic fields to widget configuration form
 	 *
 	 */
-	public static function _fields( $instance, $widget ) {
+	public static function _fields( $widget, $return, $instance ) {
 		$f_id			= $widget->get_field_id('kc-logic');
 		$f_name		= $widget->get_field_name('kc-logic');
 		$setting	= kcEssentials_widgets::get_setting( $widget->id ); ?>
@@ -96,7 +96,9 @@ class kcEssentials_widget_logic {
 		?>
 	</p>
 </div>
-	<?php }
+	<?php
+		$return = null;
+	}
 
 
 	public static function _save( $instance, $new, $old, $widget ) {
