@@ -65,26 +65,105 @@ class kcEssentials_options {
 						'options' => array(
 							'menu_cpt_archive' => sprintf( __('Custom post type archive menu %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-menu_cpt_archive" class="kc-help-trigger">?</a>' )
 						)
-					),
-					array(
-						'id'      => 'enhancement',
-						'title'   => __('Enhancements', 'kc-essentials'),
-						'type'    => 'checkbox',
-						'options' => array(
-							'enhc_history_js' => sprintf( __('Ajaxify the whole site using %1$s and jQuery, <em>(experimental)</em> %2$s', 'kc-essentials'), '<a href="https://github.com/balupton/History.js/">history.js</a>', '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-enhc_history_js" class="kc-help-trigger">?</a>' )
-						)
-					),
-					array(
-						'id'      => 'helper',
-						'title'   => __('Helper functions', 'kc-essentials'),
-						'type'    => 'checkbox',
-						'options' => array(
-							'helper_adjacent_post' => __('Get adjacent posts', 'kc-essentials') . ' (<code>KC_Adjacent_Post</code>)'
-						)
 					)
 				)
 			)
 		);
+
+		if ( !defined('KC_ESSENTIALS_EXPERIMENTAL') )
+			define( 'KC_ESSENTIALS_EXPERIMENTAL', false );
+
+		if ( KC_ESSENTIALS_EXPERIMENTAL ) {
+			$sections[0]['fields'][] = array(
+				'id'      => 'enhancement',
+				'title'   => __('Enhancements', 'kc-essentials'),
+				'type'    => 'checkbox',
+				'options' => array(
+					'enhc_history_js' => sprintf( __('Ajaxify the whole site using %1$s and jQuery, <em>(experimental)</em> %2$s', 'kc-essentials'), '<a href="https://github.com/balupton/History.js/">history.js</a>', '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-enhc_history_js" class="kc-help-trigger">?</a>' )
+				)
+			);
+			$sections[0]['fields'][] = array(
+				'id'      => 'helper',
+				'title'   => __('Helper functions', 'kc-essentials'),
+				'type'    => 'checkbox',
+				'options' => array(
+					'helper_adjacent_post' => __('Get adjacent posts', 'kc-essentials') . ' (<code>KC_Adjacent_Post</code>)'
+				)
+			);
+
+			# History.js
+			$sections[] = array(
+				'id'      => 'enhc_history_js',
+				'title'   => __('History.js', 'kc-essentials'),
+				'desc'    => __('Leave each field empty for default values. Separate <em>selectors</em> with commas, and <em>classes</em> with spaces.', 'kc-essentials'),
+				'fields'	=> array(
+					array(
+						'id'      => 'el_excludes',
+						'title'   => __('Excluded link selectors', 'kc-essentials'),
+						'type'    => 'text',
+						'default' => '#comment-popup-link',
+						'desc'    => __('Default: <code>#comment-popup-link</code>', 'kc-essentials')
+					),
+					array(
+						'id'      => 'url_excludes',
+						'title'   => __('Excluded URLs', 'kc-essentials'),
+						'type'    => 'text',
+						'default' => '/wp-admin/, /feed/',
+						'desc'    => __('Default: <code>/wp-admin/, /feed/</code>', 'kc-essentials')
+					),
+					array(
+						'id'      => 'el_content',
+						'title'   => __('Content selectors', 'kc-essentials'),
+						'type'    => 'text',
+						'default' => '#main, #content, article:first, .article:first, .post:first',
+						'desc'    => __('Default: <code>#main, #content, article:first, .article:first, .post:first</code>', 'kc-essentials')
+					),
+					array(
+						'id'      => 'el_menu',
+						'title'   => __('Menu selectors', 'kc-essentials'),
+						'type'    => 'text',
+						'default' => '.menu, nav',
+						'desc'    => __('Default: <code>.menu, nav</code>', 'kc-essentials')
+					),
+					array(
+						'id'      => 'el_menu_children',
+						'title'   => __('Children menu selectors', 'kc-essentials'),
+						'type'    => 'text',
+						'default' => '.children, .sub-menu',
+						'desc'    => __('Default: <code>.children, .sub-menu</code>', 'kc-essentials')
+					),
+					array(
+						'id'      => 'el_active_menu',
+						'title'   => __('Active menu item selectors', 'kc-essentials'),
+						'type'    => 'text',
+						'default' => '.current-menu-item, .current_page_item',
+						'desc'    => __('Default: <code>.current-menu-item, .current_page_item</code>', 'kc-essentials')
+					),
+					array(
+						'id'      => 'class_active_menu',
+						'title'   => __('Active menu item classes', 'kc-essentials'),
+						'type'    => 'text',
+						'default' => 'current-menu-item current_page_item',
+						'desc'    => __('Default: <code>current-menu-item current_page_item</code>', 'kc-essentials')
+					),
+					array(
+						'id'      => 'el_active_others',
+						'title'   => __('Active non-menu link selectors', 'kc-essentials'),
+						'type'    => 'text',
+						'default' => '.current, .active',
+						'desc'    => __('Default: <code>.current, .active</code>', 'kc-essentials')
+					),
+					array(
+						'id'      => 'class_active_others',
+						'title'   => __('Active non-menu link classes', 'kc-essentials'),
+						'type'    => 'text',
+						'default' => 'current active',
+						'desc'    => __('Default: <code>current active</code>', 'kc-essentials')
+					)
+				)
+			);
+		}
+
 
 
 		# Taxonomies
@@ -234,80 +313,6 @@ class kcEssentials_options {
 				)
 			)
 		);
-
-
-		# History.js
-		$sections[] = array(
-			'id'      => 'enhc_history_js',
-			'title'   => __('History.js', 'kc-essentials'),
-			'desc'    => __('Leave each field empty for default values. Separate <em>selectors</em> with commas, and <em>classes</em> with spaces.', 'kc-essentials'),
-			'fields'	=> array(
-				array(
-					'id'      => 'el_excludes',
-					'title'   => __('Excluded link selectors', 'kc-essentials'),
-					'type'    => 'text',
-					'default' => '#comment-popup-link',
-					'desc'    => __('Default: <code>#comment-popup-link</code>', 'kc-essentials')
-				),
-				array(
-					'id'      => 'url_excludes',
-					'title'   => __('Excluded URLs', 'kc-essentials'),
-					'type'    => 'text',
-					'default' => '/wp-admin/, /feed/',
-					'desc'    => __('Default: <code>/wp-admin/, /feed/</code>', 'kc-essentials')
-				),
-				array(
-					'id'      => 'el_content',
-					'title'   => __('Content selectors', 'kc-essentials'),
-					'type'    => 'text',
-					'default' => '#main, #content, article:first, .article:first, .post:first',
-					'desc'    => __('Default: <code>#main, #content, article:first, .article:first, .post:first</code>', 'kc-essentials')
-				),
-				array(
-					'id'      => 'el_menu',
-					'title'   => __('Menu selectors', 'kc-essentials'),
-					'type'    => 'text',
-					'default' => '.menu, nav',
-					'desc'    => __('Default: <code>.menu, nav</code>', 'kc-essentials')
-				),
-				array(
-					'id'      => 'el_menu_children',
-					'title'   => __('Children menu selectors', 'kc-essentials'),
-					'type'    => 'text',
-					'default' => '.children, .sub-menu',
-					'desc'    => __('Default: <code>.children, .sub-menu</code>', 'kc-essentials')
-				),
-				array(
-					'id'      => 'el_active_menu',
-					'title'   => __('Active menu item selectors', 'kc-essentials'),
-					'type'    => 'text',
-					'default' => '.current-menu-item, .current_page_item',
-					'desc'    => __('Default: <code>.current-menu-item, .current_page_item</code>', 'kc-essentials')
-				),
-				array(
-					'id'      => 'class_active_menu',
-					'title'   => __('Active menu item classes', 'kc-essentials'),
-					'type'    => 'text',
-					'default' => 'current-menu-item current_page_item',
-					'desc'    => __('Default: <code>current-menu-item current_page_item</code>', 'kc-essentials')
-				),
-				array(
-					'id'      => 'el_active_others',
-					'title'   => __('Active non-menu link selectors', 'kc-essentials'),
-					'type'    => 'text',
-					'default' => '.current, .active',
-					'desc'    => __('Default: <code>.current, .active</code>', 'kc-essentials')
-				),
-				array(
-					'id'      => 'class_active_others',
-					'title'   => __('Active non-menu link classes', 'kc-essentials'),
-					'type'    => 'text',
-					'default' => 'current active',
-					'desc'    => __('Default: <code>current active</code>', 'kc-essentials')
-				)
-			)
-		);
-
 
 
 		# The entry for KC Settings
