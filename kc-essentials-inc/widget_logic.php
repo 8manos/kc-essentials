@@ -40,7 +40,7 @@ class kcEssentials_widget_logic {
 				'id'         => $widget->get_field_id('kc-logic-enable'),
 				'name'       => $widget->get_field_name('kc-logic-enable'),
 				'class'      => 'hasdep kc-logic-enable',
-				'data-child' => "#{$f_id}-logics"
+				'data-child' => "#{$f_id}-logics, #{$f_id}-modes"
 			),
 			'options' => array(
 				'0' => __('Disable', 'kc-essentials'),
@@ -48,6 +48,23 @@ class kcEssentials_widget_logic {
 			),
 			'none'    => false,
 			'current' => ( isset($setting['kc-logic-enable']) && $setting['kc-logic-enable'] ) ? true : false
+		) );
+		?>
+	</p>
+	<p id="<?php echo $f_id ?>-modes" data-dep="1">
+		<label for="<?php echo $widget->get_field_id('kc-logic-mode') ?>"><?php _e('Logic mode:', 'kc-essentials') ?></label>
+		<?php echo kcForm::field( array(
+			'type'    => 'select',
+			'attr'    => array(
+				'id'   => $widget->get_field_id('kc-logic-mode'),
+				'name' => $widget->get_field_name('kc-logic-mode')
+			),
+			'options' => array(
+				'show' => __('ONLY show in&hellip;', 'kc-essentials'),
+				'hide' => __('DO NOT show in&hellip;', 'kc-essentials')
+			),
+			'none'    => false,
+			'current' => isset($setting['kc-logic-mode']) ? $setting['kc-logic-mode'] : 'show'
 		) );
 		?>
 	</p>
@@ -101,8 +118,10 @@ class kcEssentials_widget_logic {
 	public static function _save( $instance, $new, $old, $widget ) {
 		$setting = kcEssentials_widgets::get_setting( $widget->id );
 		$setting['kc-logic-enable'] = ( isset($new['kc-logic-enable']) && $new['kc-logic-enable'] ) ? true : false;
-		if ( isset($new['kc-logic']) )
-			$setting['kc-logic'] = $new['kc-logic'];
+		foreach ( array('kc-logic', 'kc-logic-mode') as $field )
+			if ( isset($new[$field]) )
+				$setting[$field] = $new[$field];
+
 		kcEssentials_widgets::save_setting( $widget->id, $setting );
 
 		return $instance;
@@ -131,8 +150,9 @@ class kcEssentials_widget_logic {
 				)
 					continue;
 
+				$show = ( $settings[$widget]['kc-logic-mode'] && $settings[$widget]['kc-logic-mode'] == 'show' ) ? true : false;
 				foreach ( $settings[$widget]['kc-logic'] as $func ) {
-					if ( call_user_func($func) === true )
+					if ( call_user_func($func) === $show )
 						continue 2;
 				}
 
