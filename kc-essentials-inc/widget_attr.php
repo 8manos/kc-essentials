@@ -61,24 +61,27 @@ class kcEssentials_widget_attr {
 					$f_opt[] = array('value' => $o, 'label' => $o);
 
 				if ( $attr == 'id' ) {
-					$f_type = 'select';
-					$f_class = 'widefat';
-				} else {
-					$f_type = 'checkbox';
-					$f_name .= '[]';
-					$f_class = '';
+					$f_attr = array(
+						'id'       => $f_id,
+						'name'     => $f_name,
+						'class' => 'widefat'
+					);
+				}
+				else {
+					$f_attr = array(
+						'id'       => $f_id,
+						'name'     => "{$f_name}[]",
+						'class'    => '',
+						'multiple' => 'multiple'
+					);
 					$f_current = explode( ' ', $f_current );
-				} ?>
-
+				}
+		?>
 		<label for="<?php echo $f_id ?>"><?php echo $label[0] ?></label><br />
 		<?php
 			echo kcForm::field( array(
-				'attr'    => array(
-					'id'    => $f_id,
-					'name'  => $f_name,
-					'class' => $f_class
-				),
-				'type'    => $f_type,
+				'type'    => 'select',
+				'attr'    => $f_attr,
 				'options' => $f_opt,
 				'current' => $f_current
 			));
@@ -97,18 +100,18 @@ class kcEssentials_widget_attr {
 	 */
 	public static function _save( $instance, $new, $old, $widget ) {
 		$setting = kcEssentials_widgets::get_setting( $widget->id );
-		foreach ( array('id', 'class') as $c ) {
+		foreach ( array('id', 'class') as $attr ) {
 			# 0. Add/Update
-			if ( isset($new["custom_{$c}"]) && !empty($new["custom_{$c}"]) ) {
-				if ( $c == 'id' )
-					$setting["custom_{$c}"] = trim( sanitize_html_class($new["custom_{$c}"]) );
+			if ( isset($new["custom_{$attr}"]) && !empty($new["custom_{$attr}"]) ) {
+				if ( $attr == 'id' )
+					$setting["custom_{$attr}"] = trim( sanitize_html_class($new["custom_{$attr}"]) );
 				else
-					$setting["custom_{$c}"] = trim( kc_essentials_sanitize_html_classes($new["custom_{$c}"]) );
+					$setting["custom_{$attr}"] = trim( kc_essentials_sanitize_html_classes($new["custom_{$attr}"]) );
 			}
 
 			# 1. Delete
 			else {
-				unset( $setting["custom_{$c}"] );
+				unset( $setting["custom_{$attr}"] );
 			}
 		}
 
@@ -129,8 +132,11 @@ class kcEssentials_widget_attr {
 			$params[0]['before_widget'] = preg_replace( '/id=".*?"/', "id=\"{$setting['custom_id']}\"", $params[0]['before_widget'], 1 );
 
 		# 1. Custom Classes
-		if ( isset($setting['custom_class']) )
-			$params[0]['before_widget'] = preg_replace( '/class="/', "class=\"{$setting['custom_class']} ", $params[0]['before_widget'], 1 );
+		if ( isset($setting['custom_class']) ) {
+			$classes = trim( $setting['custom_class'] );
+			if ( !empty($classes) )
+				$params[0]['before_widget'] = preg_replace( '/class="/', "class=\"{$setting['custom_class']} ", $params[0]['before_widget'], 1 );
+		}
 
 		return $params;
 	}
