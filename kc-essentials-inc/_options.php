@@ -21,6 +21,7 @@ class kcEssentials_options {
 
 	public static function register( $settings ) {
 		$paths = kcEssentials::get_data( 'paths' );
+		$rgt_link = class_exists( 'RegenerateThumbnails' ) ? admin_url('tools.php?page=regenerate-thumbnails') : 'http://wordpress.org/extend/plugins/regenerate-thumbnails/';
 		$sections = array(
 			array(
 				'id'      => 'components',
@@ -54,7 +55,7 @@ class kcEssentials_options {
 						'type'    => 'checkbox',
 						'options' => array(
 							'image_adaptive' => __('Adaptive images', 'kc-essentials'),
-							'image_insert'   => __('Insert images with custom sizes into post editor', 'kc-essentials'),
+							'image_insert'   => sprintf( __('Insert images with custom sizes into post editor %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-image_insert" class="kc-help-trigger">?</a>' ),
 							'image_caption'  => sprintf( __('Quicktags for attachments %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-image_caption" class="kc-help-trigger">?</a>' )
 						)
 					),
@@ -293,7 +294,6 @@ class kcEssentials_options {
 		);
 
 		# Adaptive images
-		$rgt_link = class_exists( 'RegenerateThumbnails' ) ? admin_url('tools.php?page=regenerate-thumbnails') : 'http://wordpress.org/extend/plugins/regenerate-thumbnails/';
 		$sections[] = array(
 			'id'     => 'image_adaptive',
 			'title'  => __('Adaptive Images', 'kc-essentials'),
@@ -373,6 +373,14 @@ class kcEssentials_options {
 						<img src="'.$paths['url'].'/kc-essentials-inc/assets/widget-logic.png" alt=""/><br /><br />
 						To pass multiple IDs, separate them with commas, it will be automatically converted to an array.<br />
 						Also, try double-clicking on some argument input fields to show the post finder dialog.</p>
+					'
+				),
+				array(
+					'id'      => 'image_insert',
+					'title'   => __('Insert images with custom sizes into post editor', 'kc-essentials'),
+					'content' => '
+						<p>'.__('This is what you&#39;ll get if you enable this:', 'kc-essentials').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/insert-custom-image-size.png" alt=""/></p>
+						<p>'.sprintf( __('If you don&#39;t see the custom size, either the image is smaller than that size, or you need to <a href="%s">regenerate</a> its thumbnails.', 'kc-essentials'), $rgt_link ).'</p>
 					'
 				),
 				array(
