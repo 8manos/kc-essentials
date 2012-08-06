@@ -35,12 +35,12 @@ class kcEssentials_widget_attr {
 		$setting = kcEssentials_widgets::get_setting( $widget->id );
 		$customs = array(
 			'id'	=> array(
-				__('Custom ID', 'kc-essentials'),
-				__('Custom ID', 'kc-essentials')
+				__('Custom ID:', 'kc-essentials'),
+				__('Custom ID:', 'kc-essentials')
 			),
 			'class'	=> array(
-				__('Custom classes', 'kc-essentials'),
-				__('Custom classes, <small>(separate with spaces)</small>', 'kc-essentials')
+				__('Custom classes:', 'kc-essentials'),
+				__('Custom classes <small>(separate with spaces)</small>:', 'kc-essentials')
 			)
 		); ?>
 <div class="kcwe">
@@ -77,7 +77,7 @@ class kcEssentials_widget_attr {
 					$f_current = explode( ' ', $f_current );
 				}
 		?>
-		<label for="<?php echo $f_id ?>"><?php echo $label[0] ?></label><br />
+		<label for="<?php echo $f_id ?>"><?php echo $label[0] ?></label>
 		<?php
 			echo kcForm::field( array(
 				'type'    => 'select',
