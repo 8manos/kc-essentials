@@ -33,7 +33,7 @@ class kcEssentials_options {
 						'type'    => 'checkbox',
 						'options' => array(
 							'taxonomy_unique' => sprintf( __('Unique taxonomies %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-taxonomy_unique" class="kc-help-trigger">?</a>' ),
-							'taxonomy_media'  => __('Media taxonomies', 'kc-essentials'),
+							'taxonomy_media'  => sprintf( __('Media taxonomies %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-taxonomy_media" class="kc-help-trigger">?</a>' ),
 							'taxonomy_thumb'  => sprintf( __('Term thumbnail %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-taxonomy_thumb" class="kc-help-trigger">?</a>' )
 						)
 					),
@@ -326,6 +326,11 @@ class kcEssentials_options {
 						<p>'.__('This is what you&#39;ll get if you enable this:').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/unique-taxonomy.png" alt=""/></p>
 						<p>'.__('Note: You can add more categories/terms from Posts &raquo; Categories.').'</p>
 					'
+				),
+				array(
+					'id'      => 'taxonomy_media',
+					'title'   => __('Media taxonomies', 'kc-essentials'),
+					'content' => '<p>'.__('This is what you&#39;ll get if you enable this:').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/media-taxonomies.png" alt=""/></p>'
 				),
 				array(
 					'id'      => 'taxonomy_thumb',
