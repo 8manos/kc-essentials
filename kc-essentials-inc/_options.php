@@ -34,7 +34,7 @@ class kcEssentials_options {
 						'options' => array(
 							'taxonomy_unique' => __('Unique taxonomies', 'kc-essentials'),
 							'taxonomy_media'  => __('Media taxonomies', 'kc-essentials'),
-							'taxonomy_thumb'  => __('Term thumbnail', 'kc-essentials')
+							'taxonomy_thumb'  => sprintf( __('Term thumbnail %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-taxonomy_thumb" class="kc-help-trigger">?</a>' )
 						)
 					),
 					array(
@@ -55,7 +55,7 @@ class kcEssentials_options {
 						'options' => array(
 							'image_adaptive' => __('Adaptive images', 'kc-essentials'),
 							'image_insert'   => __('Insert images with custom sizes into post editor', 'kc-essentials'),
-							'image_caption'  => __('Quicktags for attachments', 'kc-essentials')
+							'image_caption'  => sprintf( __('Quicktags for attachments %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-image_caption" class="kc-help-trigger">?</a>' )
 						)
 					),
 					array(
@@ -71,7 +71,7 @@ class kcEssentials_options {
 						'title'   => __('Enhancements', 'kc-essentials'),
 						'type'    => 'checkbox',
 						'options' => array(
-							'enhc_history_js'    => sprintf( __('Ajaxify the whole site using <a href="%s">history.js</a> and jQuery, <em>(experimental)</em>', 'kc-essentials'), 'https://github.com/balupton/History.js/' )
+							'enhc_history_js' => sprintf( __('Ajaxify the whole site using %1$s and jQuery, <em>(experimental)</em> %2$s', 'kc-essentials'), '<a href="https://github.com/balupton/History.js/">history.js</a>', '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-enhc_history_js" class="kc-help-trigger">?</a>' )
 						)
 					),
 					array(
@@ -341,7 +341,7 @@ class kcEssentials_options {
 					'content' => '<p>'.__('This is what you&#39;ll get if you enable this:').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/attachment-quicktags.png" alt=""/></p>'
 				),
 				array(
-					'id'      => 'history_js',
+					'id'      => 'enhc_history_js',
 					'title'   => __('History.js', 'kc-essentials'),
 					'content' => '
 						<h4>'.__('Excluded link selectors', 'kc-essentials').'</h4>
