@@ -71,102 +71,6 @@ class kcEssentials_options {
 			)
 		);
 
-		if ( !defined('KC_ESSENTIALS_EXPERIMENTAL') )
-			define( 'KC_ESSENTIALS_EXPERIMENTAL', false );
-
-		if ( KC_ESSENTIALS_EXPERIMENTAL ) {
-			$sections[0]['fields'][] = array(
-				'id'      => 'enhancement',
-				'title'   => __('Enhancements', 'kc-essentials'),
-				'type'    => 'checkbox',
-				'options' => array(
-					'enhc_history_js' => sprintf( __('Ajaxify the whole site using %1$s and jQuery, <em>(experimental)</em> %2$s', 'kc-essentials'), '<a href="https://github.com/balupton/History.js/">history.js</a>', '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-enhc_history_js" class="kc-help-trigger">?</a>' )
-				)
-			);
-			$sections[0]['fields'][] = array(
-				'id'      => 'helper',
-				'title'   => __('Helper functions', 'kc-essentials'),
-				'type'    => 'checkbox',
-				'options' => array(
-					'helper_adjacent_post' => __('Get adjacent posts', 'kc-essentials') . ' (<code>KC_Adjacent_Post</code>)'
-				)
-			);
-
-			# History.js
-			$sections[] = array(
-				'id'      => 'enhc_history_js',
-				'title'   => __('History.js', 'kc-essentials'),
-				'desc'    => __('Leave each field empty for default values. Separate <em>selectors</em> with commas, and <em>classes</em> with spaces.', 'kc-essentials'),
-				'fields'	=> array(
-					array(
-						'id'      => 'el_excludes',
-						'title'   => __('Excluded link selectors', 'kc-essentials'),
-						'type'    => 'text',
-						'default' => '#comment-popup-link',
-						'desc'    => __('Default: <code>#comment-popup-link</code>', 'kc-essentials')
-					),
-					array(
-						'id'      => 'url_excludes',
-						'title'   => __('Excluded URLs', 'kc-essentials'),
-						'type'    => 'text',
-						'default' => '/wp-admin/, /feed/',
-						'desc'    => __('Default: <code>/wp-admin/, /feed/</code>', 'kc-essentials')
-					),
-					array(
-						'id'      => 'el_content',
-						'title'   => __('Content selectors', 'kc-essentials'),
-						'type'    => 'text',
-						'default' => '#main, #content, article:first, .article:first, .post:first',
-						'desc'    => __('Default: <code>#main, #content, article:first, .article:first, .post:first</code>', 'kc-essentials')
-					),
-					array(
-						'id'      => 'el_menu',
-						'title'   => __('Menu selectors', 'kc-essentials'),
-						'type'    => 'text',
-						'default' => '.menu, nav',
-						'desc'    => __('Default: <code>.menu, nav</code>', 'kc-essentials')
-					),
-					array(
-						'id'      => 'el_menu_children',
-						'title'   => __('Children menu selectors', 'kc-essentials'),
-						'type'    => 'text',
-						'default' => '.children, .sub-menu',
-						'desc'    => __('Default: <code>.children, .sub-menu</code>', 'kc-essentials')
-					),
-					array(
-						'id'      => 'el_active_menu',
-						'title'   => __('Active menu item selectors', 'kc-essentials'),
-						'type'    => 'text',
-						'default' => '.current-menu-item, .current_page_item',
-						'desc'    => __('Default: <code>.current-menu-item, .current_page_item</code>', 'kc-essentials')
-					),
-					array(
-						'id'      => 'class_active_menu',
-						'title'   => __('Active menu item classes', 'kc-essentials'),
-						'type'    => 'text',
-						'default' => 'current-menu-item current_page_item',
-						'desc'    => __('Default: <code>current-menu-item current_page_item</code>', 'kc-essentials')
-					),
-					array(
-						'id'      => 'el_active_others',
-						'title'   => __('Active non-menu link selectors', 'kc-essentials'),
-						'type'    => 'text',
-						'default' => '.current, .active',
-						'desc'    => __('Default: <code>.current, .active</code>', 'kc-essentials')
-					),
-					array(
-						'id'      => 'class_active_others',
-						'title'   => __('Active non-menu link classes', 'kc-essentials'),
-						'type'    => 'text',
-						'default' => 'current active',
-						'desc'    => __('Default: <code>current active</code>', 'kc-essentials')
-					)
-				)
-			);
-		}
-
-
-
 		# Taxonomies
 		$taxonomies = kcSettings_options::$taxonomies;
 		if ( !empty($taxonomies) ) {
@@ -314,113 +218,209 @@ class kcEssentials_options {
 			)
 		);
 
+		$helps = array(
+			array(
+				'id'      => 'taxonomy_unique',
+				'title'   => __('Unique taxonomies', 'kc-essentials'),
+				'content' => '
+					<p>'.__('This is what you&#39;ll get if you enable this:', 'kc-essentials').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/unique-taxonomy.png" alt=""/></p>
+					<p>'.__('Note: You can add more categories/terms from Posts &raquo; Categories.', 'kc-essentials').'</p>
+				'
+			),
+			array(
+				'id'      => 'taxonomy_media',
+				'title'   => __('Media taxonomies', 'kc-essentials'),
+				'content' => '<p>'.__('This is what you&#39;ll get if you enable this:').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/media-taxonomies.png" alt=""/></p>'
+			),
+			array(
+				'id'      => 'taxonomy_thumb',
+				'title'   => __('Term thumbnail', 'kc-essentials'),
+				'content' => '
+					<h4>'.__('Getting the thumbnail', 'kc-essentials').'</h4>
+					<p>'.sprintf( __('Use %s to get the term&#39;s thumbnail. All arguments are optional if you&#39;re calling it in a term/category/tag index page. Otherwise you need to supply the <code>$term_id</code>.', 'kc-essentials'), '<code>kc_get_term_thumbnail( $term_id, $size, $attr )</code>' ).'</p>
+					<h4>'.__('Taxonomies', 'kc-essentials').'</h4>
+					<p>'.__('Check the desired taxonomies', 'kc-essentials').'</p>
+					<h4>'.__('Default image', 'kc-essentials').'</h4>
+					<p>'.__('If you set an image here, <code>kc_get_term_thumbnail()</code> will always return this image when a term doesn&#39;t have a thumbnail set.', 'kc-essentials').'</p>
+					<h4>'.__('Default size', 'kc-essentials').'</h4>
+					<p>'.__('If you set an image size here, <code>kc_get_term_thumbnail()</code> will use it when you don&#39;t supply a size argument.', 'kc-essentials').'</p>
+					<h4>'.__("Don&#39;t display thumbnails in term table", 'kc-essentials').'</h4>
+					<p>'.__('If checked, the term thumbnails won&#39;t be displayed in the terms list table.', 'kc-essentials').'</p>
+				'
+			),
+			array(
+				'id'      => 'widget_attr',
+				'title'   => __('Custom widget attributes', 'kc-essentials'),
+				'content' => '
+					<p>'.__('This is what you&#39;ll get if you enable this:', 'kc-essentials').'<br /><br />
+					<img src="'.$paths['url'].'/kc-essentials-inc/assets/custom-widget-attr-0.png" alt=""/><br /><br />
+					'.__('&hellip;and if you&#39;ve provided custom classes and/or IDs:', 'kc-essentials').'<br /><br />
+					<img src="'.$paths['url'].'/kc-essentials-inc/assets/custom-widget-attr-1.png" alt=""/><br /><br />
+					'.__('&hellip; then you&#39;ll be able to independently style the widgets ;-)').'
+					</p>
+				'
+			),
+			array(
+				'id'      => 'widget_logic',
+				'title'   => __('Conditional widgets', 'kc-essentials'),
+				'content' => '
+					<p>'.__('This is what you&#39;ll get if you enable this:', 'kc-essentials').'<br /><br />
+					<img src="'.$paths['url'].'/kc-essentials-inc/assets/widget-logic.png" alt=""/><br /><br />
+					To pass multiple IDs, separate them with commas, it will be automatically converted to an array.<br />
+					Also, try double-clicking on some argument input fields to show the post finder dialog.</p>
+				'
+			),
+			array(
+				'id'      => 'image_insert',
+				'title'   => __('Insert images with custom sizes into post editor', 'kc-essentials'),
+				'content' => '
+					<p>'.__('This is what you&#39;ll get if you enable this:', 'kc-essentials').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/insert-custom-image-size.png" alt=""/></p>
+					<p>'.sprintf( __('If you don&#39;t see the custom size, either the image is smaller than that size, or you need to <a href="%s">regenerate</a> its thumbnails.', 'kc-essentials'), $rgt_link ).'</p>
+				'
+			),
+			array(
+				'id'      => 'image_caption',
+				'title'   => __('Quicktags for attachments', 'kc-essentials'),
+				'content' => '<p>'.__('This is what you&#39;ll get if you enable this:', 'kc-essentials').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/attachment-quicktags.png" alt=""/></p>'
+			),
+			array(
+				'id'      => 'menu_cpt_archive',
+				'title'   => __('Custom post type archive menu', 'kc-essentials'),
+				'content' => '<p>'.__('This is what you&#39;ll get if you enable this:', 'kc-essentials').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/cpt-archive-menu.png" alt=""/></p>'
+			)
+		);
+
+		define( 'KC_ESSENTIALS_EXPERIMENTAL', false );
+		if ( !defined('KC_ESSENTIALS_EXPERIMENTAL') )
+			define( 'KC_ESSENTIALS_EXPERIMENTAL', false );
+
+		if ( KC_ESSENTIALS_EXPERIMENTAL ) {
+			$sections[0]['fields'][] = array(
+				'id'      => 'enhancement',
+				'title'   => __('Enhancements', 'kc-essentials'),
+				'type'    => 'checkbox',
+				'options' => array(
+					'enhc_history_js' => sprintf( __('Ajaxify the whole site using %1$s and jQuery, <em>(experimental)</em> %2$s', 'kc-essentials'), '<a href="https://github.com/balupton/History.js/">history.js</a>', '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-enhc_history_js" class="kc-help-trigger">?</a>' )
+				)
+			);
+			$sections[0]['fields'][] = array(
+				'id'      => 'helper',
+				'title'   => __('Helper functions', 'kc-essentials'),
+				'type'    => 'checkbox',
+				'options' => array(
+					'helper_adjacent_post' => __('Get adjacent posts', 'kc-essentials') . ' (<code>KC_Adjacent_Post</code>)'
+				)
+			);
+
+			# History.js
+			$sections[] = array(
+				'id'     => 'enhc_history_js',
+				'title'  => __('History.js', 'kc-essentials'),
+				'desc'   => __('Leave each field empty for default values. Separate <em>selectors</em> with commas, and <em>classes</em> with spaces.', 'kc-essentials'),
+				'fields' => array(
+					array(
+						'id'      => 'el_excludes',
+						'title'   => __('Excluded link selectors', 'kc-essentials'),
+						'type'    => 'text',
+						'default' => '#comment-popup-link',
+						'desc'    => __('Default: <code>#comment-popup-link</code>', 'kc-essentials')
+					),
+					array(
+						'id'      => 'url_excludes',
+						'title'   => __('Excluded URLs', 'kc-essentials'),
+						'type'    => 'text',
+						'default' => '/wp-admin/, /feed/',
+						'desc'    => __('Default: <code>/wp-admin/, /feed/</code>', 'kc-essentials')
+					),
+					array(
+						'id'      => 'el_content',
+						'title'   => __('Content selectors', 'kc-essentials'),
+						'type'    => 'text',
+						'default' => '#main, #content, article:first, .article:first, .post:first',
+						'desc'    => __('Default: <code>#main, #content, article:first, .article:first, .post:first</code>', 'kc-essentials')
+					),
+					array(
+						'id'      => 'el_menu',
+						'title'   => __('Menu selectors', 'kc-essentials'),
+						'type'    => 'text',
+						'default' => '.menu, nav',
+						'desc'    => __('Default: <code>.menu, nav</code>', 'kc-essentials')
+					),
+					array(
+						'id'      => 'el_menu_children',
+						'title'   => __('Children menu selectors', 'kc-essentials'),
+						'type'    => 'text',
+						'default' => '.children, .sub-menu',
+						'desc'    => __('Default: <code>.children, .sub-menu</code>', 'kc-essentials')
+					),
+					array(
+						'id'      => 'el_active_menu',
+						'title'   => __('Active menu item selectors', 'kc-essentials'),
+						'type'    => 'text',
+						'default' => '.current-menu-item, .current_page_item',
+						'desc'    => __('Default: <code>.current-menu-item, .current_page_item</code>', 'kc-essentials')
+					),
+					array(
+						'id'      => 'class_active_menu',
+						'title'   => __('Active menu item classes', 'kc-essentials'),
+						'type'    => 'text',
+						'default' => 'current-menu-item current_page_item',
+						'desc'    => __('Default: <code>current-menu-item current_page_item</code>', 'kc-essentials')
+					),
+					array(
+						'id'      => 'el_active_others',
+						'title'   => __('Active non-menu link selectors', 'kc-essentials'),
+						'type'    => 'text',
+						'default' => '.current, .active',
+						'desc'    => __('Default: <code>.current, .active</code>', 'kc-essentials')
+					),
+					array(
+						'id'      => 'class_active_others',
+						'title'   => __('Active non-menu link classes', 'kc-essentials'),
+						'type'    => 'text',
+						'default' => 'current active',
+						'desc'    => __('Default: <code>current active</code>', 'kc-essentials')
+					)
+				)
+			);
+
+			$helps[] = array(
+				'id'      => 'enhc_history_js',
+				'title'   => __('History.js', 'kc-essentials'),
+				'content' => '
+					<h4>'.__('Excluded link selectors', 'kc-essentials').'</h4>
+					<p>'.__('Comma separated list of jQuery selectors for link elements that shouldn&#39;t be ajaxified, default is <code>#comment-popup-link</code>', 'kc-essentials').'</p>
+					<h4>'.__('Excluded URLs', 'kc-essentials').'</h4>
+					<p>'.__('Comma separated list of URL parts that shouldn&#39;t be ajaxified, default is <code>wp-admin, feed</code>', 'kc-essentials').'</p>
+					<h4>'.__('Content selectors', 'kc-essentials').'</h4>
+					<p>'.__('Comma separated list of jQuery selectors for the content element, default is <code>#page, #main, #content, article:first, .article:first, .post:first</code>', 'kc-essentials').'</p>
+					<h4>'.__('Menu selectors', 'kc-essentials').'</h4>
+					<p>'.__('Comma separated list of jQuery selectors for the menu elements, default is <code>.menu, nav</code>', 'kc-essentials').'</p>
+					<h4>'.__('Children menu selectors', 'kc-essentials').'</h4>
+					<p>'.__('Comma separated list of jQuery selectors for the children menu elements, default is <code>.sub-menu, .children</code>.', 'kc-essentials').'</p>
+					<h4>'.__('Active menu item selectors', 'kc-essentials').'</h4>
+					<p>'.__('Comma separated list of additional jQuery selectors for active menu item, default is <code>.current-menu-item</code>.', 'kc-essentials').'</p>
+					<h4>'.__('Active menu item classes', 'kc-essentials').'</h4>
+					<p>'.__('<b>Space</b> separated list of additional active menu classes. default is <code>current-menu-item</code>.', 'kc-essentials').'</p>
+					<h4>'.__('Active non-menu link selectors', 'kc-essentials').'</h4>
+					<p>'.__('Comma separated list of jQuery selectors for active non-menu link elements, default is <code>.current, .active</code>.', 'kc-essentials').'</p>
+					<h4>'.__('Active non-menu link classes', 'kc-essentials').'</h4>
+					<p>'.__('<b>Space</b> separated list of active non-menu item classes.', 'kc-essentials').'</p>
+				'
+			);
+		}
 
 		# The entry for KC Settings
-		$kcss_settings = array(
+		$settings[] = array(
 			'prefix'       => 'kc_essentials',
 			'menu_title'   => 'KC Essentials',
 			'page_title'   => __('KC Essentials Settings', 'kc-essentials'),
 			'display'      => 'metabox',
 			'options'      => $sections,
 			'load_actions' => array(__CLASS__, 'load_actions'),
-			'help'         => array(
-				array(
-					'id'      => 'taxonomy_unique',
-					'title'   => __('Unique taxonomies', 'kc-essentials'),
-					'content' => '
-						<p>'.__('This is what you&#39;ll get if you enable this:', 'kc-essentials').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/unique-taxonomy.png" alt=""/></p>
-						<p>'.__('Note: You can add more categories/terms from Posts &raquo; Categories.', 'kc-essentials').'</p>
-					'
-				),
-				array(
-					'id'      => 'taxonomy_media',
-					'title'   => __('Media taxonomies', 'kc-essentials'),
-					'content' => '<p>'.__('This is what you&#39;ll get if you enable this:').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/media-taxonomies.png" alt=""/></p>'
-				),
-				array(
-					'id'      => 'taxonomy_thumb',
-					'title'   => __('Term thumbnail', 'kc-essentials'),
-					'content' => '
-						<h4>'.__('Getting the thumbnail', 'kc-essentials').'</h4>
-						<p>'.sprintf( __('Use %s to get the term&#39;s thumbnail. All arguments are optional if you&#39;re calling it in a term/category/tag index page. Otherwise you need to supply the <code>$term_id</code>.', 'kc-essentials'), '<code>kc_get_term_thumbnail( $term_id, $size, $attr )</code>' ).'</p>
-						<h4>'.__('Taxonomies', 'kc-essentials').'</h4>
-						<p>'.__('Check the desired taxonomies', 'kc-essentials').'</p>
-						<h4>'.__('Default image', 'kc-essentials').'</h4>
-						<p>'.__('If you set an image here, <code>kc_get_term_thumbnail()</code> will always return this image when a term doesn&#39;t have a thumbnail set.', 'kc-essentials').'</p>
-						<h4>'.__('Default size', 'kc-essentials').'</h4>
-						<p>'.__('If you set an image size here, <code>kc_get_term_thumbnail()</code> will use it when you don&#39;t supply a size argument.', 'kc-essentials').'</p>
-						<h4>'.__("Don&#39;t display thumbnails in term table", 'kc-essentials').'</h4>
-						<p>'.__('If checked, the term thumbnails won&#39;t be displayed in the terms list table.', 'kc-essentials').'</p>
-					'
-				),
-				array(
-					'id'      => 'widget_attr',
-					'title'   => __('Custom widget attributes', 'kc-essentials'),
-					'content' => '
-						<p>'.__('This is what you&#39;ll get if you enable this:', 'kc-essentials').'<br /><br />
-						<img src="'.$paths['url'].'/kc-essentials-inc/assets/custom-widget-attr-0.png" alt=""/><br /><br />
-						'.__('&hellip;and if you&#39;ve provided custom classes and/or IDs:', 'kc-essentials').'<br /><br />
-						<img src="'.$paths['url'].'/kc-essentials-inc/assets/custom-widget-attr-1.png" alt=""/><br /><br />
-						'.__('&hellip; then you&#39;ll be able to independently style the widgets ;-)').'
-						</p>
-					'
-				),
-				array(
-					'id'      => 'widget_logic',
-					'title'   => __('Conditional widgets', 'kc-essentials'),
-					'content' => '
-						<p>'.__('This is what you&#39;ll get if you enable this:', 'kc-essentials').'<br /><br />
-						<img src="'.$paths['url'].'/kc-essentials-inc/assets/widget-logic.png" alt=""/><br /><br />
-						To pass multiple IDs, separate them with commas, it will be automatically converted to an array.<br />
-						Also, try double-clicking on some argument input fields to show the post finder dialog.</p>
-					'
-				),
-				array(
-					'id'      => 'image_insert',
-					'title'   => __('Insert images with custom sizes into post editor', 'kc-essentials'),
-					'content' => '
-						<p>'.__('This is what you&#39;ll get if you enable this:', 'kc-essentials').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/insert-custom-image-size.png" alt=""/></p>
-						<p>'.sprintf( __('If you don&#39;t see the custom size, either the image is smaller than that size, or you need to <a href="%s">regenerate</a> its thumbnails.', 'kc-essentials'), $rgt_link ).'</p>
-					'
-				),
-				array(
-					'id'      => 'image_caption',
-					'title'   => __('Quicktags for attachments', 'kc-essentials'),
-					'content' => '<p>'.__('This is what you&#39;ll get if you enable this:', 'kc-essentials').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/attachment-quicktags.png" alt=""/></p>'
-				),
-				array(
-					'id'      => 'menu_cpt_archive',
-					'title'   => __('Custom post type archive menu', 'kc-essentials'),
-					'content' => '<p>'.__('This is what you&#39;ll get if you enable this:', 'kc-essentials').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/cpt-archive-menu.png" alt=""/></p>'
-				),
-				array(
-					'id'      => 'enhc_history_js',
-					'title'   => __('History.js', 'kc-essentials'),
-					'content' => '
-						<h4>'.__('Excluded link selectors', 'kc-essentials').'</h4>
-						<p>'.__('Comma separated list of jQuery selectors for link elements that shouldn&#39;t be ajaxified, default is <code>#comment-popup-link</code>', 'kc-essentials').'</p>
-						<h4>'.__('Excluded URLs', 'kc-essentials').'</h4>
-						<p>'.__('Comma separated list of URL parts that shouldn&#39;t be ajaxified, default is <code>wp-admin, feed</code>', 'kc-essentials').'</p>
-						<h4>'.__('Content selectors', 'kc-essentials').'</h4>
-						<p>'.__('Comma separated list of jQuery selectors for the content element, default is <code>#page, #main, #content, article:first, .article:first, .post:first</code>', 'kc-essentials').'</p>
-						<h4>'.__('Menu selectors', 'kc-essentials').'</h4>
-						<p>'.__('Comma separated list of jQuery selectors for the menu elements, default is <code>.menu, nav</code>', 'kc-essentials').'</p>
-						<h4>'.__('Children menu selectors', 'kc-essentials').'</h4>
-						<p>'.__('Comma separated list of jQuery selectors for the children menu elements, default is <code>.sub-menu, .children</code>.', 'kc-essentials').'</p>
-						<h4>'.__('Active menu item selectors', 'kc-essentials').'</h4>
-						<p>'.__('Comma separated list of additional jQuery selectors for active menu item, default is <code>.current-menu-item</code>.', 'kc-essentials').'</p>
-						<h4>'.__('Active menu item classes', 'kc-essentials').'</h4>
-						<p>'.__('<b>Space</b> separated list of additional active menu classes. default is <code>current-menu-item</code>.', 'kc-essentials').'</p>
-						<h4>'.__('Active non-menu link selectors', 'kc-essentials').'</h4>
-						<p>'.__('Comma separated list of jQuery selectors for active non-menu link elements, default is <code>.current, .active</code>.', 'kc-essentials').'</p>
-						<h4>'.__('Active non-menu link classes', 'kc-essentials').'</h4>
-						<p>'.__('<b>Space</b> separated list of active non-menu item classes.', 'kc-essentials').'</p>
-					'
-				)
-			)
+			'help'         => $helps
 		);
 
-		$settings[] = $kcss_settings;
 		return $settings;
 	}
 
