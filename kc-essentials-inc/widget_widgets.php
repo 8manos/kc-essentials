@@ -68,7 +68,7 @@ class kcEssentials_widgets {
 	 */
 	public static function _actions() {
 		# Scripts n styles for the widget configuration forms
-		wp_enqueue_style( 'kc-widgets-admin' );
+		wp_enqueue_style( 'kc-essentials-widgets-admin' );
 
 		# Add the post finder box
 		add_action( 'admin_footer', 'find_posts_div', 99 );

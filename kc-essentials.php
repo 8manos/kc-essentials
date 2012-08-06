@@ -86,7 +86,7 @@ class kcEssentials {
 
 		wp_register_script( 'kc-essentials', self::$data['paths']['scripts']."/settings{$suffix}.js", array('kc-settings-base'), self::$data['version'], true );
 
-		wp_register_style(  'kc-widgets-admin', self::$data['paths']['styles']."/widgets{$suffix}.css", array('kc-settings'), self::$data['version'] );
+		wp_register_style(  'kc-essentials-widgets-admin', self::$data['paths']['styles']."/widgets{$suffix}.css", array('kc-settings'), self::$data['version'] );
 		wp_register_style(  'kc-essentials', self::$data['paths']['styles']."/settings{$suffix}.css", false, self::$data['version'] );
 	}
 

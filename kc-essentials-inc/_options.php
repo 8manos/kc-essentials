@@ -45,7 +45,7 @@ class kcEssentials_options {
 							'widget_widgets' => __('Additional widgets', 'kc-essentials'),
 							'widget_areas'   => __('Register additional sidebars/widget areas', 'kc-essentials'),
 							'widget_logic'   => __('Conditional widgets, <em>a.k.a.</em> widget logic', 'kc-essentials'),
-							'widget_attr'    => __('Custom widget ID &amp; classes', 'kc-essentials')
+							'widget_attr'    => sprintf( __('Custom widget ID &amp; classes %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-widget_attr" class="kc-help-trigger">?</a>' )
 						)
 					),
 					array(
@@ -323,8 +323,8 @@ class kcEssentials_options {
 					'id'      => 'taxonomy_unique',
 					'title'   => __('Unique taxonomies', 'kc-essentials'),
 					'content' => '
-						<p>'.__('This is what you&#39;ll get if you enable this:').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/unique-taxonomy.png" alt=""/></p>
-						<p>'.__('Note: You can add more categories/terms from Posts &raquo; Categories.').'</p>
+						<p>'.__('This is what you&#39;ll get if you enable this:', 'kc-essentials').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/unique-taxonomy.png" alt=""/></p>
+						<p>'.__('Note: You can add more categories/terms from Posts &raquo; Categories.', 'kc-essentials').'</p>
 					'
 				),
 				array(
@@ -349,14 +349,25 @@ class kcEssentials_options {
 					'
 				),
 				array(
+					'id'      => 'widget_attr',
+					'title'   => __('Custom widget ID &amp; classes', 'kc-essentials'),
+					'content' => '
+						<p>'.__('This is what you&#39;ll get if you enable this:', 'kc-essentials').'<br /><br />
+						<img src="'.$paths['url'].'/kc-essentials-inc/assets/custom-widget-attr-0.png" alt=""/><br /><br />
+						'.__('&hellip;and if you&#39;ve provided custom classes and/or IDs:', 'kc-essentials').'<br /><br />
+						<img src="'.$paths['url'].'/kc-essentials-inc/assets/custom-widget-attr-1.png" alt=""/><br /><br />
+						</p>
+					'
+				),
+				array(
 					'id'      => 'image_caption',
 					'title'   => __('Quicktags for attachments', 'kc-essentials'),
-					'content' => '<p>'.__('This is what you&#39;ll get if you enable this:').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/attachment-quicktags.png" alt=""/></p>'
+					'content' => '<p>'.__('This is what you&#39;ll get if you enable this:', 'kc-essentials').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/attachment-quicktags.png" alt=""/></p>'
 				),
 				array(
 					'id'      => 'menu_cpt_archive',
 					'title'   => __('Custom post type archive menu', 'kc-essentials'),
-					'content' => '<p>'.__('This is what you&#39;ll get if you enable this:').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/cpt-archive-menu.png" alt=""/></p>'
+					'content' => '<p>'.__('This is what you&#39;ll get if you enable this:', 'kc-essentials').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/cpt-archive-menu.png" alt=""/></p>'
 				),
 				array(
 					'id'      => 'enhc_history_js',

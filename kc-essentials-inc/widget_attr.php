@@ -9,6 +9,9 @@
 class kcEssentials_widget_attr {
 
 	public static function init() {
+		# Wiget form config styles and scripts
+		add_action( 'load-widgets.php', array(__CLASS__, '_sns') );
+
 		# Custom widget ID & classes
 		# 0. Add fields on widget configuration form
 		add_filter( 'widget_form_callback', array(__CLASS__, '_fields'), 10, 2 );
@@ -18,6 +21,11 @@ class kcEssentials_widget_attr {
 
 		# 2. Modify widget markup
 		add_filter( 'dynamic_sidebar_params', array(__CLASS__, '_set') );
+	}
+
+
+	public static function _sns() {
+		wp_enqueue_style( 'kc-essentials-widgets-admin' );
 	}
 
 
