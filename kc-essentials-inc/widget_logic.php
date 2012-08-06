@@ -28,9 +28,37 @@ class kcEssentials_widget_logic {
 	 *
 	 */
 	public static function _fields( $widget, $return, $instance ) {
-		$f_id			= $widget->get_field_id('kc-logic');
-		$f_name		= $widget->get_field_name('kc-logic');
-		$setting	= kcEssentials_widgets::get_setting( $widget->id ); ?>
+		$f_id     = $widget->get_field_id('kc-logic');
+		$f_name   = $widget->get_field_name('kc-logic');
+		$setting  = kcEssentials_widgets::get_setting( $widget->id );
+		$logics   = array(
+			'is_home'              => __('Homepage', 'kc-essentials'),
+			'is_front_page'        => __('Static front page', 'kc-essentials'),
+			'is_singular'          => __('Singular', 'kc-essentials'),
+			'is_page'              => __('Page', 'kc-essentials'),
+			'is_page_template'     => __('Custom page template', 'kc-essentials'),
+			'is_single'            => __('Single post', 'kc-essentials'),
+			'is_attachment'        => __('Attachment', 'kc-essentials'),
+			'is_archive'           => __('Archive', 'kc-essentials'),
+			'is_post_type_archive' => __('Post type archive', 'kc-essentials'),
+			'is_category'          => __('Category', 'kc-essentials'),
+			'is_tag'               => __('Tag', 'kc-essentials'),
+			'is_tax'               => __('Taxonomy term', 'kc-essentials'),
+			'is_author'            => __('Author', 'kc-essentials'),
+			'is_404'               => __('404 / Not found', 'kc-essentials'),
+			'is_search'            => __('Search page', 'kc-essentials'),
+			'is_paged'             => __('Paged archive', 'kc-essentials'),
+			'is_year'              => __('Year archive', 'kc-essentials'),
+			'is_month'             => __('Month archive', 'kc-essentials'),
+			'is_date'              => __('Date archive', 'kc-essentials'),
+			'is_day'               => __('Day archive', 'kc-essentials'),
+			'is_new_day'           => __('New day', 'kc-essentials'),
+			'is_time'              => __('Time archive', 'kc-essentials'),
+			'is_preview'           => __('Preview page', 'kc-essentials'),
+			'is_user_logged_in'    => __('Logged in user', 'kc-essentials'),
+		);
+		asort( $logics );
+		?>
 <div class="kcwe">
 	<p>
 		<label for="<?php echo $widget->get_field_id('kc-logic-enable') ?>"><?php _e('Logic status:', 'kc-essentials') ?></label>
@@ -79,32 +107,7 @@ class kcEssentials_widget_logic {
 				'multiple'   => true,
 				'data-child' => ".{$f_id}-args"
 			),
-			'options' => array(
-				'is_home'              => __('Homepage', 'kc-essentials'),
-				'is_front_page'        => __('Static front page', 'kc-essentials'),
-				'is_singular'          => __('Singular', 'kc-essentials'),
-				'is_page'              => __('Page', 'kc-essentials'),
-				'is_page_template'     => __('Custom page template', 'kc-essentials'),
-				'is_single'            => __('Single post', 'kc-essentials'),
-				'is_attachment'        => __('Attachment', 'kc-essentials'),
-				'is_archive'           => __('Archive', 'kc-essentials'),
-				'is_post_type_archive' => __('Post type archive', 'kc-essentials'),
-				'is_category'          => __('Category', 'kc-essentials'),
-				'is_tag'               => __('Tag', 'kc-essentials'),
-				'is_tax'               => __('Taxonomy term', 'kc-essentials'),
-				'is_author'            => __('Author', 'kc-essentials'),
-				'is_404'               => __('404', 'kc-essentials'),
-				'is_search'            => __('Search page', 'kc-essentials'),
-				'is_paged'             => __('Paged archive', 'kc-essentials'),
-				'is_year'              => __('Year archive', 'kc-essentials'),
-				'is_month'             => __('Month archive', 'kc-essentials'),
-				'is_date'              => __('Date archive', 'kc-essentials'),
-				'is_day'               => __('Day archive', 'kc-essentials'),
-				'is_new_day'           => __('New day', 'kc-essentials'),
-				'is_time'              => __('Time archive', 'kc-essentials'),
-				'is_preview'           => __('Preview page', 'kc-essentials'),
-				'is_user_logged_in'    => __('Logged in user', 'kc-essentials'),
-			),
+			'options' => $logics,
 			'none'    => false,
 			'current' => isset($setting['kc-logic']) ? $setting['kc-logic'] : array()
 		) );
@@ -121,7 +124,7 @@ class kcEssentials_widget_logic {
 			$args_val = isset($setting['kc-logic-args'][$cond]) ? $setting['kc-logic-args'][$cond] : '';
 	?>
 	<p class="<?php echo $f_id ?>-args" data-dep="<?php echo $cond ?>">
-		<label for="<?php echo "{$args_id}-{$cond}" ?>"><?php printf( __('%s argument:', 'kc-essentials'), "<code>{$cond}</code>" ) ?></label>
+		<label for="<?php echo "{$args_id}-{$cond}" ?>"><?php printf( __('%1$s argument: %2$s', 'kc-essentials'), "<code>{$cond}()</code>", "<a title='".__('Read documentation at WP Codex', 'kc-essentials')."' href='http://codex.wordpress.org/Function_Reference/{$cond}'><small>?</small></a>" ) ?></label>
 		<input id="<?php echo "{$args_id}-{$cond}" ?>" name="<?php echo "{$args_name}[{$cond}]" ?>" class="widefat" type="text" value="<?php esc_attr_e($args_val) ?>" />
 	</p>
 	<?php } ?>
