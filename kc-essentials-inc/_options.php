@@ -356,6 +356,7 @@ class kcEssentials_options {
 						<img src="'.$paths['url'].'/kc-essentials-inc/assets/custom-widget-attr-0.png" alt=""/><br /><br />
 						'.__('&hellip;and if you&#39;ve provided custom classes and/or IDs:', 'kc-essentials').'<br /><br />
 						<img src="'.$paths['url'].'/kc-essentials-inc/assets/custom-widget-attr-1.png" alt=""/><br /><br />
+						'.__('&hellip; then you&#39;ll be able to independently style the widgets ;-)').'
 						</p>
 					'
 				),
