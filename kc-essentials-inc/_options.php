@@ -49,12 +49,11 @@ class kcEssentials_options {
 							'widget_attr'    => sprintf( __('Custom widget attributes %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-widget_attr" class="kc-help-trigger">?</a>' )
 						)
 					),
-					array(
+					'image' => array(
 						'id'      => 'image',
 						'title'   => __('Images / Attachments', 'kc-essentials'),
 						'type'    => 'checkbox',
 						'options' => array(
-							'image_adaptive' => __('Adaptive images', 'kc-essentials'),
 							'image_insert'   => sprintf( __('Insert images with custom sizes into post editor %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-image_insert" class="kc-help-trigger">?</a>' ),
 							'image_caption'  => sprintf( __('Quicktags for attachments %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-image_caption" class="kc-help-trigger">?</a>' )
 						)
@@ -197,27 +196,6 @@ class kcEssentials_options {
 			)
 		);
 
-		# Adaptive images
-		$sections[] = array(
-			'id'     => 'image_adaptive',
-			'title'  => __('Adaptive Images', 'kc-essentials'),
-			'fields' => array(
-				array(
-					'id'    => 'sizes',
-					'title' => __('Image sizes', 'kc-essentials'),
-					'type'  => 'text',
-					'attr'  => array( 'style' => 'width:98%' ),
-					'desc'  => sprintf( __('Comma separated list of image widths. <span class="impo">Don&#39;t forget to <a href="%s">regenerate the thumbnails</a></span>.', 'kc-essentials'), $rgt_link )
-				),
-				array(
-					'id'      => 'default',
-					'title'   => __('Default size', 'kc-essentials'),
-					'type'    => 'text',
-					'default' => 1280
-				)
-			)
-		);
-
 		$helps = array(
 			array(
 				'id'      => 'taxonomy_unique',
@@ -290,11 +268,32 @@ class kcEssentials_options {
 			)
 		);
 
-		define( 'KC_ESSENTIALS_EXPERIMENTAL', false );
 		if ( !defined('KC_ESSENTIALS_EXPERIMENTAL') )
 			define( 'KC_ESSENTIALS_EXPERIMENTAL', false );
 
 		if ( KC_ESSENTIALS_EXPERIMENTAL ) {
+			# Adaptive images
+			$sections[0]['fields']['image']['options']['image_adaptive'] = __('Adaptive images', 'kc-essentials');
+			$sections[] = array(
+				'id'     => 'image_adaptive',
+				'title'  => __('Adaptive Images', 'kc-essentials'),
+				'fields' => array(
+					array(
+						'id'    => 'sizes',
+						'title' => __('Image sizes', 'kc-essentials'),
+						'type'  => 'text',
+						'attr'  => array( 'style' => 'width:98%' ),
+						'desc'  => sprintf( __('Comma separated list of image widths. <span class="impo">Don&#39;t forget to <a href="%s">regenerate the thumbnails</a></span>.', 'kc-essentials'), $rgt_link )
+					),
+					array(
+						'id'      => 'default',
+						'title'   => __('Default size', 'kc-essentials'),
+						'type'    => 'text',
+						'default' => 1280
+					)
+				)
+			);
+
 			$sections[0]['fields'][] = array(
 				'id'      => 'enhancement',
 				'title'   => __('Enhancements', 'kc-essentials'),
