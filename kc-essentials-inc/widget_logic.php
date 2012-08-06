@@ -19,9 +19,6 @@ class kcEssentials_widget_logic {
 
 		# 2. Remove widgets from sidebars as needed
 		add_filter( 'sidebars_widgets', array(__CLASS__, '_filter_widgets') );
-
-		# Widget config form scripts & styles
-		add_action( 'load-widgets.php', array('kcEssentials_widgets', '_actions') );
 	}
 
 

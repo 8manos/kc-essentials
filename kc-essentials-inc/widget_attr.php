@@ -9,9 +9,6 @@
 class kcEssentials_widget_attr {
 
 	public static function init() {
-		# Wiget form config styles and scripts
-		add_action( 'load-widgets.php', array(__CLASS__, '_sns') );
-
 		# Custom widget ID & classes
 		# 0. Add fields on widget configuration form
 		add_filter( 'in_widget_form', array(__CLASS__, '_fields'), 9, 3 );

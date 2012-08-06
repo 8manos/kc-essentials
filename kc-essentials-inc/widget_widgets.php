@@ -19,6 +19,9 @@ class kcEssentials_widgets {
 		)
 			return false;
 
+		# Scripts & styles for widget config forms
+		add_action( 'load-widgets.php', array(__CLASS__, '_actions') );
+
 		# Register sidebars
 		if (
 			in_array('widget_areas', $settings['components']['widget'])
@@ -45,8 +48,6 @@ class kcEssentials_widgets {
 				require_once $file;
 				register_widget( "kc_widget_{$widget}" );
 			}
-
-			add_action( 'load-widgets.php', array(__CLASS__, '_actions') );
 		}
 	}
 
