@@ -31,6 +31,7 @@ class kcEssentials_widget_logic {
 		$f_id     = $widget->get_field_id('kc-logic');
 		$f_name   = $widget->get_field_name('kc-logic');
 		$setting  = kcEssentials_widgets::get_setting( $widget->id );
+		$enabled  = ( isset($setting['kc-logic-enable']) && $setting['kc-logic-enable'] ) ? true : false;
 		$logics   = array(
 			'is_home'              => __('Homepage', 'kc-essentials'),
 			'is_front_page'        => __('Static front page', 'kc-essentials'),
@@ -57,78 +58,82 @@ class kcEssentials_widget_logic {
 			'is_preview'           => __('Preview page', 'kc-essentials'),
 			'is_user_logged_in'    => __('Logged in user', 'kc-essentials'),
 		);
-		asort( $logics );
-		?>
-<div class="kcwe">
-	<p>
-		<label for="<?php echo $widget->get_field_id('kc-logic-enable') ?>"><?php _e('Logic status:', 'kc-essentials') ?></label>
-		<?php echo kcForm::field( array(
-			'type'    => 'select',
-			'attr'    => array(
-				'id'         => $widget->get_field_id('kc-logic-enable'),
-				'name'       => $widget->get_field_name('kc-logic-enable'),
-				'class'      => 'hasdep kc-logic-enable',
-				'data-child' => "#{$f_id}-logics, #{$f_id}-modes"
-			),
-			'options' => array(
-				'0' => __('Disable', 'kc-essentials'),
-				'1' => __('Enable', 'kc-essentials')
-			),
-			'none'    => false,
-			'current' => ( isset($setting['kc-logic-enable']) && $setting['kc-logic-enable'] ) ? true : false
-		) );
-		?>
-	</p>
-	<p id="<?php echo $f_id ?>-modes" data-dep="1">
-		<label for="<?php echo $widget->get_field_id('kc-logic-mode') ?>"><?php _e('Logic mode:', 'kc-essentials') ?></label>
-		<?php echo kcForm::field( array(
-			'type'    => 'select',
-			'attr'    => array(
-				'id'   => $widget->get_field_id('kc-logic-mode'),
-				'name' => $widget->get_field_name('kc-logic-mode')
-			),
-			'options' => array(
-				'show' => __('ONLY show in&hellip;', 'kc-essentials'),
-				'hide' => __('DO NOT show in&hellip;', 'kc-essentials')
-			),
-			'none'    => false,
-			'current' => isset($setting['kc-logic-mode']) ? $setting['kc-logic-mode'] : 'show'
-		) );
-		?>
-	</p>
-	<p id="<?php echo $f_id ?>-logics" data-dep="1">
-		<label for="<?php echo $f_id ?>"><?php _e('Logic locations:', 'kc-essentials') ?></label>
-		<?php echo kcForm::field( array(
-			'type'    => 'select',
-			'attr'    => array(
-				'id'         => $f_id,
-				'name'       => "{$f_name}[]",
-				'class'      => 'hasdep',
-				'multiple'   => true,
-				'data-child' => ".{$f_id}-args"
-			),
-			'options' => $logics,
-			'none'    => false,
-			'current' => isset($setting['kc-logic']) ? $setting['kc-logic'] : array()
-		) );
-		?>
-	</p>
+		asort( $logics ); ?>
+<details<?php if ( $enabled ) echo ' open' ?>>
+	<summary><?php _e('Conditionals / Widget Logic', 'kc-essentials') ?></summary>
+	<ul class="kcw-control-block">
+		<li>
+			<label for="<?php echo $widget->get_field_id('kc-logic-enable') ?>"><?php _e('Status:', 'kc-essentials') ?></label>
+			<?php echo kcForm::field( array(
+				'type'    => 'select',
+				'attr'    => array(
+					'id'         => $widget->get_field_id('kc-logic-enable'),
+					'name'       => $widget->get_field_name('kc-logic-enable'),
+					'class'      => 'hasdep kc-logic-enable',
+					'data-child' => "#{$f_id}-logics, #{$f_id}-modes"
+				),
+				'options' => array(
+					'0' => __('Disable', 'kc-essentials'),
+					'1' => __('Enable', 'kc-essentials')
+				),
+				'none'    => false,
+				'current' => $enabled
+			) );
+			?>
+		</li>
+		<li id="<?php echo $f_id ?>-modes" data-dep="1">
+			<label for="<?php echo $widget->get_field_id('kc-logic-mode') ?>"><?php _e('Mode:', 'kc-essentials') ?></label>
+			<?php echo kcForm::field( array(
+				'type'    => 'select',
+				'attr'    => array(
+					'id'   => $widget->get_field_id('kc-logic-mode'),
+					'name' => $widget->get_field_name('kc-logic-mode')
+				),
+				'options' => array(
+					'show' => __('ONLY show in&hellip;', 'kc-essentials'),
+					'hide' => __('DO NOT show in&hellip;', 'kc-essentials')
+				),
+				'none'    => false,
+				'current' => isset($setting['kc-logic-mode']) ? $setting['kc-logic-mode'] : 'show'
+			) );
+			?>
+		</li>
+		<li id="<?php echo $f_id ?>-logics" data-dep="1">
+			<label for="<?php echo $f_id ?>"><?php _e('Locations:', 'kc-essentials') ?></label>
+			<?php echo kcForm::field( array(
+				'type'    => 'select',
+				'attr'    => array(
+					'id'         => $f_id,
+					'name'       => "{$f_name}[]",
+					'class'      => 'hasdep',
+					'multiple'   => true,
+					'data-child' => ".{$f_id}-args"
+				),
+				'options' => $logics,
+				'none'    => false,
+				'current' => isset($setting['kc-logic']) ? $setting['kc-logic'] : array()
+			) );
+			?>
+		</li>
+	</ul>
+
 	<?php
 		$args_id   = $widget->get_field_id('kc-logic-args');
 		$args_name = $widget->get_field_name('kc-logic-args');
-		foreach ( array(
+		$has_args  = array(
 			'is_page', 'is_single', 'is_singular', 'is_attachment'
 			,'is_category', 'is_tag', 'is_tax', 'is_author', 'is_page_template'
 			,'is_post_type_archive'
-		) as $cond ) {
+		);
+		foreach ( $has_args as $cond ) {
 			$args_val = isset($setting['kc-logic-args'][$cond]) ? $setting['kc-logic-args'][$cond] : '';
 	?>
 	<p class="<?php echo $f_id ?>-args" data-dep="<?php echo $cond ?>">
-		<label for="<?php echo "{$args_id}-{$cond}" ?>"><?php printf( __('%1$s argument: %2$s', 'kc-essentials'), "<code>{$cond}()</code>", "<a title='".__('Read documentation at WP Codex', 'kc-essentials')."' href='http://codex.wordpress.org/Function_Reference/{$cond}'><small>?</small></a>" ) ?></label>
+		<label for="<?php echo "{$args_id}-{$cond}" ?>"><?php printf( __('%1$s arg. %2$s', 'kc-essentials'), "<code>{$cond}()</code>", "<small><a title='".__('Read documentation at WP Codex', 'kc-essentials')."' href='http://codex.wordpress.org/Function_Reference/{$cond}'>?</a></small>" ) ?></label>
 		<input id="<?php echo "{$args_id}-{$cond}" ?>" name="<?php echo "{$args_name}[{$cond}]" ?>" class="widefat" type="text" value="<?php esc_attr_e($args_val) ?>" />
 	</p>
-	<?php } ?>
-</div>
+		<?php } ?>
+</details>
 	<?php
 		$return = null;
 	}
