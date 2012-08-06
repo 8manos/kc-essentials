@@ -34,62 +34,56 @@ class kcEssentials_widget_attr {
 		$data = kcEssentials::get_data('settings', 'widget_attr');
 		$setting = kcEssentials_widgets::get_setting( $widget->id );
 		$customs = array(
-			'id'	=> array(
-				__('Custom ID:', 'kc-essentials'),
-				__('Custom ID:', 'kc-essentials')
-			),
-			'class'	=> array(
-				__('Custom classes:', 'kc-essentials'),
-				__('Custom classes <small>(separate with spaces)</small>:', 'kc-essentials')
-			)
+			'id'    => __('ID:', 'kc-essentials'),
+			'class' => __('Classes:', 'kc-essentials'),
 		); ?>
-<div class="kcwe">
-<?php
-	foreach ( $customs as $attr => $label ) {
-		$f_current = isset($setting["custom_{$attr}"]) ? $setting["custom_{$attr}"] : '';
-		$f_name    = "widget-{$widget->id_base}[{$widget->number}][custom_{$attr}]";
-		$f_id      = "widget-{$widget->id_base}-{$widget->number}-custom_{$attr}"; ?>
-	<p>
-		<?php if ( !isset($data[$attr]) || empty($data[$attr]) ) { ?>
-		<label for="<?php echo $f_id ?>"><?php echo $label[1] ?></label>
-		<input type="text" name="<?php echo $f_name ?>" id="<?php echo $f_id ?>" class="widefat" value="<?php esc_attr_e($f_current) ?>" />
-		<?php
-			}
-			else {
-				$f_opt = array();
-				foreach ( explode( ' ', $data[$attr]) as $o )
-					$f_opt[] = array('value' => $o, 'label' => $o);
-
-				if ( $attr == 'id' ) {
-					$f_attr = array(
-						'id'       => $f_id,
-						'name'     => $f_name,
-						'class' => 'widefat'
-					);
+<details>
+	<summary><?php _e('Widget attributes', 'kc-essentials') ?></summary>
+	<ul class="kcw-control-block">
+	<?php
+		foreach ( $customs as $attr => $label ) {
+			$f_current = isset($setting["custom_{$attr}"]) ? $setting["custom_{$attr}"] : '';
+			$f_name    = "widget-{$widget->id_base}[{$widget->number}][custom_{$attr}]";
+			$f_id      = "widget-{$widget->id_base}-{$widget->number}-custom_{$attr}"; ?>
+		<li>
+			<?php if ( !isset($data[$attr]) || empty($data[$attr]) ) { ?>
+			<label for="<?php echo $f_id ?>"><?php echo $label; if ( $attr == 'class' ) echo ' <small class="impo" title="'.__('Separate with spaces', 'kc-essentials').'">(?)</small>' ?></label>
+			<input type="text" name="<?php echo $f_name ?>" id="<?php echo $f_id ?>" value="<?php esc_attr_e($f_current) ?>" />
+			<?php
 				}
 				else {
-					$f_attr = array(
-						'id'       => $f_id,
-						'name'     => "{$f_name}[]",
-						'class'    => '',
-						'multiple' => 'multiple'
-					);
-					$f_current = explode( ' ', $f_current );
+					$f_opt = array();
+					foreach ( explode( ' ', $data[$attr]) as $o )
+						$f_opt[] = array('value' => $o, 'label' => $o);
+
+					if ( $attr == 'id' ) {
+						$f_attr = array(
+							'id'       => $f_id,
+							'name'     => $f_name
+						);
+					}
+					else {
+						$f_attr = array(
+							'id'       => $f_id,
+							'name'     => "{$f_name}[]",
+							'multiple' => 'multiple'
+						);
+						$f_current = explode( ' ', $f_current );
+					}
+			?>
+			<label for="<?php echo $f_id ?>"><?php echo $label ?></label>
+			<?php
+				echo kcForm::field( array(
+					'type'    => 'select',
+					'attr'    => $f_attr,
+					'options' => $f_opt,
+					'current' => $f_current
+				));
 				}
-		?>
-		<label for="<?php echo $f_id ?>"><?php echo $label[0] ?></label>
-		<?php
-			echo kcForm::field( array(
-				'type'    => 'select',
-				'attr'    => $f_attr,
-				'options' => $f_opt,
-				'current' => $f_current
-			));
-			}
-	}
-?>
-	</p>
-</div>
+			} ?>
+		</li>
+	</ul>
+</details>
 	<?php $return = null;
 	}
 

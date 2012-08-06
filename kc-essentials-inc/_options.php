@@ -45,7 +45,7 @@ class kcEssentials_options {
 							'widget_widgets' => __('Additional widgets', 'kc-essentials'),
 							'widget_areas'   => __('Register additional sidebars/widget areas', 'kc-essentials'),
 							'widget_logic'   => sprintf( __('Conditional widgets, <em>a.k.a.</em> widget logic %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-widget_logic" class="kc-help-trigger">?</a>' ),
-							'widget_attr'    => sprintf( __('Custom widget ID &amp; classes %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-widget_attr" class="kc-help-trigger">?</a>' )
+							'widget_attr'    => sprintf( __('Custom widget attributes %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-widget_attr" class="kc-help-trigger">?</a>' )
 						)
 					),
 					array(
@@ -350,7 +350,7 @@ class kcEssentials_options {
 				),
 				array(
 					'id'      => 'widget_attr',
-					'title'   => __('Custom widget ID &amp; classes', 'kc-essentials'),
+					'title'   => __('Custom widget attributes', 'kc-essentials'),
 					'content' => '
 						<p>'.__('This is what you&#39;ll get if you enable this:', 'kc-essentials').'<br /><br />
 						<img src="'.$paths['url'].'/kc-essentials-inc/assets/custom-widget-attr-0.png" alt=""/><br /><br />
