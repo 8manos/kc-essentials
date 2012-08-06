@@ -32,7 +32,7 @@ class kcEssentials_options {
 						'title'   => __('Taxonomies', 'kc-essentials'),
 						'type'    => 'checkbox',
 						'options' => array(
-							'taxonomy_unique' => __('Unique taxonomies', 'kc-essentials'),
+							'taxonomy_unique' => sprintf( __('Unique taxonomies %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-taxonomy_unique" class="kc-help-trigger">?</a>' ),
 							'taxonomy_media'  => __('Media taxonomies', 'kc-essentials'),
 							'taxonomy_thumb'  => sprintf( __('Term thumbnail %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-taxonomy_thumb" class="kc-help-trigger">?</a>' )
 						)
@@ -319,6 +319,14 @@ class kcEssentials_options {
 			'options'      => $sections,
 			'load_actions' => array(__CLASS__, 'load_actions'),
 			'help'         => array(
+				array(
+					'id'      => 'taxonomy_unique',
+					'title'   => __('Unique taxonomies', 'kc-essentials'),
+					'content' => '
+						<p>'.__('This is what you&#39;ll get if you enable this:').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/unique-taxonomy.png" alt=""/></p>
+						<p>'.__('Note: You can add more categories/terms from Posts &raquo; Categories.').'</p>
+					'
+				),
 				array(
 					'id'      => 'taxonomy_thumb',
 					'title'   => __('Term thumbnail', 'kc-essentials'),
