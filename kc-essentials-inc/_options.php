@@ -63,7 +63,7 @@ class kcEssentials_options {
 						'title'   => __('Menu', 'kc-essentials'),
 						'type'    => 'checkbox',
 						'options' => array(
-							'menu_cpt_archive' => __('Custom post type archive menu', 'kc-essentials')
+							'menu_cpt_archive' => sprintf( __('Custom post type archive menu %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-menu_cpt_archive" class="kc-help-trigger">?</a>' )
 						)
 					),
 					array(
@@ -339,6 +339,11 @@ class kcEssentials_options {
 					'id'      => 'image_caption',
 					'title'   => __('Quicktags for attachments', 'kc-essentials'),
 					'content' => '<p>'.__('This is what you&#39;ll get if you enable this:').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/attachment-quicktags.png" alt=""/></p>'
+				),
+				array(
+					'id'      => 'menu_cpt_archive',
+					'title'   => __('Custom post type archive menu', 'kc-essentials'),
+					'content' => '<p>'.__('This is what you&#39;ll get if you enable this:').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/cpt-archive-menu.png" alt=""/></p>'
 				),
 				array(
 					'id'      => 'enhc_history_js',
