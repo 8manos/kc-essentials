@@ -20,8 +20,8 @@ class kcEssentials_widget_logic {
 		# 2. Remove widgets from sidebars as needed
 		add_filter( 'sidebars_widgets', array(__CLASS__, '_filter_widgets') );
 
-		# Admin scripts & styles
-		add_action( 'load-widgets.php', array(__CLASS__, '_sns') );
+		# Widget config form scripts & styles
+		add_action( 'load-widgets.php', array('kcEssentials_widgets', '_actions') );
 	}
 
 
@@ -33,190 +33,77 @@ class kcEssentials_widget_logic {
 	public static function _fields( $instance, $widget ) {
 		$f_id			= $widget->get_field_id('kc-logic');
 		$f_name		= $widget->get_field_name('kc-logic');
-		$setting	= kcEssentials_widgets::get_setting( $widget->id );
-
-		$output  = "<div class='kcwe'>\n";
-		$output .= "\t<p>\n";
-		$output .= "\t\t<label for='".$widget->get_field_id('kc-logic-enable')."'>".__('Logic', 'kc-essentials')."</label>\n";
-		$output .= "\t\t<select id='".$widget->get_field_id('kc-logic-enable')."' name='".$widget->get_field_name('kc-logic-enable')."' class='hasdep kc-logic-enable' data-child='#{$f_id}-logics'>\n";
-
-		$output .= "\t\t\t<option";
-		if ( !isset($setting['kc-logic']) )
-			$output .= " selected='true'";
-		$output .= ">".__('Disable', 'kc-essentials')."</option>\n";
-
-		$output .= "\t\t\t<option";
-		if ( isset($setting['kc-logic']) && count($setting['kc-logic']) )
-			$output .= " selected='true'";
-		$output .= " value='y'> ".__('Enable', 'kc-essentials')."</option>\n";
-		$output .= "\t\t</select>\n";
-		$output .= "\t</p>\n";
-
-
-		$logics = array(
-			array(
-				'label' => __('Homepage', 'kc-essentials'),
-				'key'   => 'is_home',
-				'value' => true
+		$setting	= kcEssentials_widgets::get_setting( $widget->id ); ?>
+<div class="kcwe">
+	<p>
+		<label for="<?php echo $widget->get_field_id('kc-logic-enable') ?>"><?php _e('Logic status:', 'kc-essentials') ?></label>
+		<?php echo kcForm::field( array(
+			'type'    => 'select',
+			'attr'    => array(
+				'id'         => $widget->get_field_id('kc-logic-enable'),
+				'name'       => $widget->get_field_name('kc-logic-enable'),
+				'class'      => 'hasdep kc-logic-enable',
+				'data-child' => "#{$f_id}-logics"
 			),
-			array(
-				'label' => __('Static front page', 'kc-essentials'),
-				'key'   => 'is_front_page',
-				'value' => true
+			'options' => array(
+				'0' => __('Disable', 'kc-essentials'),
+				'1' => __('Enable', 'kc-essentials')
 			),
-			array(
-				'label' => __('Singular', 'kc-essentials'),
-				'key'   => 'is_singular',
-				'value' => true,
-				'args'  => true
+			'none'    => false,
+			'current' => ( isset($setting['kc-logic-enable']) && $setting['kc-logic-enable'] ) ? true : false
+		) );
+		?>
+	</p>
+	<p id="<?php echo $f_id ?>-logics" data-dep="1">
+		<label for="<?php echo $f_id ?>"><?php _e('Logic locations:', 'kc-essentials') ?></label>
+		<?php echo kcForm::field( array(
+			'type'    => 'select',
+			'attr'    => array(
+				'id'       => $f_id,
+				'name'     => "{$f_name}[]",
+				'multiple' => true
 			),
-			array(
-				'label' => __('Page', 'kc-essentials'),
-				'key'   => 'is_page',
-				'value' => true,
-				'args'  => true
+			'options' => array(
+				'is_home'              => __('Homepage', 'kc-essentials'),
+				'is_front_page'        => __('Static front page', 'kc-essentials'),
+				'is_singular'          => __('Singular', 'kc-essentials'),
+				'is_page'              => __('Page', 'kc-essentials'),
+				'is_page_template'     => __('Custom page template', 'kc-essentials'),
+				'is_single'            => __('Single post', 'kc-essentials'),
+				'is_sticky'            => __('Sticky post', 'kc-essentials'),
+				'is_attachment'        => __('Attachment', 'kc-essentials'),
+				'is_archive'           => __('Archive', 'kc-essentials'),
+				'is_post_type_archive' => __('Post type archive', 'kc-essentials'),
+				'is_category'          => __('Category', 'kc-essentials'),
+				'is_tag'               => __('Tag', 'kc-essentials'),
+				'is_tax'               => __('Taxonomy', 'kc-essentials'),
+				'is_author'            => __('Author', 'kc-essentials'),
+				'is_404'               => __('404', 'kc-essentials'),
+				'is_search'            => __('Search page', 'kc-essentials'),
+				'is_paged'             => __('Paged archive', 'kc-essentials'),
+				'is_year'              => __('Year archive', 'kc-essentials'),
+				'is_month'             => __('Month archive', 'kc-essentials'),
+				'is_date'              => __('Date archive', 'kc-essentials'),
+				'is_day'               => __('Day archive', 'kc-essentials'),
+				'is_new_day'           => __('New day', 'kc-essentials'),
+				'is_time'              => __('Time archive', 'kc-essentials'),
+				'is_preview'           => __('Preview page', 'kc-essentials'),
+				'is_user_logged_in'    => __('Logged in user', 'kc-essentials'),
 			),
-			array(
-				'label' => __('Custom page template', 'kc-essentials'),
-				'key'   => 'is_page_template',
-				'value' => true,
-				'args'  => true
-			),
-			array(
-				'label' => __('Single post', 'kc-essentials'),
-				'key'   => 'is_single',
-				'value' => true,
-				'args'  => true
-			),
-			array(
-				'label' => __('Sticky post', 'kc-essentials'),
-				'key'   => 'is_sticky',
-				'value' => true,
-				'args'  => true
-			),
-			array(
-				'label' => __('Attachment', 'kc-essentials'),
-				'key'   => 'is_attachment',
-				'value' => true,
-				'args'  => true
-			),
-			array(
-				'label' => __('Archive', 'kc-essentials'),
-				'key'   => 'is_archive',
-				'value' => true
-			),
-			array(
-				'label' => __('Post type archive', 'kc-essentials'),
-				'key'   => 'is_post_type_archive',
-				'value' => true,
-				'args'  => true
-			),
-			array(
-				'label' => __('Category', 'kc-essentials'),
-				'key'   => 'is_category',
-				'value' => true,
-				'args'  => true
-			),
-			array(
-				'label' => __('Tag', 'kc-essentials'),
-				'key'   => 'is_tag',
-				'value' => true,
-				'args'  => true
-			),
-			array(
-				'label' => __('Taxonomy', 'kc-essentials'),
-				'key'   => 'is_tax',
-				'value' => true
-			),
-			array(
-				'label' => __('Author', 'kc-essentials'),
-				'key'   => 'is_tax',
-				'value' => true,
-				'args'  => true
-			),
-			array(
-				'label' => __('404', 'kc-essentials'),
-				'key'   => 'is_404',
-				'value' => true
-			),
-			array(
-				'label' => __('Search page', 'kc-essentials'),
-				'key'   => 'is_search',
-				'value' => true
-			),
-			array(
-				'label' => __('Paged archive', 'kc-essentials'),
-				'key'   => 'is_paged',
-				'value' => true
-			),
-			array(
-				'label' => __('Year archive', 'kc-essentials'),
-				'key'   => 'is_year',
-				'value' => true
-			),
-			array(
-				'label' => __('Month archive', 'kc-essentials'),
-				'key'   => 'is_month',
-				'value' => true
-			),
-			array(
-				'label' => __('Date archive', 'kc-essentials'),
-				'key'   => 'is_date',
-				'value' => true
-			),
-			array(
-				'label' => __('Day archive', 'kc-essentials'),
-				'key'   => 'is_day',
-				'value' => true
-			),
-			array(
-				'label' => __('New day', 'kc-essentials'),
-				'key'   => 'is_new_day',
-				'value' => true
-			),
-			array(
-				'label' => __('Time archive', 'kc-essentials'),
-				'key'   => 'is_time',
-				'value' => true
-			),
-			array(
-				'label' => __('Preview page', 'kc-essentials'),
-				'key'   => 'is_preview',
-				'value' => true
-			),
-			array(
-				'label' => __('Logged in user', 'kc-essentials'),
-				'key'   => 'is_preview',
-				'value' => true
-			)
-		);
-
-		$output .= "\t<ul id='{$f_id}-logics' data-dep='y' class='logics'>";
-		foreach ( $logics as $c ) {
-			$output .= "\t\t<li>\n";
-			$output .= "\t\t<label><input type='checkbox' name='{$f_name}[{$c['key']}]' value='{$c['value']}' ";
-			if ( isset($setting['kc-logic'][$c['key']]) )
-			$output .= " checked='true'";
-				$output .= "/> {$c['label']}</label>\n";
-			$output .= "\t\t</li>\n";
-		}
-
-		$output .= "\t</ul>\n";
-		$output .= "</div>\n";
-
-		echo $output;
-		return $instance;
-	}
+			'none'    => false,
+			'current' => isset($setting['kc-logic']) ? $setting['kc-logic'] : array()
+		) );
+		?>
+	</p>
+</div>
+	<?php }
 
 
 	public static function _save( $instance, $new, $old, $widget ) {
 		$setting = kcEssentials_widgets::get_setting( $widget->id );
-
-		if ( $new['kc-logic-enable'] != 'y' || !isset($new['kc-logic']) || !count($new['kc-logic']) )
-			unset( $setting['kc-logic'] );
-		else
+		$setting['kc-logic-enable'] = ( isset($new['kc-logic-enable']) && $new['kc-logic-enable'] ) ? true : false;
+		if ( isset($new['kc-logic']) )
 			$setting['kc-logic'] = $new['kc-logic'];
-
 		kcEssentials_widgets::save_setting( $widget->id, $setting );
 
 		return $instance;
@@ -236,10 +123,16 @@ class kcEssentials_widget_logic {
 				continue;
 
 			foreach ( $widgets as $idx => $widget ) {
-				if ( !isset($settings[$widget]['kc-logic']) )
+				if (
+					!isset($settings[$widget]['kc-logic-enable'])
+					|| !$settings[$widget]['kc-logic-enable']
+					|| !isset($settings[$widget]['kc-logic'])
+					|| !is_array($settings[$widget]['kc-logic'])
+					|| empty($settings[$widget]['kc-logic'])
+				)
 					continue;
 
-				foreach ( $settings[$widget]['kc-logic'] as $func => $arg ) {
+				foreach ( $settings[$widget]['kc-logic'] as $func ) {
 					if ( call_user_func($func) === true )
 						continue 2;
 				}
@@ -250,15 +143,6 @@ class kcEssentials_widget_logic {
 		}
 
 		return $sidebars_widgets;
-	}
-
-
-	/**
-	 * Scripts n styles for the widget configuration forms
-	 */
-	public static function _sns() {
-		wp_enqueue_script( 'kc-widgets-admin' );
-		wp_enqueue_style( 'kc-widgets-admin' );
 	}
 }
 

@@ -95,6 +95,8 @@ class kcEssentials_widgets {
 	$.kcRowCloner();
 	// Post IDs finder
 	$.kcPostFinder();
+	// Chosen
+	$('.kcwe select.chosen').kcChosen();
 })(jQuery);
 </script>
 	<?php }
