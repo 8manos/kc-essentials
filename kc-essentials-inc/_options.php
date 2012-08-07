@@ -65,6 +65,14 @@ class kcEssentials_options {
 						'options' => array(
 							'menu_cpt_archive' => sprintf( __('Custom post type archive menu %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-menu_cpt_archive" class="kc-help-trigger">?</a>' )
 						)
+					),
+					'disabler' => array(
+						'id'      => 'disabler',
+						'title'   => __('Disabler', 'kc-essentials'),
+						'type'    => 'checkbox',
+						'options' => array(
+							'ms_hide_wc_screen' => __('Hide welcome screen on multisite', 'kc-essentials')
+						)
 					)
 				)
 			)

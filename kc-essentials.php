@@ -92,10 +92,16 @@ class kcEssentials {
 
 
 	public static function _component_activation() {
-		foreach ( self::$data['settings']['components'] as $group )
-			foreach ( $group as $component )
+		foreach ( self::$data['settings']['components'] as $group => $items ) {
+			if ( file_exists( self::$data['paths']['inc'] . "/{$group}.php") ) {
+				require_once self::$data['paths']['inc'] . "/{$group}.php";
+				continue;
+			}
+
+			foreach ( $items as $component )
 				if ( file_exists( self::$data['paths']['inc'] . "/{$component}.php") )
 					require_once self::$data['paths']['inc'] . "/{$component}.php";
+		}
 	}
 
 
