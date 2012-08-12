@@ -21,7 +21,9 @@ function kc_dropdown_menu( $menu_id, $args = array() ) {
 		'echo'        => true,
 		'submit_text' => __('Go', 'kc-essentials'),
 		'select_text' => '',
-		'js'          => false
+		'js'          => false,
+		'menu_class'  => '',
+		'menu_id'     => ''
 	) );
 
 	$walk = new kcWalker_Menu;
@@ -46,8 +48,16 @@ function kc_dropdown_menu( $menu_id, $args = array() ) {
 		$f_args['none'] = false;
 	}
 
+	$class = 'kcss';
+	if ( $args['menu_class'] )
+		$class .= " {$args['menu_class']}";
+
+	$f_attr = 'class="'.$class.'" method="post" action="'.$current_url.'"';
+	if ( $args['menu_id'] )
+		$f_attr .= ' id="'.$args['menu_id'].'"';
+
 	$out = '
-<form class="kcss" method="post" action="'.$current_url.'">
+<form '.$f_attr.'>
 	'.kcForm::field( $f_args ).'
 	<input type="hidden" name="kcform[current]" value="'.$current_url.'" />
 	<button type="submit" name="kcform[action]" value="menu">'.$args['submit_text'].'</button>

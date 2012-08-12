@@ -286,7 +286,9 @@ class kcEssentials_options {
   "echo"        =&gt; true,
   "submit_text" =&gt; "Go",
   "select_text" =&gt; "", <span class="ccomment">// '.__('If you put something here, it will always be shown as the first option instead of the current page title (if applicable)', 'kc-essentials').'</span>
-  "js"          =&gt; false
+  "js"          =&gt; false,
+  "menu_class"  =&gt; "", <span class="ccomment">// '.sprintf( __('The %s attribute for the form', 'kc-essentials'), '<strong>class</strong>' ).'</span>,
+  "menu_id"     =&gt; "", <span class="ccomment">// '.sprintf( __('The %s attribute for the form', 'kc-essentials'), '<strong>id</strong>' ).'</span>
 )</code></pre>
 					<p>'.sprintf(__('You can style the form using the %s CSS class.', 'kc-essentials'), '<code>.kc-menu-form</code>').'</p>
 				'
