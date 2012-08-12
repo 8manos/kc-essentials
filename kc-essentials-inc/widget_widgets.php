@@ -112,8 +112,8 @@ class kcEssentials_widgets {
 	 *
 	 * @return string Configuration form
 	 */
-  public static function form( $widget, $options, $config, $list_class = 'kcw-control-normal' ) {
-		$form = "<ul class='{$list_class}'>\n";
+  public static function form( $widget, $options, $config, $attr = array() ) {
+		$form = "<ul ".kcForm::_build_attr( wp_parse_args( $attr, array( 'class' => 'kcw-control-normal' ) ) ).">\n";
 		foreach ( $options as $id => $args ) {
 			$f_id = $widget->get_field_id( $id );
 			$f_name = $widget->get_field_name( $id );
@@ -122,7 +122,10 @@ class kcEssentials_widgets {
 				unset( $args['name_sfx'] );
 			}
 
-			$form .= "\t<li>\n";
+			$form .= "\t<li";
+			if ( isset($args['wrap_attr']) && !empty($args['wrap_attr']) )
+				$form .= is_array( $args['wrap_attr'] ) ? kcForm::_build_attr( $args['wrap_attr'], "'" ) : " {$args['wrap_attr']}";
+			$form .= ">\n";
 
 			if ( isset($args['label']) && !empty($args['label']) ) {
 				$label = "<label for='{$f_id}'>{$args['label']}</label>";
@@ -137,10 +140,11 @@ class kcEssentials_widgets {
 
 			if ( !isset($args['current']) )
 				$args['current'] = isset($config[$id]) ? $config[$id] : '';
-			$args['attr'] = array(
-				'id'   => $f_id,
-				'name' => $f_name
-			);
+			if ( !isset($args['attr']) )
+				$args['attr'] = array();
+			$args['attr']['id']   = $f_id;
+			$args['attr']['name'] = $f_name;
+
 			$form .= "\t\t".kcForm::field( $args )."\n";
 			$form .= "\t</li>\n";
 		}

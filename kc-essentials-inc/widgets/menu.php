@@ -30,7 +30,17 @@ Class kc_widget_menu extends WP_Widget {
 
 		$instance['echo'] = false;
 		$instance['fallback_cb'] = '';
-		$menu = wp_nav_menu( $instance );
+		if ( isset($instance['container']) && !$instance['container'] )
+			$instance['container'] = false;
+
+		if ( isset($instance['mode']) && $instance['mode'] == 'select' ) {
+			require_once kcEssentials::get_data('paths', 'inc') . '/menu_dropdown.php';
+			$instance['echo'] = false;
+			$menu = kc_dropdown_menu( $menu->term_id, $instance );
+		}
+		else {
+			$menu = wp_nav_menu( $instance );
+		}
 		if ( !$menu )
 			return;
 
@@ -46,9 +56,6 @@ Class kc_widget_menu extends WP_Widget {
 		if ( !empty($instance['title']) )
 			echo $args['before_title'] . $instance['title'] . $args['after_title'];
 		unset( $instance['title'] );
-
-		if ( !$instance['container'] )
-			$instance['container'] = false;
 
 		echo $menu;
 		echo $args['after_widget'];
@@ -84,7 +91,7 @@ Class kc_widget_menu extends WP_Widget {
 		foreach ( $menus as $m )
 			$nav_menus[] = array( 'value' => $m->term_id, 'label' => $m->name );
 
-		$options = array(
+		$options_main = array(
 			'title' => array(
 				'label'   => __('Title:'),
 				'type'    => 'text'
@@ -100,24 +107,6 @@ Class kc_widget_menu extends WP_Widget {
 				'type'    => 'text',
 				'current' => isset( $instance['depth'] ) ? $instance['depth'] : '0'
 			),
-			'container' => array(
-				'label'   => __('Container tag', 'kc-essentials'),
-				'type'    => 'select',
-				'options' => array(
-					array( 'value' => 'div', 'label' => 'div' ),
-					array( 'value' => 'nav', 'label' => 'nav' ),
-					array( 'value' => '0',   'label' => __('None', 'kc-essentials') )
-				),
-				'none'    => false
-			),
-			'container_class' => array(
-				'label'   => __('Container class', 'kc-essentials'),
-				'type'    => 'text'
-			),
-			'container_id' => array(
-				'label'   => __('Container ID', 'kc-essentials'),
-				'type'    => 'text'
-			),
 			'menu_class' => array(
 				'label'   => __('Menu class', 'kc-essentials'),
 				'type'    => 'text',
@@ -126,6 +115,53 @@ Class kc_widget_menu extends WP_Widget {
 			'menu_id' => array(
 				'label'   => __('Menu ID', 'kc-essentials'),
 				'type'    => 'text'
+			),
+			'mode' => array(
+				'label'   => __('Mode', 'kc-essentials'),
+				'type'    => 'select',
+				'options' => array(
+					'list'   => __('List', 'kc-essentials'),
+					'select' => __('Dropdown select', 'kc-essentials')
+				),
+				'none' => false,
+				'current' => isset( $instance['mode'] ) ? $instance['mode'] : 'list',
+				'attr'    => array(
+					'class' => 'hasdep',
+					'data-child' => '.' .$this->get_field_id('mode') .'-child'
+				)
+			)
+		);
+
+		$options_list = array(
+			'container' => array(
+				'label'   => __('Container tag', 'kc-essentials'),
+				'type'    => 'select',
+				'options' => array(
+					'div' => '&lt;div /&gt;',
+					'nav' => '&lt;nav /&gt;',
+					'0'   => __('None', 'kc-essentials')
+				),
+				'none'    => false,
+				'attr'    => array(
+					'class' => 'hasdep',
+					'data-child' => '.' .$this->get_field_id('container'). '-child'
+				)
+			),
+			'container_class' => array(
+				'label'   => __('Container class', 'kc-essentials'),
+				'type'    => 'text',
+				'wrap_attr' => array(
+					'class' => $this->get_field_id('container') . '-child',
+					'data-dep' => json_encode( array('div', 'nav') )
+				)
+			),
+			'container_id' => array(
+				'label'   => __('Container ID', 'kc-essentials'),
+				'type'    => 'text',
+				'wrap_attr' => array(
+					'class' => $this->get_field_id('container') . '-child',
+					'data-dep' => json_encode( array('div', 'nav') )
+				)
 			),
 			'before' => array(
 				'label'   => __('Before link text', 'kc-essentials'),
@@ -158,7 +194,33 @@ Class kc_widget_menu extends WP_Widget {
 			)
 		);
 
-		echo kcEssentials_widgets::form( $this, $options, $instance );
+		$options_select = array(
+			'submit_text' => array(
+				'label' => __('Submit text', 'kc-essentials'),
+				'type'  => 'text',
+				'current' => ( isset( $instance['submit_text'] ) && $instance['submit_text'] ) ? $instance['submit_text'] : __('Go', 'kc-essentials')
+			),
+			'select_text' => array(
+				'label' => __('Select text', 'kc-essentials'),
+				'type'  => 'text',
+				'current' => isset( $instance['select_text'] ) ? $instance['select_text'] : ''
+			),
+			'pad' => array(
+				'label' => __('Pad', 'kc-essentials'),
+				'type'  => 'text',
+				'current' => isset( $instance['pad'] ) ? $instance['pad'] : '&mdash;'
+			)
+		);
+
+		echo kcEssentials_widgets::form( $this, $options_main, $instance );
+		echo kcEssentials_widgets::form( $this, $options_list, $instance, array(
+			'class' => $this->get_field_id('mode') .'-child kcw-control-normal',
+			'data-dep' => 'list'
+		) );
+		echo kcEssentials_widgets::form( $this, $options_select, $instance, array(
+			'class' => $this->get_field_id('mode') .'-child kcw-control-normal',
+			'data-dep' => 'select'
+		) );
 	}
 
 
