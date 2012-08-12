@@ -64,6 +64,10 @@ class kcEssentials {
 			return false;
 
 		add_action( 'init', array(__CLASS__, '_component_activation'), 100 );
+
+		# Cather
+		if ( !is_admin() )
+			require_once "{$paths['inc']}/catcher.php";
 	}
 
 

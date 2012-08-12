@@ -63,7 +63,8 @@ class kcEssentials_options {
 						'title'   => __('Menu', 'kc-essentials'),
 						'type'    => 'checkbox',
 						'options' => array(
-							'menu_cpt_archive' => sprintf( __('Custom post type archive menu %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-menu_cpt_archive" class="kc-help-trigger">?</a>' )
+							'menu_cpt_archive' => sprintf( __('Custom post type archive menu %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-menu_cpt_archive" class="kc-help-trigger">?</a>' ),
+							'menu_dropdown' => sprintf( __('Dropdown menu %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-menu_dropdown" class="kc-help-trigger">?</a>' )
 						)
 					),
 					'disabler' => array(
@@ -273,6 +274,22 @@ class kcEssentials_options {
 				'id'      => 'menu_cpt_archive',
 				'title'   => __('Custom post type archive menu', 'kc-essentials'),
 				'content' => '<p>'.__('This is what you&#39;ll get if you enable this:', 'kc-essentials').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/cpt-archive-menu.png" alt=""/></p>'
+			),
+			array(
+				'id'      => 'menu_dropdown',
+				'title'   => __('Dropdown menu', 'kc-essentials'),
+				'content' => '
+					<p>'.sprintf( __('This will give you %s that you can use to display your menu as HTML select dropdown (useful for small screen devices). Default argument is:', 'kc-essentials'), '<code>kc_dropdown_menu( $menu_id, $args )</code>' ).'</p>
+<pre><code>array(
+  "depth"       =&gt; 0,
+  "pad"         =&gt; "&mdash;", <span class="ccomment">// '.__('The string to be appended before sub-menu items', 'kc-essentials').'</span>
+  "echo"        =&gt; true,
+  "submit_text" =&gt; "Go",
+  "select_text" =&gt; "", <span class="ccomment">// '.__('If you put something here, it will always be shown as the first option instead of the current page title (if applicable)', 'kc-essentials').'</span>
+  "js"          =&gt; false
+)</code></pre>
+					<p>'.sprintf(__('You can style the form using the %s CSS class.', 'kc-essentials'), '<code>.kc-menu-form</code>').'</p>
+				'
 			)
 		);
 

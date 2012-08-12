@@ -21,8 +21,20 @@ Class kc_widget_menu extends WP_Widget {
 		if ( !$menu )
 			return;
 
-		$instance['title'] = apply_filters( 'widget_title', empty( $instance['title'] ) ? '' : $instance['title'], $instance, $this->id_base );
+		if ( !empty($instance['walker']) ) {
+			if ( class_exists($instance['walker']) )
+				$instance['walker'] = new $instance['walker'];
+			else
+				return;
+		}
+
+		$instance['echo'] = false;
 		$instance['fallback_cb'] = '';
+		$menu = wp_nav_menu( $instance );
+		if ( !$menu )
+			return;
+
+		$instance['title'] = apply_filters( 'widget_title', empty( $instance['title'] ) ? '' : $instance['title'], $instance, $this->id_base );
 		if ( $instance['action_id'] ) {
 			$args['before_widget'] = apply_filters( "kc_widget-{$instance['action_id']}", $args['before_widget'], 'before_widget', 'widget_menu' );
 			$args['after_widget'] = apply_filters( "kc_widget-{$instance['action_id']}", $args['after_widget'], 'after_widget', 'widget_menu' );
@@ -38,8 +50,7 @@ Class kc_widget_menu extends WP_Widget {
 		if ( !$instance['container'] )
 			$instance['container'] = false;
 
-		wp_nav_menu( $instance );
-
+		echo $menu;
 		echo $args['after_widget'];
 	}
 
