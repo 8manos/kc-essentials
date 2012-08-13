@@ -257,5 +257,3 @@ Class kc_widget_menu extends WP_Widget {
 	}
 }
 add_filter( 'kcml_widget_fields', array('kc_widget_menu', 'kcml_fields') );
-
-?>

@@ -78,5 +78,3 @@ class kcEssentials_menu_cpt_archive {
 	}
 }
 kcEssentials_menu_cpt_archive::init();
-
-?>

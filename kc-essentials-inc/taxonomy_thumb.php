@@ -101,5 +101,3 @@ class kcEssentials_termthumb {
 function kc_get_term_thumbnail( $term_id = '', $size = '', $attr = array() ) {
 	return kcEssentials_termthumb::get_thumb( $term_id, $size, $attr );
 }
-
-?>

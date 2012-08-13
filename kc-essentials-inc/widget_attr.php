@@ -135,7 +135,4 @@ class kcEssentials_widget_attr {
 		return $params;
 	}
 }
-
 kcEssentials_widget_attr::init();
-
-?>

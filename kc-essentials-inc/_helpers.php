@@ -39,6 +39,3 @@ function kc_essentials_sanitize_numbers( $value, $glue = ',' ) {
 
 	return implode( $glue, $_sizes );
 }
-
-
-?>

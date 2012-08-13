@@ -530,5 +530,3 @@ class kcEssentials_options {
 	}
 }
 kcEssentials_options::init();
-
-?>

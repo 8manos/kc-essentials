@@ -107,5 +107,3 @@ class kcEssentials_mediatax {
 
 if ( $taxonomies = kcEssentials::get_data('settings', 'taxonomy_media', 'taxonomies') )
 	kcEssentials_mediatax::init( $taxonomies );
-
-?>

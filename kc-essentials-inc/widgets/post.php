@@ -1237,5 +1237,3 @@ class kc_widget_post extends WP_Widget {
 	}
 }
 add_filter( 'kcml_widget_fields', array('kc_widget_post', 'kcml_fields') );
-
-?>

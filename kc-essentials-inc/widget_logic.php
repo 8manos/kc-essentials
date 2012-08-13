@@ -202,7 +202,4 @@ class kcEssentials_widget_logic {
 		return $sidebars_widgets;
 	}
 }
-
 kcEssentials_widget_logic::init();
-
-?>

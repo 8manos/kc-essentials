@@ -35,5 +35,3 @@ class kcEssentials_image_caption_quicktags {
 	}
 }
 kcEssentials_image_caption_quicktags::init();
-
-?>

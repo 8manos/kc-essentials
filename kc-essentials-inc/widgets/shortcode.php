@@ -79,5 +79,3 @@ class kc_widget_shortcode extends WP_Widget {
 	}
 }
 add_filter( 'kcml_widget_fields' , array('kc_widget_shortcode', 'kcml_fields') );
-
-?>

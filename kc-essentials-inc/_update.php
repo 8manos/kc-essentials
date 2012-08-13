@@ -135,5 +135,3 @@ class kcUpdate {
 		return false;
 	}
 }
-
-?>

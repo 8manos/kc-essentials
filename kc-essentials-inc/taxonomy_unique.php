@@ -130,5 +130,3 @@ class kcEssentials_uniquetax_Walker extends Walker {
 		$output .= "</li>\n";
 	}
 }
-
-?>

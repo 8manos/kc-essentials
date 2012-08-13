@@ -103,5 +103,3 @@ kcEssentials_adaptive_images::init();
 function kc_get_adaptive_image( $id, $max = false, $stepup = true, $get_url = true ) {
 	return kcEssentials_adaptive_images::get_image( $id, $max, $stepup, $get_url );
 }
-
-?>

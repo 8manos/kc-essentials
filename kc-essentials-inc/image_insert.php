@@ -19,5 +19,3 @@ function kc_essentials_insert_custom_image_sizes( $sizes ) {
 	return $sizes;
 }
 add_filter( 'image_size_names_choose', 'kc_essentials_insert_custom_image_sizes' );
-
-?>

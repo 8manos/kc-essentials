@@ -69,5 +69,3 @@ function kc_dropdown_menu( $menu_id, $args = array() ) {
 	else
 		return $out;
 }
-
-?>

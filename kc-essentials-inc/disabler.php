@@ -37,5 +37,3 @@ class kcEssentials_disabler {
 }
 
 kcEssentials_disabler::init();
-
-?>

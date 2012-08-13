@@ -96,5 +96,3 @@ class KC_Adjacent_Post {
 		return $where;
 	}
 }
-
-?>
