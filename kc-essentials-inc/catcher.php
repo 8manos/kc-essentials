@@ -25,13 +25,9 @@ class kcEssentials_Catcher {
 
 
 	private static function menu() {
-		if (
-			isset( self::$data['url'] )
-			&& !empty( self::$data['url'] )
-			&& self::$data['url'] != self::$data['current']
-		) {
-			$url = ( get_option('permalink_structure') ) ? trailingslashit( self::$data['url'] ) : self::$data['url'];
-			wp_redirect( $url );
+		if ( isset( self::$data['menu-id'] ) && self::$data['menu-id'] ) {
+			$m = wp_setup_nav_menu_item( get_post( self::$data['menu-id'] ) );
+			wp_redirect( $m->url );
 			exit;
 		}
 	}
