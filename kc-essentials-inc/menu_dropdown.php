@@ -84,6 +84,6 @@ if ( !class_exists('kcEssentials_Dropdown_Menu') ) {
 
 
 	function kc_dropdown_menu( $menu_id, $args = array() ) {
-		kcEssentials_Dropdown_Menu::get_menu( $menu_id, $args );
+		return kcEssentials_Dropdown_Menu::get_menu( $menu_id, $args );
 	}
 }

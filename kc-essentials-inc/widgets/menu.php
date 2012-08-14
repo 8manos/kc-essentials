@@ -17,8 +17,8 @@ Class kc_widget_menu extends WP_Widget {
 
 	function widget( $args, $instance ) {
 		# Get menu
-		$menu = ! empty( $instance['menu'] ) ? wp_get_nav_menu_object( $instance['menu'] ) : false;
-		if ( !$menu )
+		$_menu = ! empty( $instance['menu'] ) ? wp_get_nav_menu_object( $instance['menu'] ) : false;
+		if ( !$_menu )
 			return;
 
 		if ( !empty($instance['walker']) ) {
@@ -34,9 +34,9 @@ Class kc_widget_menu extends WP_Widget {
 			$instance['container'] = false;
 
 		if ( isset($instance['mode']) && $instance['mode'] == 'select' ) {
-			require_once kcEssentials::get_data('paths', 'inc') . '/menu_dropdown.php';
-			$instance['echo'] = false;
-			$menu = kc_dropdown_menu( $menu->term_id, $instance );
+			if ( !function_exists('kc_dropdown_menu') )
+				require_once kcEssentials::get_data('paths', 'inc') . '/menu_dropdown.php';
+			$menu = kc_dropdown_menu( $_menu->term_id, $instance );
 		}
 		else {
 			$menu = wp_nav_menu( $instance );
@@ -203,12 +203,19 @@ Class kc_widget_menu extends WP_Widget {
 			'select_text' => array(
 				'label' => __('Select text', 'kc-essentials'),
 				'type'  => 'text',
-				'current' => isset( $instance['select_text'] ) ? $instance['select_text'] : ''
+				'current' => isset( $instance['select_text'] ) ? $instance['select_text'] : '&mdash;&nbsp;'.__('Navigate', 'kc-essentials').'&nbsp;&mdash;'
 			),
 			'pad' => array(
 				'label' => __('Pad', 'kc-essentials'),
 				'type'  => 'text',
 				'current' => isset( $instance['pad'] ) ? $instance['pad'] : '&mdash;'
+			),
+			'js' => array(
+				'label'   => __('Enable Javascript?', 'kc-essentials'),
+				'type'    => 'select',
+				'options' => kcSettings_options::$yesno,
+				'none'    => false,
+				'current' => isset( $instance['js'] ) ? $instance['js'] : '1'
 			)
 		);
 

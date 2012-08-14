@@ -285,8 +285,8 @@ class kcEssentials_options {
   "pad"         =&gt; "&mdash;", <span class="ccomment">// '.__('The string to be appended before sub-menu items', 'kc-essentials').'</span>
   "echo"        =&gt; true,
   "submit_text" =&gt; "Go",
-  "select_text" =&gt; "", <span class="ccomment">// '.__('If you put something here, it will always be shown as the first option instead of the current page title (if applicable)', 'kc-essentials').'</span>
-  "js"          =&gt; false,
+  "select_text" =&gt; "— Navigate —", <span class="ccomment">// '.__('If you put something here, it will always be shown as the first option instead of the current page title (if applicable)', 'kc-essentials').'</span>
+  "js"          =&gt; false, <span class="ccomment">// '.__('Enable this if you want the form to auto-submit when a menu is selected', 'kc-essentials').'</span>
   "menu_class"  =&gt; "", <span class="ccomment">// '.sprintf( __('The %s attribute for the form', 'kc-essentials'), '<strong>class</strong>' ).'</span>,
   "menu_id"     =&gt; "", <span class="ccomment">// '.sprintf( __('The %s attribute for the form', 'kc-essentials'), '<strong>id</strong>' ).'</span>
 )</code></pre>
