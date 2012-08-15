@@ -32,4 +32,4 @@ class kcEssentials_Catcher {
 		}
 	}
 }
-add_action( 'init', array('kcEssentials_Catcher', '_catch') );
+add_action( 'init', array('kcEssentials_Catcher', '_catch'), 101 );
