@@ -74,6 +74,7 @@ class kcEssentials_widgets {
 		# Add the post finder box
 		add_action( 'admin_footer', 'find_posts_div', 99 );
 		add_action( 'admin_enqueue_scripts', array(__CLASS__, 'scripts_enq'), 99 );
+		add_action( 'admin_print_footer_scripts', array('kcSettings', '_sns_vars'), 9 );
 		add_action( 'admin_print_footer_scripts', array(__CLASS__, 'scripts_print'), 99 );
 	}
 
