@@ -953,7 +953,7 @@ class kc_widget_post extends WP_Widget {
 
 		$q_args = apply_filters( 'kc_widget_post-query_args', $q_args, $instance, $this );
 		foreach ( $af_IDs as $af_id )
-			$q_args = apply_filters( "kc_widget_post-query_args-{$af_id}", $q_args, $instance, $this );
+			$q_args = apply_filters( "kc_widget_post-query_args{$af_id}", $q_args, $instance, $this );
 
 		$debug .= "<pre>".var_export($q_args, true)."</pre>";
 
