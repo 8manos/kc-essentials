@@ -837,14 +837,6 @@ class kc_widget_post extends WP_Widget {
 	<?php }
 
 
-	function _sort_query_by_post_in( $sortby, $query ) {
-		if ( isset($query->query['post__in']) && !empty($query->query['post__in']) && isset($query->query['orderby']) && $query->query['orderby'] == 'post__in' )
-			$sortby = "find_in_set(ID, '" . implode( ',', $query->query['post__in'] ) . "')";
-
-		return $sortby;
-	}
-
-
 	function widget( $args, $instance ) {
 		$af_IDs = array( '', "-{$this->id}" );
 		if ( $instance['action_id'] )
@@ -902,7 +894,7 @@ class kc_widget_post extends WP_Widget {
 
 		# post orderby
 		if ( $instance['posts_orderby'] == 'post__in' )
-			add_filter( 'posts_orderby', array(&$this, '_sort_query_by_post_in'), 10, 2 );
+			add_filter( 'posts_orderby', 'kc_sort_query_by_post_in', 10, 2 );
 
 		# Post type
 		if ( $instance['post_type'] )
@@ -957,10 +949,10 @@ class kc_widget_post extends WP_Widget {
 
 		$debug .= "<pre>".var_export($q_args, true)."</pre>";
 
-		$wp_query = new WP_Query($q_args);
+		$posts_query = new WP_Query($q_args);
 		$output = '';
 
-		if ( $wp_query->have_posts() ) {
+		if ( $posts_query->have_posts() ) {
 
 			# Before widget
 			$output .= $before_widget;
@@ -993,8 +985,8 @@ class kc_widget_post extends WP_Widget {
 				$output .= ">\n";
 			}
 
-			while ( $wp_query->have_posts() ) {
-				$wp_query->the_post();
+			while ( $posts_query->have_posts() ) {
+				$posts_query->the_post();
 				$post_id = get_the_ID();
 
 				# Action: Before entry
@@ -1054,9 +1046,7 @@ class kc_widget_post extends WP_Widget {
 
 			$output .= "{$after_widget}\n";
 		}
-		$wp_query = null;
-		wp_reset_query();
-		remove_filter( 'posts_orderby', array(&$this, '_sort_query_by_post_in') );
+		wp_reset_postdata();
 
 		echo $output;
 
