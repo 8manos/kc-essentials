@@ -25,7 +25,7 @@ class kcEssentials_options {
 		$sections = array(
 			array(
 				'id'      => 'components',
-				'title'   => __('General Settings', 'kc-essentials'),
+				'title'   => __('Components', 'kc-essentials'),
 				'desc'    => sprintf( __('<b>Please</b> read the <a%s>guide</a> before using this plugin!', 'kc-essentials'), ' href="#" class="kc-help-trigger"' ),
 				'fields'  => array(
 					array(
