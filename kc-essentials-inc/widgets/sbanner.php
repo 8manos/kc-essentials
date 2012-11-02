@@ -58,7 +58,7 @@ class kc_widget_sbanner extends WP_Widget {
 							'name'  => $this->get_field_name('source'),
 							'class'      => 'hasdep',
 							'data-child' => '.sbanner-src',
-							'data-scope' => 'div'
+							'data-scope' => 'ul'
 						),
 						'options' => array(
 							'post' => __('Attachment', 'kc-essentials'),
@@ -82,8 +82,9 @@ class kc_widget_sbanner extends WP_Widget {
 					<label for="<?php echo $this->get_field_id('post_id') ?>"><?php _e('Attachment', 'kc-essentials') ?></label>
 					<?php echo _kc_field_file_single( array(
 						'field' => array (
-							'mode'  => 'single',
-							'size'  => 'thumbnail'
+							'mode'      => 'single',
+							'size'      => 'thumbnail',
+							'mime_type' => 'all'
 						),
 						'id'       => $this->get_field_id('post_id'),
 						'name'     => $this->get_field_name('post_id'),
