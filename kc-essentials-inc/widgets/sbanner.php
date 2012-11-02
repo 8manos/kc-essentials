@@ -161,7 +161,7 @@ class kc_widget_sbanner extends WP_Widget {
 		if ( $instance['source'] == 'post' && $instance['post_id'] )
 			$url = wp_get_attachment_url($instance['post_id']);
 		elseif ( $instance['source'] == 'url' && $instance['url'] )
-			$url = $instance['url'];
+			$url = esc_url($instance['url']);
 
 		if ( !isset($url) )
 			return;
@@ -180,7 +180,7 @@ class kc_widget_sbanner extends WP_Widget {
 			$banner = "<img src='{$url}' alt='' />";
 		}
 		if ( $instance['link'] ) {
-			$_link = ( is_numeric($instance['link']) ) ? get_permalink($instance['link']) : $instance['link'];
+			$_link = ( is_numeric($instance['link']) ) ? get_permalink($instance['link']) : esc_url($instance['link']);
 			$banner = "<a href='{$_link}'>{$banner}</a>";
 		}
 		$banner = "<div class='kcw-sbanner-wrap'>{$banner}</div>\n";
