@@ -92,3 +92,10 @@ ul.kcw-control-block,
 	padding-left:1em;
 }
 .kcwe select.widefat {background:#fff;}
+.kc-sbanner-items .row {
+	padding:6px;
+	margin:0;
+}
+.kc-sbanner-items h4 {
+	margin:0;
+}

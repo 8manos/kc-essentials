@@ -94,6 +94,25 @@ class kcEssentials_widgets {
 	$widgets.ajaxSuccess(function() { $('.hasdep', this).kcFormDep(); });
 	// Tax/Meta query row cloner
 	$.kcRowCloner();
+	$.kcRowCloner.addCallback( 'add', function( args ) {
+		if ( args.isLast ) {
+			$('span.count', args.nuItem).text( args.nuItem.index() + 1 );
+		}
+		else {
+			args.block.children().each(function(i) {
+				$('span.count', this).text( i + 1 );
+			});
+		}
+	});
+	$.kcRowCloner.addCallback( 'del', function( args ) {
+		if ( args.isLast )
+			return;
+
+		args.block.children().each(function(i) {
+			$('span.count', this).text( i + 1 );
+		});
+	});
+
 	// Post IDs finder
 	$.kcPostFinder();
 	// Chosen
