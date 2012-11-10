@@ -89,7 +89,13 @@ class kc_widget_sbanner extends WP_Widget {
 						'id'       => $this->get_field_id('post_id'),
 						'name'     => $this->get_field_name('post_id'),
 						'db_value' => $instance['post_id'],
-						'up_url'   => 'media-upload.php?kcsfs=true&post_id=0&tab=library&TB_iframe=1',
+						'up_url'   => add_query_arg( array(
+							'kcsfs'     => 'true',
+							'post_id'   => '0',
+							'tab'       => 'library',
+							'width'     => '640',
+							'TB_iframe' => '1'
+						), 'media-upload.php')
 					)); ?>
 				</li>
 				<li>
