@@ -24,10 +24,6 @@ class kc_widget_sbanner extends WP_Widget {
 					'height'      => '100',
 					'url'         => '',
 					'link'        => '',
-					'text_before' => '',
-					'text_after'  => '',
-					'filter_text' => false,
-					'shortcode'   => false,
 				),
 			),
 			'debug' => 0
@@ -72,136 +68,111 @@ class kc_widget_sbanner extends WP_Widget {
 		?>
 			<li class="row" data-mode="items">
 				<h4><?php printf( __('Item #%s', 'kc-essentials'), '<span class="count">'. ($item_count + 1) .'</span>' ) ?></h5>
-				<details open="true">
-					<summary><?php _e('Basic', 'kc-essentials') ?></summary>
-					<ul class="kcw-control-block">
-						<li>
-							<label for="<?php echo "{$_id}-{$item_count}-source"; ?>"><?php _e('Source', 'kc-essentials') ?></label>
-							<?php echo kcForm::field(array(
-								'type'    => 'select',
-								'attr'    => array(
-									'id'    => "{$_id}-{$item_count}-source",
-									'name'  => "{$_name}[{$item_count}][source]",
-									'class'      => 'hasdep',
-									'data-child' => '.sbanner-src',
-									'data-scope' => 'ul'
-								),
-								'options' => array(
-									'post' => __('Attachment', 'kc-essentials'),
-									'url'  => __('Custom URL', 'kc-essentials')
-								),
-								'none'    => false,
-								'current' => $item_values['source']
-							)) ?>
-						</li>
-						<li class="sbanner-src" data-dep="url">
-							<label for="<?php echo "{$_id}-{$item_count}-url" ?>"><?php _e('File URL', 'kc-essentials') ?></label>
-							<?php echo kcForm::input(array(
-								'attr'    => array(
-									'id'   => "{$_id}-{$item_count}-url",
-									'name' => "{$_name}[{$item_count}][url]",
-								),
-								'current' => $item_values['url']
-							)) ?>
-						</li>
-						<li class="sbanner-src" data-dep="post">
-							<label for="<?php echo "{$_id}-{$item_count}-post_id" ?>"><?php _e('Attachment', 'kc-essentials') ?></label>
-							<?php echo _kc_field_file_single( array(
-								'field' => array (
-									'mode'      => 'single',
-									'size'      => 'thumbnail',
-									'mime_type' => 'all'
-								),
-								'id'       => "{$_id}-{$item_count}-post_id",
-								'name'     => "{$_name}[{$item_count}][post_id]",
-								'db_value' => $item_values['post_id'],
-								'up_url'   => $up_url
-							)); ?>
-						</li>
-						<li class="sbanner-src" data-dep="post">
-							<label for="<?php echo "{$_id}-{$item_count}-image_size" ?>"><?php _e('Size', 'kc-essentials') ?></label>
-							<?php echo kcForm::field(array(
-								'type'    => 'select',
-								'attr'    => array(
-									'id'   => "{$_id}-{$item_count}-image_size",
-									'name' => "{$_name}[{$item_count}][image_size]",
-								),
-								'options'  => $image_sizes,
-								'none'     => false,
-								'current'  => $item_values['image_size']
-							)) ?>
-						</li>
-						<li>
-							<label for="<?php echo "{$_id}-{$item_count}-is_flash" ?>"><?php _e('Flash?', 'kc-essentials') ?></label>
-							<?php echo kcForm::field(array(
-								'type'    => 'select',
-								'attr'         => array(
-									'id'         => "{$_id}-{$item_count}-is_flash",
-									'name'       => "{$_name}[{$item_count}][is_flash]",
-									'class'      => 'hasdep',
-									'data-child' => '.sbanner-prop',
-									'data-scope' => 'ul'
-								),
-								'options' => $yesno,
-								'none'    => false,
-								'current' => $item_values['is_flash']
-							) ); ?>
-						</li>
-						<li class="sbanner-prop" data-dep='1'>
-							<label for="<?php echo "{$_id}-{$item_count}-width" ?>"><?php _e('Width', 'kc-essentials') ?></label>
-							<?php echo kcForm::input(array(
-								'attr'    => array(
-									'id'   => "{$_id}-{$item_count}-width",
-									'name' => "{$_name}[{$item_count}][width]",
-								),
-								'current' => $item_values['width']
-							)) ?>
-						</li>
-						<li class="sbanner-prop" data-dep='1'>
-							<label for="<?php echo "{$_id}-{$item_count}-height" ?>"><?php _e('Height', 'kc-essentials') ?></label>
-							<?php echo kcForm::input(array(
-								'attr'    => array(
-									'id'   => "{$_id}-{$item_count}-height",
-									'name' => "{$_name}[{$item_count}][height]",
-								),
-								'current' => $item_values['height']
-							)) ?>
-						</li>
-						<li class="sbanner-prop" data-dep='0'>
-							<label for="<?php echo "{$_id}-{$item_count}-link" ?>" title="<?php esc_attr_e('You can enter a post ID here to use its permalink, &#xA;double-click the input field to find posts.', 'kc-essentials') ?>"><?php _e('Link URL', 'kc-essentials') ?> <span class="impo">(?)</span></label>
-							<?php echo kcForm::input(array(
-								'attr'    => array(
-									'id'    => "{$_id}-{$item_count}-link",
-									'name'  => "{$_name}[{$item_count}][link]",
-									'class' => 'kc-find-post'
-								),
-								'current' => $item_values['link']
-							)) ?>
-						</li>
-					</ul>
-				</details>
-
-				<details<?php if ( !empty($item_values['text_before']) || !empty($item_values['text_after']) ) echo ' open="true" ' ?>>
-					<summary><?php _e('Misc.', 'kc-essentials') ?></summary>
-					<ul>
-						<li>
-							<label for="<?php echo "{$_id}-{$item_count}-text_before" ?>"><?php _e('Text before banner', 'kc-essentials') ?></label>
-							<textarea class="widefat" rows="4" cols="10" id="<?php echo "{$_id}-{$item_count}-text_before" ?>" name="<?php echo "{$_name}[{$item_count}][text_before]" ?>"><?php echo esc_textarea($item_values['text_before']) ?></textarea>
-						</li>
-						<li>
-							<label for="<?php echo "{$_id}-{$item_count}-text_after" ?>"><?php _e('Text after banner', 'kc-essentials') ?></label>
-							<textarea class="widefat" rows="4" cols="10" id="<?php echo "{$_id}-{$item_count}-text_after" ?>" name="<?php echo "{$_name}[{$item_count}][text_after]" ?>"><?php echo esc_textarea($item_values['text_after']) ?></textarea>
-						</li>
-						<li>
-							<input id="<?php echo "{$_id}-{$item_count}-filter_text" ?>" name="<?php echo "{$_name}[{$item_count}][filter_text]" ?>" type="checkbox" <?php checked(isset($item_values['filter_text']) ? $item_values['filter_text'] : false); ?> value="1" />
-							<label for="<?php echo "{$_id}-{$item_count}-filter_text" ?>"><?php _e('Automatically add paragraphs'); ?></label>
-						</li>
-						<li>
-							<input id="<?php echo "{$_id}-{$item_count}-shortcode" ?>" name="<?php echo "{$_name}[{$item_count}][shortcode]" ?>" type="checkbox" <?php checked(isset($item_values['shortcode']) ? $item_values['shortcode'] : false); ?> value="1" />
-							<label for="<?php echo "{$_id}-{$item_count}-shortcode" ?>"><?php _e('Enable shortcode'); ?></label>
-						</li>
-					</ul>
-				</details>
+				<ul class="kcw-control-block">
+					<li>
+						<label for="<?php echo "{$_id}-{$item_count}-source"; ?>"><?php _e('Source', 'kc-essentials') ?></label>
+						<?php echo kcForm::field(array(
+							'type'    => 'select',
+							'attr'    => array(
+								'id'    => "{$_id}-{$item_count}-source",
+								'name'  => "{$_name}[{$item_count}][source]",
+								'class'      => 'hasdep',
+								'data-child' => '.sbanner-src',
+								'data-scope' => 'ul'
+							),
+							'options' => array(
+								'post' => __('Attachment', 'kc-essentials'),
+								'url'  => __('Custom URL', 'kc-essentials')
+							),
+							'none'    => false,
+							'current' => $item_values['source']
+						)) ?>
+					</li>
+					<li class="sbanner-src" data-dep="url">
+						<label for="<?php echo "{$_id}-{$item_count}-url" ?>"><?php _e('File URL', 'kc-essentials') ?></label>
+						<?php echo kcForm::input(array(
+							'attr'    => array(
+								'id'   => "{$_id}-{$item_count}-url",
+								'name' => "{$_name}[{$item_count}][url]",
+							),
+							'current' => $item_values['url']
+						)) ?>
+					</li>
+					<li class="sbanner-src" data-dep="post">
+						<label for="<?php echo "{$_id}-{$item_count}-post_id" ?>"><?php _e('Attachment', 'kc-essentials') ?></label>
+						<?php echo _kc_field_file_single( array(
+							'field' => array (
+								'mode'      => 'single',
+								'size'      => 'thumbnail',
+								'mime_type' => 'all'
+							),
+							'id'       => "{$_id}-{$item_count}-post_id",
+							'name'     => "{$_name}[{$item_count}][post_id]",
+							'db_value' => $item_values['post_id'],
+							'up_url'   => $up_url
+						)); ?>
+					</li>
+					<li class="sbanner-src" data-dep="post">
+						<label for="<?php echo "{$_id}-{$item_count}-image_size" ?>"><?php _e('Size', 'kc-essentials') ?></label>
+						<?php echo kcForm::field(array(
+							'type'    => 'select',
+							'attr'    => array(
+								'id'   => "{$_id}-{$item_count}-image_size",
+								'name' => "{$_name}[{$item_count}][image_size]",
+							),
+							'options'  => $image_sizes,
+							'none'     => false,
+							'current'  => $item_values['image_size']
+						)) ?>
+					</li>
+					<li>
+						<label for="<?php echo "{$_id}-{$item_count}-is_flash" ?>"><?php _e('Flash?', 'kc-essentials') ?></label>
+						<?php echo kcForm::field(array(
+							'type'    => 'select',
+							'attr'         => array(
+								'id'         => "{$_id}-{$item_count}-is_flash",
+								'name'       => "{$_name}[{$item_count}][is_flash]",
+								'class'      => 'hasdep',
+								'data-child' => '.sbanner-prop',
+								'data-scope' => 'ul'
+							),
+							'options' => $yesno,
+							'none'    => false,
+							'current' => $item_values['is_flash']
+						) ); ?>
+					</li>
+					<li class="sbanner-prop" data-dep='1'>
+						<label for="<?php echo "{$_id}-{$item_count}-width" ?>"><?php _e('Width', 'kc-essentials') ?></label>
+						<?php echo kcForm::input(array(
+							'attr'    => array(
+								'id'   => "{$_id}-{$item_count}-width",
+								'name' => "{$_name}[{$item_count}][width]",
+							),
+							'current' => $item_values['width']
+						)) ?>
+					</li>
+					<li class="sbanner-prop" data-dep='1'>
+						<label for="<?php echo "{$_id}-{$item_count}-height" ?>"><?php _e('Height', 'kc-essentials') ?></label>
+						<?php echo kcForm::input(array(
+							'attr'    => array(
+								'id'   => "{$_id}-{$item_count}-height",
+								'name' => "{$_name}[{$item_count}][height]",
+							),
+							'current' => $item_values['height']
+						)) ?>
+					</li>
+					<li class="sbanner-prop" data-dep='0'>
+						<label for="<?php echo "{$_id}-{$item_count}-link" ?>" title="<?php esc_attr_e('You can enter a post ID here to use its permalink, &#xA;double-click the input field to find posts.', 'kc-essentials') ?>"><?php _e('Link URL', 'kc-essentials') ?> <span class="impo">(?)</span></label>
+						<?php echo kcForm::input(array(
+							'attr'    => array(
+								'id'    => "{$_id}-{$item_count}-link",
+								'name'  => "{$_name}[{$item_count}][link]",
+								'class' => 'kc-find-post'
+							),
+							'current' => $item_values['link']
+						)) ?>
+					</li>
+				</ul>
 				<p class="hide-if-no-js actions">
 					<a class="add" title="<?php _e('Add item', 'kc-essentials') ?>"><?php _e('Add', 'kc-essentials') ?></a>
 					<a class="del" title="<?php _e('Remove item', 'kc-essentials') ?>"><?php _e('Remove', 'kc-essentials') ?></a>
@@ -224,24 +195,13 @@ class kc_widget_sbanner extends WP_Widget {
 			<?php if ( $title = apply_filters( 'widget_title', $instance['title'] ) ) : ?>
 			<?php echo $args['before_title'] . $title . $args['after_title'] ?>
 			<?php endif; ?>
+			<?php do_action( 'kcw_sbanner_items_before', $instance, $this, $args ) ?>
 			<?php
 				foreach ( $instance['items'] as $item ) :
 					$has_link = false;
 			?>
 			<div class="sbanner-item">
-				<?php
-					if ( !empty($item['text_before']) ) :
-						$text_before = trim( $item['text_before'] );
-						if ( !empty($item['shortcode']) )
-							$text_before = do_shortcode( $text_before );
-
-						if ( !empty($text_before) ) :
-							$text_before = !empty( $item['filter_text'] ) ? wpautop( $text_before ) : $text_before;
-				?>
-				<div class="text text-before">
-					<?php echo $text_before ?>
-				</div>
-				<?php endif; endif; ?>
+				<?php do_action( 'kcw_sbanner_item_before', $item, $instance, $this, $args ) ?>
 				<?php
 					if ( !empty($item['link']) ) :
 						if ( is_numeric($item['link']) )
@@ -275,21 +235,10 @@ class kc_widget_sbanner extends WP_Widget {
 				<?php if ( !empty($item['link']) ) : ?>
 				</a>
 				<?php endif; ?>
-				<?php
-					if ( !empty($item['text_after']) ) :
-						$text_after = trim( $item['text_after'] );
-						if ( !empty($item['shortcode']) )
-							$text_after = do_shortcode( $text_after );
-
-						if ( !empty($text_after) ) :
-							$text_after = !empty( $item['filter_text'] ) ? wpautop( $text_after ) : $text_after;
-				?>
-				<div class="text text-after">
-					<?php echo $text_after ?>
-				</div>
-				<?php endif; endif; ?>
+				<?php do_action( 'kcw_sbanner_item_after', $item, $instance, $this, $args ) ?>
 			</div>
 			<?php endforeach; ?>
+			<?php do_action( 'kcw_sbanner_items_after', $instance, $this, $args ) ?>
 		<?php echo $args['after_widget'] ?>
 		<?php
 	}
@@ -345,23 +294,6 @@ class kc_widget_sbanner extends WP_Widget {
 				'id'    => 'title',
 				'type'  => 'text',
 				'label' => __('Title')
-			),
-			array(
-				'id'    => 'link',
-				'type'  => 'text',
-				'label' => __('Link URL', 'kc-essentials')
-			),
-			array(
-				'id'    => 'text_before',
-				'type'  => 'textarea',
-				'label' => __('Text before banner', 'kc-essentials'),
-				'attr'  => array('cols' => 10, 'rows' => 4)
-			),
-			array(
-				'id'    => 'text_after',
-				'type'  => 'textarea',
-				'label' => __('Text after banner', 'kc-essentials'),
-				'attr'  => array('cols' => 10, 'rows' => 4)
 			)
 		);
 

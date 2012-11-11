@@ -96,6 +96,7 @@ ul.kcw-control-block,
 	padding:6px;
 	margin:0;
 }
-.kc-sbanner-items h4 {
+.kc-sbanner-items h4,
+.widget .widget-inside .kc-sbanner-items .actions {
 	margin:0;
 }
