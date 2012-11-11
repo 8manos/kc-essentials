@@ -168,7 +168,7 @@ class kc_widget_sbanner extends WP_Widget {
 							)) ?>
 						</li>
 						<li class="sbanner-prop" data-dep='0'>
-							<label for="<?php echo "{$_id}-{$item_count}-link" ?>" title="<?php _e('You can enter a post ID here to use its permalink, &#xA;double-click the input field to find posts.') ?>"><?php _e('Link URL', 'kc-essentials') ?> <span class="impo">(?)</span></label>
+							<label for="<?php echo "{$_id}-{$item_count}-link" ?>" title="<?php esc_attr_e('You can enter a post ID here to use its permalink, &#xA;double-click the input field to find posts.', 'kc-essentials') ?>"><?php _e('Link URL', 'kc-essentials') ?> <span class="impo">(?)</span></label>
 							<?php echo kcForm::input(array(
 								'attr'    => array(
 									'id'    => "{$_id}-{$item_count}-link",
