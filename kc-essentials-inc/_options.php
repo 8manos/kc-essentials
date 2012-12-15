@@ -205,6 +205,37 @@ class kcEssentials_options {
 			)
 		);
 
+		# Twitter setting
+		/*
+		$sections[] = array(
+			'id'     => 'twitter',
+			'title'  => sprintf( __('%s credentials', 'kc-essentials'), 'Twitter' ),
+			'desc'   => sprintf( __('Create your app <a href="%s">here</a> if you haven&#8217;t done so.', 'kc-essentials'), 'https://dev.twitter.com/apps/new' ),
+			'fields' => array(
+				array(
+					'id'    => 'consumer_key',
+					'title' => __('Consumer key', 'kc-essentials'),
+					'type'  => 'text',
+				),
+				array(
+					'id'    => 'consumer_secret',
+					'title' => __('Consumer secret', 'kc-essentials'),
+					'type'  => 'text',
+				),
+				array(
+					'id'    => 'oauth_token',
+					'title' => __('OAuth token', 'kc-essentials'),
+					'type'  => 'text',
+				),
+				array(
+					'id'    => 'oauth_token_secret',
+					'title' => __('OAuth token secret', 'kc-essentials'),
+					'type'  => 'text',
+				),
+			)
+		);
+		*/
+
 		$helps = array(
 			array(
 				'id'      => 'taxonomy_unique',
