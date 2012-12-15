@@ -2,14 +2,14 @@
 
 /**
  * @package KC_Essentials
- * @version 0.2
+ * @version 0.3
  */
 
 /*
 Plugin name: KC Essentials
 Plugin URI: http://kucrut.org/
 Description: The essentials
-Version: 0.2
+Version: 0.3
 Author: Dzikri Aziz
 Author URI: http://kucrut.org/
 License: GPL v2
