@@ -246,11 +246,6 @@ class kcEssentials_options {
 				'
 			),
 			array(
-				'id'      => 'taxonomy_media',
-				'title'   => __('Media taxonomies', 'kc-essentials'),
-				'content' => '<p>'.__('This is what you&#39;ll get if you enable this:').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/media-taxonomies.png" alt=""/></p>'
-			),
-			array(
 				'id'      => 'taxonomy_thumb',
 				'title'   => __('Term thumbnail', 'kc-essentials'),
 				'content' => '
