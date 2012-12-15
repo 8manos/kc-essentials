@@ -55,7 +55,6 @@ class kcEssentials_options {
 						'type'    => 'checkbox',
 						'options' => array(
 							'image_insert'   => sprintf( __('Insert images with custom sizes into post editor %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-image_insert" class="kc-help-trigger">?</a>' ),
-							'image_caption'  => sprintf( __('Quicktags for attachments %s', 'kc-essentials'), '<a title="'.__('What&#39;s this?', 'kc-essentials').'" href="#tab-link-image_caption" class="kc-help-trigger">?</a>' )
 						)
 					),
 					array(
@@ -290,11 +289,6 @@ class kcEssentials_options {
 					<p>'.__('This is what you&#39;ll get if you enable this:', 'kc-essentials').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/insert-custom-image-size.png" alt=""/></p>
 					<p>'.sprintf( __('If you don&#39;t see the custom size, either the image is smaller than that size, or you need to <a href="%s">regenerate</a> its thumbnails.', 'kc-essentials'), $rgt_link ).'</p>
 				'
-			),
-			array(
-				'id'      => 'image_caption',
-				'title'   => __('Quicktags for attachments', 'kc-essentials'),
-				'content' => '<p>'.__('This is what you&#39;ll get if you enable this:', 'kc-essentials').'<br /><br /><img src="'.$paths['url'].'/kc-essentials-inc/assets/attachment-quicktags.png" alt=""/></p>'
 			),
 			array(
 				'id'      => 'menu_cpt_archive',
