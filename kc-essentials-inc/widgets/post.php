@@ -892,10 +892,6 @@ class kc_widget_post extends WP_Widget {
 		if ( isset($instance['offset']) && $instance['offset'] )
 			$q_args['offset'] = $instance['offset'];
 
-		# post orderby
-		if ( $instance['posts_orderby'] == 'post__in' )
-			add_filter( 'posts_orderby', 'kc_sort_query_by_post_in', 10, 2 );
-
 		# Post type
 		if ( $instance['post_type'] )
 			$q_args['post_type'] = $instance['post_type'];
