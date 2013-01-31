@@ -70,7 +70,7 @@ class kcEssentials_widget_logic {
 					'id'         => $widget->get_field_id('kc-logic-enable'),
 					'name'       => $widget->get_field_name('kc-logic-enable'),
 					'class'      => 'hasdep kc-logic-enable',
-					'data-child' => "#{$f_id}-logics, #{$f_id}-modes"
+					'data-child' => "#{$f_id}-logics, #{$f_id}-modes, #{$f_id}-langs"
 				),
 				'options' => array(
 					'0' => __('Disable', 'kc-essentials'),
@@ -87,17 +87,41 @@ class kcEssentials_widget_logic {
 				'type'    => 'select',
 				'attr'    => array(
 					'id'   => $widget->get_field_id('kc-logic-mode'),
-					'name' => $widget->get_field_name('kc-logic-mode')
+					'name' => $widget->get_field_name('kc-logic-mode'),
 				),
 				'options' => array(
 					'show' => __('ONLY show in&hellip;', 'kc-essentials'),
-					'hide' => __('DO NOT show in&hellip;', 'kc-essentials')
+					'hide' => __('DO NOT show in&hellip;', 'kc-essentials'),
 				),
 				'none'    => false,
 				'current' => isset($setting['kc-logic-mode']) ? $setting['kc-logic-mode'] : 'show'
 			) );
 			?>
 		</li>
+		<?php
+			if ( class_exists( 'kcMultilingual_backend' ) ) :
+				$_languages = kcMultilingual_backend::get_data( 'languages' );
+				if ( count($_languages) > 1 ) {
+					$languages = array();
+					foreach ( $_languages as $lang )
+						$languages[ $lang['locale'] ] = $lang['custom_name'];
+		?>
+		<li id="<?php echo $f_id ?>-langs" data-dep="1">
+			<label for="<?php echo $f_id ?>-languages"><?php _e('Languages:', 'kc-essentials') ?></label>
+			<?php echo kcForm::field( array(
+				'type'    => 'select',
+				'attr'    => array(
+					'id'       => "{$f_id}-languages",
+					'name'     => $widget->get_field_name('kc-logic-languages').'[]',
+					'multiple' => true,
+				),
+				'options' => $languages,
+				'none'    => false,
+				'current' => !empty($setting['kc-logic-languages']) ? $setting['kc-logic-languages'] : array(),
+			) );
+			?>
+		</li>
+		<?php } endif; ?>
 		<li id="<?php echo $f_id ?>-logics" data-dep="1">
 			<label for="<?php echo $f_id ?>"><?php _e('Locations:', 'kc-essentials') ?></label>
 			<?php echo kcForm::field( array(
@@ -110,8 +134,8 @@ class kcEssentials_widget_logic {
 					'data-child' => ".{$f_id}-args"
 				),
 				'options' => $logics,
-				'none'    => false,
-				'current' => isset($setting['kc-logic']) ? $setting['kc-logic'] : array()
+				//'none'    => false,
+				'current' => isset($setting['kc-logic']) ? $setting['kc-logic'] : array(),
 			) );
 			?>
 		</li>
@@ -145,10 +169,13 @@ class kcEssentials_widget_logic {
 
 	public static function _save( $instance, $new, $old, $widget ) {
 		$setting = kcEssentials_widgets::get_setting( $widget->id );
-		$setting['kc-logic-enable'] = ( isset($new['kc-logic-enable']) && $new['kc-logic-enable'] ) ? true : false;
+		$setting['kc-logic-enable'] = !empty($new['kc-logic-enable']) ? true : false;
 		foreach ( array('kc-logic', 'kc-logic-mode', 'kc-logic-args') as $field )
-			if ( isset($new[$field]) )
+			if ( !empty($new[$field]) )
 				$setting[$field] = $new[$field];
+
+		if ( !empty($new['kc-logic-languages']) )
+			$setting['kc-logic-languages'] = $new['kc-logic-languages'];
 
 		kcEssentials_widgets::save_setting( $widget->id, $setting );
 
@@ -161,38 +188,50 @@ class kcEssentials_widget_logic {
 			return $sidebars_widgets;
 
 		$settings = get_option( 'kc_essentials_we' );
-		if ( !$settings )
+		if ( empty($settings) )
 			return $sidebars_widgets;
+
+		$check_lang     = class_exists( 'kcMultilingual_backend' );
+		$current_locale = get_locale();
 
 		foreach ( $sidebars_widgets as $sidebar => $widgets ) {
 			if ( $sidebar == 'wp_inactive_widgets' )
 				continue;
 
 			foreach ( $widgets as $idx => $widget ) {
-				if (
-					!isset($settings[$widget]['kc-logic-enable'])
-					|| !$settings[$widget]['kc-logic-enable']
-					|| !isset($settings[$widget]['kc-logic'])
-					|| !is_array($settings[$widget]['kc-logic'])
-					|| empty($settings[$widget]['kc-logic'])
-				)
+				if ( empty($settings[$widget]['kc-logic-enable']) )
 					continue;
 
-				$show = ( $settings[$widget]['kc-logic-mode'] && $settings[$widget]['kc-logic-mode'] == 'show' ) ? true : false;
-				foreach ( $settings[$widget]['kc-logic'] as $func ) {
-					if ( isset( $settings[$widget]['kc-logic-args'][$func] ) && !empty($settings[$widget]['kc-logic-args'][$func]) ) {
-						$args =
-							strpos($settings[$widget]['kc-logic-args'][$func], ',') === false
-							? $settings[$widget]['kc-logic-args'][$func]
-							: explode(',', $settings[$widget]['kc-logic-args'][$func]);
-						$res = call_user_func( $func, $args );
-					}
-					else {
-						$res = call_user_func( $func );
-					}
+				$show = ( !empty($settings[$widget]['kc-logic-mode']) && $settings[$widget]['kc-logic-mode'] == 'show' ) ? true : false;
 
-					if ( $res === $show )
-						continue 2;
+				// Languages
+				$lang_pass = (
+					!empty($settings[ $widget ]['kc-logic-languages'])
+					&& $show === in_array( $current_locale, $settings[ $widget ]['kc-logic-languages'] )
+				);
+
+				// Templates
+				if ( !empty($settings[$widget]['kc-logic']) && is_array($settings[$widget]['kc-logic']) ) {
+					foreach ( $settings[$widget]['kc-logic'] as $func ) {
+						if ( isset( $settings[$widget]['kc-logic-args'][$func] ) && !empty($settings[$widget]['kc-logic-args'][$func]) ) {
+							$args =
+								strpos($settings[$widget]['kc-logic-args'][$func], ',') === false
+								? $settings[$widget]['kc-logic-args'][$func]
+								: explode(',', $settings[$widget]['kc-logic-args'][$func]);
+							$res = call_user_func( $func, $args );
+						}
+						else {
+							$res = call_user_func( $func );
+						}
+
+						$loc_pass = ( $res === $show );
+						if ( $check_lang ) {
+							$loc_pass = ( $loc_pass === $lang_pass );
+						}
+
+						if ( $loc_pass )
+							continue 2;
+					}
 				}
 				unset( $widgets[$idx] );
 			}
