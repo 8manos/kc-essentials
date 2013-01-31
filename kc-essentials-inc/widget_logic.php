@@ -170,12 +170,17 @@ class kcEssentials_widget_logic {
 	public static function _save( $instance, $new, $old, $widget ) {
 		$setting = kcEssentials_widgets::get_setting( $widget->id );
 		$setting['kc-logic-enable'] = !empty($new['kc-logic-enable']) ? true : false;
-		foreach ( array('kc-logic', 'kc-logic-mode', 'kc-logic-args') as $field )
-			if ( !empty($new[$field]) )
-				$setting[$field] = $new[$field];
+		foreach ( array('kc-logic', 'kc-logic-mode', 'kc-logic-args') as $field ) {
+			$_new = array_filter( $new[$field] );
+			if ( !empty($_new) )
+				$setting[$field] = $_new;
+			else
+				unset( $setting[$field] );
+		}
 
-		if ( !empty($new['kc-logic-languages']) )
+		if ( !empty($new['kc-logic-languages']) ) {
 			$setting['kc-logic-languages'] = $new['kc-logic-languages'];
+		}
 
 		kcEssentials_widgets::save_setting( $widget->id, $setting );
 
@@ -211,11 +216,12 @@ class kcEssentials_widget_logic {
 				);
 
 				// Templates
+				$loc_pass = false;
 				if ( !empty($settings[$widget]['kc-logic']) && is_array($settings[$widget]['kc-logic']) ) {
 					foreach ( $settings[$widget]['kc-logic'] as $func ) {
-						if ( isset( $settings[$widget]['kc-logic-args'][$func] ) && !empty($settings[$widget]['kc-logic-args'][$func]) ) {
+						if ( !empty($settings[$widget]['kc-logic-args'][$func]) ) {
 							$args =
-								strpos($settings[$widget]['kc-logic-args'][$func], ',') === false
+								( strpos($settings[$widget]['kc-logic-args'][$func], ',') === false )
 								? $settings[$widget]['kc-logic-args'][$func]
 								: explode(',', $settings[$widget]['kc-logic-args'][$func]);
 							$res = call_user_func( $func, $args );
@@ -225,15 +231,16 @@ class kcEssentials_widget_logic {
 						}
 
 						$loc_pass = ( $res === $show );
-						if ( $check_lang ) {
-							$loc_pass = ( $loc_pass === $lang_pass );
-						}
-
 						if ( $loc_pass )
-							continue 2;
+							break;
 					}
 				}
-				unset( $widgets[$idx] );
+
+				if ( $check_lang )
+					$loc_pass = ( $loc_pass === $lang_pass );
+
+				if ( !$loc_pass )
+					unset( $widgets[$idx] );
 			}
 			$sidebars_widgets[$sidebar] = $widgets;
 		}
