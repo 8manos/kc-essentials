@@ -16,10 +16,6 @@ class kc_widget_twitter extends WP_Widget {
 		$this->defaults = array(
 			'title'           => '',
 			'username'        => '',
-			'consumer_key'    => '',
-			'consumer_secret' => '',
-			'access_token'    => '',
-			'access_secret'   => '',
 			'expiration'      => 30,
 			'count'           => 5,
 			'follow_text'     => __('Follow me', 'kc-essentials'),
@@ -31,10 +27,27 @@ class kc_widget_twitter extends WP_Widget {
 	}
 
 
+	private static function _check_config() {
+		$twitter_credentials = kcEssentials::get_data( 'settings', 'twitter' );
+		foreach ( array('consumer_key', 'consumer_secret', 'access_token', 'access_secret') as $req ) {
+			if ( empty($twitter_credentials[ $req ]) )
+				return false;
+		}
+
+		return true;
+	}
+
+
 	function form( $instance ) {
 		$instance = wp_parse_args( (array) $instance, $this->defaults );
 		$title    = strip_tags( $instance['title'] );
-	?>
+			if ( !self::_check_config() ) :
+			?>
+				<p class="description"><?php printf( __('Please <a%s>fill in</a> your twitter credentials first!'), sprintf(' href="%s"', menu_page_url('kc-settings-kc_essentials', false)) ) ?></p>
+			<?php
+				return;
+			endif;
+		?>
 		<p>
 			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?></label>
 			<input type="text" class="widefat" id="<?php echo $this->get_field_id('title') ?>" name="<?php echo $this->get_field_name('title') ?>" value="<?php echo $title ?>" />
@@ -51,52 +64,6 @@ class kc_widget_twitter extends WP_Widget {
 					'current' => $instance['username']
 				)) ?>
 			</li>
-			<li>
-				<label for="<?php echo $this->get_field_id('consumer_key') ?>"><?php _e('Consumer Key', 'kc-essentials') ?></label>
-				<?php echo kcForm::input(array(
-					'attr'    => array(
-						'id'   => $this->get_field_id('consumer_key'),
-						'name' => $this->get_field_name('consumer_key')
-					),
-					'current' => $instance['consumer_key']
-				)) ?>
-			</li>
-			<li>
-				<label for="<?php echo $this->get_field_id('consumer_secret') ?>"><?php _e('Consumer Secret', 'kc-essentials') ?></label>
-				<?php echo kcForm::input(array(
-					'attr'    => array(
-						'id'   => $this->get_field_id('consumer_secret'),
-						'name' => $this->get_field_name('consumer_secret')
-					),
-					'current' => $instance['consumer_secret']
-				)) ?>
-			</li>
-			<?php /*if ( empty($instance['access_token']) ) : ?>
-				<li><p class="description"><?php _e('Access token and secret is not saved yet. Save the configuration to get them.', 'kc-essentials') ?></p></li>
-			<?php else : */?>
-				<li>
-					<label for="<?php echo $this->get_field_id('access_token') ?>"><?php _e('Access Token', 'kc-essentials') ?></label>
-					<?php echo kcForm::input(array(
-						'attr'    => array(
-							'id'   => $this->get_field_id('access_token'),
-							'name' => $this->get_field_name('access_token')
-						),
-						'current' => $instance['access_token'],
-						//'attr'    => array('disabled' => 'disabled'),
-					)) ?>
-				</li>
-				<li>
-					<label for="<?php echo $this->get_field_id('access_secret') ?>"><?php _e('Access Secret', 'kc-essentials') ?></label>
-					<?php echo kcForm::input(array(
-						'attr'    => array(
-							'id'   => $this->get_field_id('access_secret'),
-							'name' => $this->get_field_name('access_secret')
-						),
-						'current' => $instance['access_secret'],
-						//'attr'    => array('disabled' => 'disabled'),
-					)) ?>
-				</li>
-			<?php # endif; ?>
 			<li>
 				<label for="<?php echo $this->get_field_id('expiration') ?>" title="<?php _e('Cache expiration time in minutes, minimum is 5', 'kc-essentials'); ?>"><?php _e('Expiration (m)', 'kc-essentials') ?> <small class="impo">(?)</small></label>
 				<?php echo kcForm::input(array(
@@ -219,10 +186,16 @@ class kc_widget_twitter extends WP_Widget {
 			return $data;
 		}
 
+		if ( !self::_check_config() ) {
+			error_log( sprintf( __('Please fill in your twitter credentials first! %s'), menu_page_url('kc-settings-kc_essentials', false)) );
+			return false;
+		}
+
 		require_once kcEssentials::get_data('paths', 'inc') . '/libs/codebird.php';
-		\Codebird\Codebird::setConsumerKey( $instance['consumer_key'], $instance['consumer_secret'] );
+		$twitter_credentials = kcEssentials::get_data( 'settings', 'twitter' );
+		\Codebird\Codebird::setConsumerKey( $twitter_credentials['consumer_key'], $twitter_credentials['consumer_secret'] );
 		$cb = \Codebird\Codebird::getInstance();
-		$cb->setToken( $instance['access_token'], $instance['access_secret'] );
+		$cb->setToken( $twitter_credentials['access_token'], $twitter_credentials['access_secret'] );
 		$timeline = $cb->statuses_userTimeline( sprintf(
 			'screen_name=%s&count=%d&exclude_replies=true',
 			$instance['username'],

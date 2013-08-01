@@ -205,7 +205,6 @@ class kcEssentials_options {
 		);
 
 		# Twitter setting
-		/*
 		$sections[] = array(
 			'id'     => 'twitter',
 			'title'  => sprintf( __('%s credentials', 'kc-essentials'), 'Twitter' ),
@@ -222,18 +221,17 @@ class kcEssentials_options {
 					'type'  => 'text',
 				),
 				array(
-					'id'    => 'oauth_token',
-					'title' => __('OAuth token', 'kc-essentials'),
+					'id'    => 'access_token',
+					'title' => __('Access token', 'kc-essentials'),
 					'type'  => 'text',
 				),
 				array(
-					'id'    => 'oauth_token_secret',
-					'title' => __('OAuth token secret', 'kc-essentials'),
+					'id'    => 'access_secret',
+					'title' => __('Access secret', 'kc-essentials'),
 					'type'  => 'text',
 				),
 			)
 		);
-		*/
 
 		$helps = array(
 			array(
